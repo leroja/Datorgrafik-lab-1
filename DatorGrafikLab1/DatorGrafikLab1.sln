@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatorGrafikLab1", "DatorGrafikLab1\DatorGrafikLab1.csproj", "{0162FD0A-CC32-4754-A656-0A4087602749}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{28A11787-1990-47C4-BFC0-FCA1B9E2031B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{0162FD0A-CC32-4754-A656-0A4087602749}.Debug|x86.Build.0 = Debug|x86
 		{0162FD0A-CC32-4754-A656-0A4087602749}.Release|x86.ActiveCfg = Release|x86
 		{0162FD0A-CC32-4754-A656-0A4087602749}.Release|x86.Build.0 = Release|x86
+		{28A11787-1990-47C4-BFC0-FCA1B9E2031B}.Debug|x86.ActiveCfg = Debug|x86
+		{28A11787-1990-47C4-BFC0-FCA1B9E2031B}.Debug|x86.Build.0 = Debug|x86
+		{28A11787-1990-47C4-BFC0-FCA1B9E2031B}.Release|x86.ActiveCfg = Release|x86
+		{28A11787-1990-47C4-BFC0-FCA1B9E2031B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
