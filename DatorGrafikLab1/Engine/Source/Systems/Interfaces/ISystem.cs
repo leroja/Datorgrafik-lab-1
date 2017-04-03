@@ -8,5 +8,6 @@ namespace Engine.Source.Systems.Interfaces
 {
     public interface ISystem
     {
+
     }
 }

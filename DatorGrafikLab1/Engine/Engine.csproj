@@ -51,6 +51,7 @@
     <Compile Include="Source\Components\TransformComponent.cs" />
     <Compile Include="Source\Managers\ComponentManager.cs" />
     <Compile Include="Source\Managers\SystemManager.cs" />
+    <Compile Include="Source\structs.cs" />
     <Compile Include="Source\Systems\CameraSystem.cs" />
     <Compile Include="Source\Systems\HeightmapSystem.cs" />
     <Compile Include="Source\Systems\Interfaces\IRender.cs" />

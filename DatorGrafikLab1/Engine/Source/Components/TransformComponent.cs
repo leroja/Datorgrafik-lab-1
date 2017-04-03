@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Engine.Source.Components
 {
-    class TransformComponent : IComponent
+    public class TransformComponent : IComponent
     {
+
     }
 }

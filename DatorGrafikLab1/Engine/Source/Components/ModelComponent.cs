@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Engine.Source.Components
 {
-    class ModelComponent : IComponent
+    public class ModelComponent : IComponent
     {
+
+
     }
 }
