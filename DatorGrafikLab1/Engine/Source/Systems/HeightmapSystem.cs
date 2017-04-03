@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Engine.Source.Systems
 {
     public class HeightmapSystem : IRender
     {
-        public void Draw(GameTime gameTime)
+        public void Draw(GraphicsDevice device, GameTime gameTime)
         {
 
             // hämta camera component
