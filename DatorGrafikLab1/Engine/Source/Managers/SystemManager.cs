@@ -18,9 +18,10 @@ namespace Engine.Source.Managers
 
         public GameTime GameTime { get; set; }
         public SpriteBatch spriteBatch { get; set; }
+        public GraphicsDevice device { get; set; }
 
         // List<IObserving> observingSystems = new List<IObserving>();
-        // List<IDraw> renderSystems = new List<IDraw>();
+        List<IRender> renderSystems = new List<IRender>();
         List<IUpdate> updateSystems = new List<IUpdate>();
         // List<IInput> inputSystems = new List<IInput>();
 
@@ -51,10 +52,10 @@ namespace Engine.Source.Managers
             {
                 AddSystemToList<IUpdate>(updateSystems, system);
             }
-            //if (system is IDraw)
-            //{
-            //    AddSystemToList<IDraw>(renderSystems, system);
-            //}
+            if (system is IRender)
+            {
+                AddSystemToList<IRender>(renderSystems, system);
+            }
             //if (system is IInput)
             //{
             //    AddSystemToList<IInput>(inputSystems, system);
@@ -76,10 +77,10 @@ namespace Engine.Source.Managers
             {
                 RemoveSystemFromList<IUpdate>(updateSystems, system);
             }
-            //if (system is IDraw)
-            //{
-            //    RemoveSystemFromList<IDraw>(renderSystems, system);
-            //}
+            if (system is IRender)
+            {
+                RemoveSystemFromList<IRender>(renderSystems, system);
+            }
             //if (system is IInput)
             //{
             //    RemoveSystemFromList<IInput>(inputSystems, system);
@@ -107,11 +108,11 @@ namespace Engine.Source.Managers
 
                 return (sys);
             }
-            //if (type.Equals(typeof(IDraw)))
-            //{
-            //    sys = (T)renderSystems.Find(x => x.ToString().Contains(system));
-            //    return (sys);
-            //}
+            if (type.Equals(typeof(IRender)))
+            {
+                sys = (T)renderSystems.Find(x => x.ToString().Contains(system));
+                return (sys);
+            }
             //if (type.Equals(typeof(IInput)))
             //{
             //    sys = (T)inputSystems.Find(x => x.ToString().Contains(system));
@@ -156,16 +157,16 @@ namespace Engine.Source.Managers
         /// <summary>
         /// Runs all rendering systems
         /// </summary>
-        //public void RunRenderSystems()
-        //{
-        //    if (renderSystems.Count > 0)
-        //    {
-        //        foreach (IDraw system in renderSystems)
-        //        {
-        //            system.draw(GameTime, spriteBatch);
-        //        }
-        //    }
-        //}
+        public void RunRenderSystems()
+        {
+            if (renderSystems.Count > 0)
+            {
+                foreach (IRender system in renderSystems)
+                {
+                    system.Draw(GameTime);
+                }
+            }
+        }
 
 
         /// <summary>

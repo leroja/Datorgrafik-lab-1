@@ -10,7 +10,7 @@ namespace Engine.Source.Systems.Interfaces
 {
     public interface IRender : ISystem
     {
-        void Draw(GraphicsDevice device, GameTime gameTime);
+        void Draw(GameTime gameTime);
         
     }
 }
