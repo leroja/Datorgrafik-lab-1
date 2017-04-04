@@ -45,6 +45,7 @@ namespace DatorGrafikLab1
             ComponentManager.Instance.AddAllComponents(entityID, componentList);
 
             SystemManager.Instance.AddSystem(new ModelSystem());
+            SystemManager.Instance.AddSystem(new TransformSystem());
             
             
 
@@ -84,6 +85,8 @@ namespace DatorGrafikLab1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            SystemManager.Instance.RunUpdateSystems();
 
             // TODO: Add your update logic here
 

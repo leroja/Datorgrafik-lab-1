@@ -34,11 +34,8 @@ namespace Engine.Source.Systems
                         //System.Console.WriteLine(modelMesh.Name);
                         foreach (BasicEffect effect in modelMesh.Effects)
                         {
-                            //In my understanding this calculation should already be done in the transform system, so therefore it should 
-                            //just be assigning object world to the value of for tfc.objectworld or mcp.objectworld depending on where the data
-                            //should be kept. 
-                            //TODO: se the above comment
-                            Matrix objectWorld = Matrix.CreateScale(tfc.scale) * tfc.rotation * Matrix.CreateTranslation(tfc.position);
+
+                            Matrix objectWorld = tfc.objectMatrix;
                             effect.World = modelMesh.ParentBone.Transform * objectWorld * mcp.worldMatrix;
 
                             // need to get the camera here?
