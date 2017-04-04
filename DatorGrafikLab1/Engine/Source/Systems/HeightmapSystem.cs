@@ -6,14 +6,52 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Engine.Source.Managers;
+using Engine.Source.Components;
 
 namespace Engine.Source.Systems
 {
     public class HeightmapSystem : IRender
     {
+        private GraphicsDevice device;
+
+        public HeightmapSystem(GraphicsDevice device)
+        {
+            this.device = device;
+        }
+
         public void Draw(GraphicsDevice device, GameTime gameTime)
         {
+            ComponentManager compMan = ComponentManager.Instance;
 
+            var ents = compMan.GetAllEntitiesWithComponentType<HeightmapComponent>();
+
+            // Todo fix with camera
+            var cameraIds = compMan.GetAllEntitiesWithComponentType<CameraComponent>();
+            var cameraComp = compMan.GetEntityComponent<CameraComponent>(cameraIds[0]);
+            if (ents != null)
+            {
+                foreach(int heightMapId in ents)
+                {
+                    var heightMap = compMan.GetEntityComponent<HeightmapComponent>(heightMapId);
+                    var transformComp = compMan.GetEntityComponent<TransformComponent>(heightMapId);
+
+                    heightMap.Effect.View = cameraComp.ViewMatrix;
+                    heightMap.Effect.Projection = cameraComp.ProjectionMatrix;
+                    //heightMap.Effect.World = transformComp.WorldMatrix;
+
+                    foreach (var pass in heightMap.Effect.CurrentTechnique.Passes)
+                    {
+                        pass.Apply();
+
+                        device.Indices = heightMap.IndexBuffer;
+                        device.SetVertexBuffer(heightMap.VertexBuffer);
+                        device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightMap.Indices.Length / 3);
+                    }
+
+                }
+
+            }
             // hämta camera component
             // hämta heightmap component
             // hämta transform component
