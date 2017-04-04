@@ -11,135 +11,164 @@ namespace Engine.Source.Components
 {
     public class HeightmapComponent : IComponent
     {
-        public int terrainHeight { get; set; }
-        public int terrainWidth { get; set; }
+        private int TerrainHeight { get; set; }
+        private int TerrainWidth { get; set; }
 
-        public Texture2D heightMap { get; set; }
+        public Texture2D HeightMap { get; set; }
+        private GraphicsDevice Device;
 
-        private GraphicsDevice device;
-
-        VertexBuffer myVertexBuffer;
-        IndexBuffer myIndexBuffer;
-
-        VertexPositionColorNormal[] vertices;
-        private float[,] heightData;
-        short[] indices;
+        public VertexBuffer VertexBuffer { get; set; }
+        public IndexBuffer IndexBuffer { get; set; }
+        public VertexPositionColorNormal[] Vertices { get; set; }
+        public float[,] HeightData { get; set; }
+        public int[] Indices { get; set; }
+        public BasicEffect Effect { get; set; }
 
         public HeightmapComponent(Texture2D heightMap, GraphicsDevice device)
         {
-            this.heightMap = heightMap;
-            this.device = device;
+            this.HeightMap = heightMap;
+            this.Device = device;
             LoadHeightData(heightMap);
             SetUpVertices();
             SetUpIndices();
             CalculateNormals();
 
             CopyToBuffers();
+            SetUpEffect();
+        }
+
+        private void SetUpEffect()
+        {
+            Effect = new BasicEffect(Device);
+            Effect.EnableDefaultLighting();
+
+            // test
+            Effect.VertexColorEnabled = true;
+            // lite fog stuff
+            //Effect.FogEnabled = true;
+            //Effect.FogStart = 100;
+            //Effect.FogEnd = 600;
+            //Effect.FogColor = Color.Gray.ToVector3();
+
+            // else
+            //Effect.EnableDefaultLighting();
+            //Effect.LightingEnabled = true;
+
+            //Effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f);
+            //Effect.DirectionalLight0.Direction = new Vector3(0.5f, -1, 0);
+            //Effect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
+            //Effect.DirectionalLight0.Enabled = true;
+
+            //Effect.AmbientLightColor = new Vector3(0.1f, 0.1f, 0.1f);
+            //Effect.PreferPerPixelLighting = true;
+            //Effect.SpecularPower = 100;
+            //Effect.DiffuseColor = new Vector3(0.9f, 0.4f, 0.6f);
+            //Effect.EmissiveColor = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
         private void LoadHeightData(Texture2D heightMap)
         {
-            terrainWidth = heightMap.Width;
-            terrainHeight = heightMap.Height;
+            TerrainWidth = heightMap.Width;
+            TerrainHeight = heightMap.Height;
 
-            Color[] heightMapColors = new Color[terrainWidth * terrainHeight];
+            Color[] heightMapColors = new Color[TerrainWidth * TerrainHeight];
             heightMap.GetData(heightMapColors);
 
-            heightData = new float[terrainWidth, terrainHeight];
-            for (int x = 0; x < terrainWidth; x++)
-                for (int y = 0; y < terrainHeight; y++)
-                    heightData[x, y] = heightMapColors[x + y * terrainWidth].R / 5.0f;
+            HeightData = new float[TerrainWidth, TerrainHeight];
+            for (int x = 0; x < TerrainWidth; x++)
+                for (int y = 0; y < TerrainHeight; y++)
+                    HeightData[x, y] = heightMapColors[x + y * TerrainWidth].R / 5.0f;
         }
 
         private void SetUpVertices()
         {
             float minHeight = float.MaxValue;
             float maxHeight = float.MinValue;
-            for (int x = 0; x < terrainWidth; x++)
+            for (int x = 0; x < TerrainWidth; x++)
             {
-                for (int y = 0; y < terrainHeight; y++)
+                for (int y = 0; y < TerrainHeight; y++)
                 {
-                    if (heightData[x, y] < minHeight)
-                        minHeight = heightData[x, y];
-                    if (heightData[x, y] > maxHeight)
-                        maxHeight = heightData[x, y];
+                    if (HeightData[x, y] < minHeight)
+                        minHeight = HeightData[x, y];
+                    if (HeightData[x, y] > maxHeight)
+                        maxHeight = HeightData[x, y];
                 }
             }
 
-            vertices = new VertexPositionColorNormal[terrainWidth * terrainHeight];
-            for (int x = 0; x < terrainWidth; x++)
+            Vertices = new VertexPositionColorNormal[TerrainWidth * TerrainHeight];
+            for (int x = 0; x < TerrainWidth; x++)
             {
-                for (int y = 0; y < terrainHeight; y++)
+                for (int y = 0; y < TerrainHeight; y++)
                 {
-                    vertices[x + y * terrainWidth].Position = new Vector3(x, heightData[x, y], -y);
+                    Vertices[x + y * TerrainWidth].Position = new Vector3(x, HeightData[x, y], -y);
 
-                    if (heightData[x, y] < minHeight + (maxHeight - minHeight) / 4)
-                        vertices[x + y * terrainWidth].Color = Color.Blue;
-                    else if (heightData[x, y] < minHeight + (maxHeight - minHeight) * 2 / 4)
-                        vertices[x + y * terrainWidth].Color = Color.Green;
-                    else if (heightData[x, y] < minHeight + (maxHeight - minHeight) * 3 / 4)
-                        vertices[x + y * terrainWidth].Color = Color.Brown;
+                    if (HeightData[x, y] < minHeight + (maxHeight - minHeight) / 4)
+                        Vertices[x + y * TerrainWidth].Color = Color.Blue;
+                    else if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 2 / 4)
+                        Vertices[x + y * TerrainWidth].Color = Color.Green;
+                    else if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 3 / 4)
+                        Vertices[x + y * TerrainWidth].Color = Color.Brown;
                     else
-                        vertices[x + y * terrainWidth].Color = Color.White;
+                        Vertices[x + y * TerrainWidth].Color = Color.White;
                 }
             }
         }
 
         private void SetUpIndices()
         {
-            indices = new short[(terrainWidth - 1) * (terrainHeight - 1) * 6];
+            Indices = new int[(TerrainWidth - 1) * (TerrainHeight - 1) * 6];
             int counter = 0;
-            for (int y = 0; y < terrainHeight - 1; y++)
+            for (int y = 0; y < TerrainHeight - 1; y++)
             {
-                for (int x = 0; x < terrainWidth - 1; x++)
+                for (int x = 0; x < TerrainWidth - 1; x++)
                 {
-                    short lowerLeft = (short)(x + y * terrainWidth);
-                    short lowerRight = (short)((x + 1) + y * terrainWidth);
-                    short topLeft = (short)(x + (y + 1) * terrainWidth);
-                    short topRight = (short)((x + 1) + (y + 1) * terrainWidth);
+                    int lowerLeft = (x + y * TerrainWidth);
+                    int lowerRight = ((x + 1) + y * TerrainWidth);
+                    int topLeft = (x + (y + 1) * TerrainWidth);
+                    int topRight = ((x + 1) + (y + 1) * TerrainWidth);
 
-                    indices[counter++] = topLeft;
-                    indices[counter++] = lowerRight;
-                    indices[counter++] = lowerLeft;
+                    Indices[counter++] = topLeft;
+                    Indices[counter++] = lowerRight;
+                    Indices[counter++] = lowerLeft;
 
-                    indices[counter++] = topLeft;
-                    indices[counter++] = topRight;
-                    indices[counter++] = lowerRight;
+                    Indices[counter++] = topLeft;
+                    Indices[counter++] = topRight;
+                    Indices[counter++] = lowerRight;
                 }
             }
         }
 
         private void CalculateNormals()
         {
-            for (int i = 0; i < vertices.Length; i++)
-                vertices[i].Normal = new Vector3(0, 0, 0);
+            for (int i = 0; i < Vertices.Length; i++)
+                Vertices[i].Normal = new Vector3(0, 0, 0);
 
-            for (int i = 0; i < indices.Length / 3; i++)
+            for (int i = 0; i < Indices.Length / 3; i++)
             {
-                int index1 = indices[i * 3];
-                int index2 = indices[i * 3 + 1];
-                int index3 = indices[i * 3 + 2];
+                int index1 = Indices[i * 3];
+                int index2 = Indices[i * 3 + 1];
+                int index3 = Indices[i * 3 + 2];
 
-                Vector3 side1 = vertices[index1].Position - vertices[index3].Position;
-                Vector3 side2 = vertices[index1].Position - vertices[index2].Position;
+                Vector3 side1 = Vertices[index1].Position - Vertices[index3].Position;
+                Vector3 side2 = Vertices[index1].Position - Vertices[index2].Position;
                 Vector3 normal = Vector3.Cross(side1, side2);
 
-                vertices[index1].Normal += normal;
-                vertices[index2].Normal += normal;
-                vertices[index3].Normal += normal;
+                Vertices[index1].Normal += normal;
+                Vertices[index2].Normal += normal;
+                Vertices[index3].Normal += normal;
             }
 
-            for (int i = 0; i < vertices.Length; i++)
-                vertices[i].Normal.Normalize();
+            for (int i = 0; i < Vertices.Length; i++)
+                Vertices[i].Normal.Normalize();
         }
 
         private void CopyToBuffers()
         {
-            myVertexBuffer = new VertexBuffer(device, VertexPositionColorNormal.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
-            myVertexBuffer.SetData(vertices);
+            VertexBuffer = new VertexBuffer(Device, VertexPositionColorNormal.VertexDeclaration, Vertices.Length, BufferUsage.WriteOnly);
+            VertexBuffer.SetData(Vertices);
 
-            myIndexBuffer = new IndexBuffer(device, typeof(short), indices.Length, BufferUsage.WriteOnly);
-            myIndexBuffer.SetData(indices);
+            IndexBuffer = new IndexBuffer(Device, typeof(int), Indices.Length, BufferUsage.WriteOnly);
+            IndexBuffer.SetData(Indices);
         }
 
     }

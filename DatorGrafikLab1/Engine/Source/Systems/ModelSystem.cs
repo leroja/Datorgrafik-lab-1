@@ -28,8 +28,8 @@ namespace Engine.Source.Systems
 
                     foreach (ModelMesh modelMesh in mcp.model.Meshes)
                     {
-                        Vector3 scale = tfc.scale;
-                        Vector3 position = tfc.position;
+                        Vector3 scale = tfc.Scale;
+                        Vector3 position = tfc.Position;
 
                         //System.Console.WriteLine(modelMesh.Name);
                         foreach (BasicEffect effect in modelMesh.Effects)

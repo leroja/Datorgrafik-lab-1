@@ -11,15 +11,15 @@ namespace Engine.Source.Components
     {
         //Holds data such as position, rotation and scaling.
 
-        public Vector3 position { get; set; }
-        public Matrix rotation { get; set; }
-        public Vector3 scale { get; set; }
-        public Matrix objectMatrix { get; set; }
+        public Vector3 Position { get; set; }
+        public Matrix Rotation { get; set; }
+        public Vector3 Scale { get; set; }
+        public Matrix ObjectMatrix { get; set; }
         public TransformComponent(Vector3 position, Vector3 scale)
         {
-            this.position = position;
-            this.scale = scale;
-            this.rotation = Matrix.Identity;
+            this.Position = position;
+            this.Scale = scale;
+            this.Rotation = Matrix.Identity;
         }
 
 
