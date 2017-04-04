@@ -20,7 +20,7 @@ namespace Engine.Source.Systems
             this.device = device;
         }
 
-        public void Draw(GraphicsDevice device, GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             ComponentManager compMan = ComponentManager.Instance;
 

@@ -99,7 +99,8 @@ namespace DatorGrafikLab1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             SystemManager.Instance.RunRenderSystems();
-           
+           
+
 
             // TODO: Add your drawing code here
 
