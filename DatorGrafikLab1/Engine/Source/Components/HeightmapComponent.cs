@@ -45,10 +45,10 @@ namespace Engine.Source.Components
             // test
             Effect.VertexColorEnabled = true;
             // lite fog stuff
-            Effect.FogEnabled = true;
-            Effect.FogStart = 100;
-            Effect.FogEnd = 600;
-            Effect.FogColor = Color.Gray.ToVector3();
+            //Effect.FogEnabled = true;
+            //Effect.FogStart = 100;
+            //Effect.FogEnd = 600;
+            //Effect.FogColor = Color.Gray.ToVector3();
 
             // else
             //Effect.EnableDefaultLighting();

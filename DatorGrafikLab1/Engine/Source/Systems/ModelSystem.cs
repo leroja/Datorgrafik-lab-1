@@ -28,8 +28,8 @@ namespace Engine.Source.Systems
 
                     foreach (ModelMesh modelMesh in mcp.model.Meshes)
                     {
-                        Vector3 scale = tfc.scale;
-                        Vector3 position = tfc.position;
+                        Vector3 scale = tfc.Scale;
+                        Vector3 position = tfc.Position;
 
                         //System.Console.WriteLine(modelMesh.Name);
                         foreach (BasicEffect effect in modelMesh.Effects)
@@ -38,7 +38,7 @@ namespace Engine.Source.Systems
                             //just be assigning object world to the value of for tfc.objectworld or mcp.objectworld depending on where the data
                             //should be kept. 
                             //TODO: se the above comment
-                            Matrix objectWorld = Matrix.CreateScale(tfc.scale) * tfc.rotation * Matrix.CreateTranslation(tfc.position);
+                            Matrix objectWorld = Matrix.CreateScale(tfc.Scale) * tfc.Rotation * Matrix.CreateTranslation(tfc.Position);
                             effect.World = modelMesh.ParentBone.Transform * objectWorld * mcp.worldMatrix;
 
                             // need to get the camera here?

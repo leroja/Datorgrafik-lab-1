@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Source.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,12 +10,13 @@ namespace Engine
     /// </summary>
     public class Engine : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public GraphicsDeviceManager Graphics { get; }
+        public GraphicsDevice Device { get; set; }
+        // SpriteBatch spriteBatch;
 
         public Engine()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -26,8 +28,7 @@ namespace Engine
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            Device = Graphics.GraphicsDevice;
             base.Initialize();
         }
 
@@ -38,7 +39,7 @@ namespace Engine
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            // spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -62,7 +63,8 @@ namespace Engine
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            SystemManager.Instance.GameTime = gameTime;
+            SystemManager.Instance.RunUpdateSystems();
 
             base.Update(gameTime);
         }
@@ -75,7 +77,8 @@ namespace Engine
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            SystemManager.Instance.GameTime = gameTime;
+            SystemManager.Instance.RunRenderSystems();
 
             base.Draw(gameTime);
         }

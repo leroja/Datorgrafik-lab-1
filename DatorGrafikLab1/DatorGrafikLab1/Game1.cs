@@ -11,18 +11,19 @@ namespace DatorGrafikLab1
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Engine.Engine
     {
-        GraphicsDeviceManager graphics;
+        // GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Model plane;
-        GraphicsDevice device;
+        //GraphicsDevice device;
 
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            //graphics = new GraphicsDeviceManager(this);
+            //graphics = base.graphics;
+            //Content.RootDirectory = "Content";
         }
 
         /// <summary>
@@ -37,16 +38,26 @@ namespace DatorGrafikLab1
 
             //Entitet för planet
             int entityID = ComponentManager.Instance.CreateID();
-            List<IComponent> componentList = new List<IComponent>();
-            //Skapa och lägg till alla komponenter som vi behöver för modellen
-            componentList.Add(new ModelComponent(Content.Load<Model>("Chopper")));
-            componentList.Add(new TransformComponent(new Vector3(0, 0, -50), new Vector3(5, 5, 5)));
-            componentList.Add(new CameraComponent(graphics.GraphicsDevice));
+            List<IComponent> componentList = new List<IComponent>
+            {
+                //Skapa och lägg till alla komponenter som vi behöver för modellen
+                new ModelComponent(Content.Load<Model>("Chopper")),
+                new TransformComponent(new Vector3(0, 0, -50), new Vector3(5, 5, 5)),
+                new CameraComponent(Graphics.GraphicsDevice)
+            };
             ComponentManager.Instance.AddAllComponents(entityID, componentList);
 
             SystemManager.Instance.AddSystem(new ModelSystem());
-            
-            
+
+            int entityID1 = ComponentManager.Instance.CreateID();
+            List<IComponent> componentList1 = new List<IComponent>
+            {
+                new HeightmapComponent(Content.Load<Texture2D>("US_Canyon"), Device),
+                new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1))
+            };
+            ComponentManager.Instance.AddAllComponents(entityID1, componentList1);
+
+            SystemManager.Instance.AddSystem(new HeightmapSystem(Device));
 
             base.Initialize();
         }
@@ -60,7 +71,6 @@ namespace DatorGrafikLab1
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             plane = Content.Load<Model>("Chopper");
-            device = graphics.GraphicsDevice;
 
             // TODO: use this.Content to load your game content here
         }
@@ -82,10 +92,6 @@ namespace DatorGrafikLab1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -96,13 +102,6 @@ namespace DatorGrafikLab1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            SystemManager.Instance.RunRenderSystems();
-           
-
-
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }

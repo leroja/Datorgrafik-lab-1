@@ -38,7 +38,10 @@ namespace Engine.Source.Systems
 
                     heightMap.Effect.View = cameraComp.ViewMatrix;
                     heightMap.Effect.Projection = cameraComp.ProjectionMatrix;
+                    // Todo fix with world matrix
                     //heightMap.Effect.World = transformComp.WorldMatrix;
+                    //heightMap.Effect.World = Matrix.CreateWorld(new Vector3(-100,0,0), new Vector3(), new Vector3());
+                    
 
                     foreach (var pass in heightMap.Effect.CurrentTechnique.Passes)
                     {
@@ -48,16 +51,8 @@ namespace Engine.Source.Systems
                         device.SetVertexBuffer(heightMap.VertexBuffer);
                         device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightMap.Indices.Length / 3);
                     }
-
                 }
-
             }
-            // hämta camera component
-            // hämta heightmap component
-            // hämta transform component
-
-
-
         }
     }
 }
