@@ -11,7 +11,7 @@ namespace Engine.Source.Systems
 {
     public class HeightmapSystem : IRender
     {
-        public void Draw(GraphicsDevice device, GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
 
             // hämta camera component

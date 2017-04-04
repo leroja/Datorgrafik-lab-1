@@ -119,6 +119,30 @@ namespace Engine.Source.Managers
             }
 
         }
+        public void AddAllComponents(int entityID, List<IComponent> componentList)
+        {
+            foreach(var comp in componentList)
+            {
+                Type type = comp.GetType();
+                if (compDic.ContainsKey(type))
+                {
+                    try
+                    {
+                        compDic[type].Add(entityID, comp);
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                }
+                else
+                {
+                    compDic.Add(type, new Dictionary<int, IComponent>());
+                    compDic[type].Add(entityID, comp);
+                }
+            }
+        }
 
         /// <summary>
         /// removes the component from the entity

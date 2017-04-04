@@ -10,6 +10,11 @@ namespace Engine.Source.Systems
 {
     class TransformSystem : IUpdate
     {
+
+        /// <summary>
+        /// the system for this component should handle the objects world matrix calculation
+        /// i.e objectWorld = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
+        /// </summary>
         public void update(GameTime gameTime)
         {
             throw new NotImplementedException();

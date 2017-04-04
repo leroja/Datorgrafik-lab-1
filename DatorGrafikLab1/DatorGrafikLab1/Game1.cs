@@ -1,6 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Source.Components;
+using Engine.Source.Managers;
+using Engine.Source.Systems;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace DatorGrafikLab1
 {
@@ -11,6 +15,9 @@ namespace DatorGrafikLab1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Model plane;
+        GraphicsDevice device;
+
 
         public Game1()
         {
@@ -28,6 +35,19 @@ namespace DatorGrafikLab1
         {
             // TODO: Add your initialization logic here
 
+            //Entitet för planet
+            int entityID = ComponentManager.Instance.CreateID();
+            List<IComponent> componentList = new List<IComponent>();
+            //Skapa och lägg till alla komponenter som vi behöver för modellen
+            componentList.Add(new ModelComponent(Content.Load<Model>("Chopper")));
+            componentList.Add(new TransformComponent(new Vector3(0, 0, -50), new Vector3(5, 5, 5)));
+            componentList.Add(new CameraComponent(graphics.GraphicsDevice));
+            ComponentManager.Instance.AddAllComponents(entityID, componentList);
+
+            SystemManager.Instance.AddSystem(new ModelSystem());
+            
+            
+
             base.Initialize();
         }
 
@@ -39,9 +59,12 @@ namespace DatorGrafikLab1
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            plane = Content.Load<Model>("Chopper");
+            device = graphics.GraphicsDevice;
 
             // TODO: use this.Content to load your game content here
         }
+        
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -74,6 +97,9 @@ namespace DatorGrafikLab1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            SystemManager.Instance.RunRenderSystems();
+           
 
             // TODO: Add your drawing code here
 
