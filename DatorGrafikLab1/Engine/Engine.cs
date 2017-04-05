@@ -12,7 +12,6 @@ namespace Engine
     {
         public GraphicsDeviceManager Graphics { get; }
         public GraphicsDevice Device { get; set; }
-        // SpriteBatch spriteBatch;
 
         public Engine()
         {
@@ -37,10 +36,7 @@ namespace Engine
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            // spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -49,7 +45,7 @@ namespace Engine
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
         /// <summary>

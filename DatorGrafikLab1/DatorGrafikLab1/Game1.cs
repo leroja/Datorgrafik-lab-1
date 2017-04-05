@@ -1,4 +1,7 @@
-﻿using Engine.Source.Components;
+﻿using DatorGrafikLab1.Content.GameComponents;
+using DatorGrafikLab1.Content.GameSystems;
+using Engine.Source.Components;
+using Engine.Source.Enums;
 using Engine.Source.Managers;
 using Engine.Source.Systems;
 using Microsoft.Xna.Framework;
@@ -14,13 +17,10 @@ namespace DatorGrafikLab1
     public class Game1 : Engine.Engine
     {
         SpriteBatch spriteBatch;
-        Model plane;
 
         public Game1()
         {
-            //graphics = new GraphicsDeviceManager(this);
-            //graphics = base.graphics;
-            //Content.RootDirectory = "Content";
+
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace DatorGrafikLab1
         protected override void Initialize()
         {
             Device = Graphics.GraphicsDevice;
-            // TODO: Add your initialization logic here
+
             var t = Device;
             //Entitet för planet
             int entityID = ComponentManager.Instance.CreateID();
@@ -40,25 +40,42 @@ namespace DatorGrafikLab1
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 new ModelComponent(Content.Load<Model>("Chopper")),
-                new TransformComponent(new Vector3(0, 0, -50), new Vector3(5, 5, 5)),
-                new CameraComponent(Graphics.GraphicsDevice)
-            };
-            ComponentManager.Instance.AddAllComponents(entityID, componentList);
+                new TransformComponent(new Vector3(0, 500, 100), new Vector3(1, 1, 1)),
+                new CameraComponent(new Vector3(0, 500, -100), new Vector3(0, 0, 0), new Vector3(0, 1, 0), 1000.0f, 1.0f, Device.Viewport.AspectRatio),
 
-            SystemManager.Instance.AddSystem(new ModelSystem());
+                new ChopperComponent()
+                
+            };
+            var keýComp = new KeyBoardComponent();
+            keýComp.KeyBoardActions.Add(ActionsEnum.Forward, Keys.Up);
+
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.A);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.D);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeY, Keys.W);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateY, Keys.X);
+
+            //keýComp.keyBoardActions.Add(ActionsEnum.RotateZ, Keys.Up);
+            //keýComp.keyBoardActions.Add(ActionsEnum.RotatenegativeZ, Keys.Up);
+
+
+            ComponentManager.Instance.AddAllComponents(entityID, componentList);
+            ComponentManager.Instance.AddComponentToEntity(entityID, keýComp);
 
             int entityID1 = ComponentManager.Instance.CreateID();
             List<IComponent> componentList1 = new List<IComponent>
             {
                 new HeightmapComponent(Content.Load<Texture2D>("US_Canyon"), Device),
-                new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1))
+                new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
             };
             ComponentManager.Instance.AddAllComponents(entityID1, componentList1);
 
+            SystemManager.Instance.AddSystem(new CameraSystem());
+            SystemManager.Instance.AddSystem(new ChaseCamSystem());
+            SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystem(Device));
             SystemManager.Instance.AddSystem(new TransformSystem());
-            
-            
+            SystemManager.Instance.AddSystem(new KeyBoardSystem());
+            SystemManager.Instance.AddSystem(new ChopperSystem());
 
             base.Initialize();
         }
@@ -70,10 +87,7 @@ namespace DatorGrafikLab1
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            plane = Content.Load<Model>("Chopper");
-
-            // TODO: use this.Content to load your game content here
+            spriteBatch = new SpriteBatch(GraphicsDevice);            
         }
         
 
@@ -83,7 +97,7 @@ namespace DatorGrafikLab1
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+
         }
 
         /// <summary>
@@ -93,13 +107,7 @@ namespace DatorGrafikLab1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            SystemManager.Instance.RunUpdateSystems();
-
-            // TODO: Add your update logic here
-
+            
             base.Update(gameTime);
         }
 

@@ -10,9 +10,9 @@ using Engine.Source.Components;
 
 namespace Engine.Source.Systems
 {
-    class CameraSystem : IUpdate
+    public class CameraSystem : IUpdate
     {
-        public void update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             ComponentManager compMan = ComponentManager.Instance;
 
@@ -22,7 +22,10 @@ namespace Engine.Source.Systems
 
             foreach (int cameraId in cameraIds){
 
-                var cameraComp = compMan.GetEntityComponent<CameraComponent>(cameraIds[0]);
+                var cameraComp = compMan.GetEntityComponent<CameraComponent>(cameraId);
+
+                //var ViewMatrix = Matrix.CreateLookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+                //var ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1.6f, 1.0f, 1000.0f);
 
                 cameraComp.ViewMatrix = Matrix.CreateLookAt(cameraComp.Position, cameraComp.LookAt, cameraComp.UpVector);
                 cameraComp.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, cameraComp.AspectRatio, cameraComp.NearPlane, cameraComp.FarPlane);

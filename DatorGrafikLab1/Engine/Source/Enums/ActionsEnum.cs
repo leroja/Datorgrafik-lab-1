@@ -13,6 +13,6 @@ namespace Engine.Source.Enums
     /// </summary>
     public enum ActionsEnum
     {
-        Jump, Up, Down, Left, Right
+        Up, Down, Left, Right, RotateX, RotateY, RotateZ, RotatenegativeX, RotatenegativeY, RotatenegativeZ, Forward
     }
 }

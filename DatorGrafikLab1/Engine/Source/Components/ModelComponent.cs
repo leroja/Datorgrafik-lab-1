@@ -11,16 +11,16 @@ namespace Engine.Source.Components
     public class ModelComponent : IComponent
     {
         //Holds a model and the data transforms for its meshes.
-        public Model model { get; set; }
+        public Model Model { get; set; }
 
         //Should this be here or in the transformcomponent?
-        public Matrix worldMatrix { get; set; }
+        public Matrix WorldMatrix { get; set; }
         
 
         public ModelComponent(Model model)
         {
-            this.model = model;
-            worldMatrix = Matrix.Identity;
+            this.Model = model;
+            WorldMatrix = Matrix.Identity;
 
         }
     }

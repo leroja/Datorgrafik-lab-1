@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Engine.Source
 {
-    public class structs
+    public class Structs
     {
         public struct VertexPositionColorNormal
         {

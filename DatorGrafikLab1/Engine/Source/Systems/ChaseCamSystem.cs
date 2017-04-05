@@ -12,12 +12,13 @@ namespace Engine.Source.Systems
 {
     public class ChaseCamSystem : IUpdate
     {
-        public void update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
 
             var chaseCameras = ComponentManager.Instance.GetAllEntitiesWithComponentType<ChaseCamComponent>();
 
-            if (chaseCameras == null) return;
+            if (chaseCameras == null)
+                return;
 
             foreach (var cameraId in chaseCameras)
             {
@@ -25,8 +26,9 @@ namespace Engine.Source.Systems
                 var baseCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(cameraId);
                 var transform = ComponentManager.Instance.GetEntityComponent<TransformComponent>(cameraId);
 
+
                 var camPosition = chaseCam.OffSet;
-                // var mat = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
+                //var mat = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
                 //camPosition = Vector3.Transform(camPosition, mat);
                 camPosition += transform.Position;
 

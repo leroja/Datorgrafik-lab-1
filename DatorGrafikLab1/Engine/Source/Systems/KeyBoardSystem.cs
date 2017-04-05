@@ -10,7 +10,7 @@ using Engine.Source.Systems.Interfaces;
 using Engine.Source.Components;
 using Engine.Source.Enums;
 
-namespace GameEngine.Source.Systems
+namespace Engine.Source.Systems
 {
     /// <summary>
     /// a system that updates the state of the keyboard and the updates the states of the keyboard components
@@ -24,9 +24,9 @@ namespace GameEngine.Source.Systems
         /// 
         /// </summary>
         /// <param name="gameTime"></param>
-        public void update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            updateStates();
+            UpdateStates();
 
             List<int> entities = ComponentManager.Instance.GetAllEntitiesWithComponentType<KeyBoardComponent>();
 
@@ -43,7 +43,7 @@ namespace GameEngine.Source.Systems
         /// <summary>
         /// updates the previous & current State of the keyboard
         /// </summary>
-        private void updateStates()
+        private void UpdateStates()
         {
             PrevState = CurState;
             CurState = Keyboard.GetState();
@@ -56,27 +56,27 @@ namespace GameEngine.Source.Systems
         public void UpdateActionStates(KeyBoardComponent keyboardComp)
         {
 
-            foreach (ActionsEnum action in keyboardComp.keyBoardActions.Keys)
+            foreach (ActionsEnum action in keyboardComp.KeyBoardActions.Keys)
             {
-                Keys key = keyboardComp.keyBoardActions[action];
+                Keys key = keyboardComp.KeyBoardActions[action];
                 bool newState = CurState.IsKeyDown(key);
                 bool oldState = PrevState.IsKeyDown(key);
 
                 if (newState && !oldState)
                 {
-                    keyboardComp.state[action] = ButtonStates.Pressed;
+                    keyboardComp.State[action] = ButtonStates.Pressed;
                 }
                 else if (newState && oldState)
                 {
-                    keyboardComp.state[action] = ButtonStates.Hold;
+                    keyboardComp.State[action] = ButtonStates.Hold;
                 }
                 else if (!newState && oldState)
                 {
-                    keyboardComp.state[action] = ButtonStates.Released;
+                    keyboardComp.State[action] = ButtonStates.Released;
                 }
                 else
                 {
-                    keyboardComp.state[action] = ButtonStates.Not_Pressed;
+                    keyboardComp.State[action] = ButtonStates.Not_Pressed;
                 }
             }
         }

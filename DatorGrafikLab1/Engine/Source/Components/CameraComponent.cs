@@ -28,16 +28,11 @@ namespace Engine.Source.Components
             this.FarPlane = FarPlane;
             this.LookAt = LookAt;
             this.NearPlane = NearPlane;
-            this.Position = Position;
+            this.Position = pos;
             this.UpVector = UpVector;
 
+            //ViewMatrix = Matrix.CreateLookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+            //ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, AspectRatio, 1.0f, 1000.0f);
         }
-
-        public CameraComponent(GraphicsDevice device)
-        {
-            ViewMatrix = Matrix.CreateLookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, device.Viewport.AspectRatio, 1.0f, 1000.0f);
-        }
-
     }
 }

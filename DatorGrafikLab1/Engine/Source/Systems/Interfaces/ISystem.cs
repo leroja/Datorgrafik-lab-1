@@ -8,6 +8,6 @@ namespace Engine.Source.Systems.Interfaces
 {
     public interface ISystem
     {
-
+        // Todo gör så att alla system har tillgång till ComponentManagern
     }
 }

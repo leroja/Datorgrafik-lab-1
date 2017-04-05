@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Engine.Source.structs;
+using static Engine.Source.Structs;
 
 namespace Engine.Source.Components
 {
@@ -77,7 +77,7 @@ namespace Engine.Source.Components
             HeightData = new float[TerrainWidth, TerrainHeight];
             for (int x = 0; x < TerrainWidth; x++)
                 for (int y = 0; y < TerrainHeight; y++)
-                    HeightData[x, y] = heightMapColors[x + y * TerrainWidth].R / 5.0f;
+                    HeightData[x, y] = heightMapColors[x + y * TerrainWidth].R;
         }
 
         private void SetUpVertices()

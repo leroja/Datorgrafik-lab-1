@@ -26,7 +26,7 @@ namespace Engine.Source.Systems
                     //Hämta ut Transformcomponenten
                     TransformComponent tfc = ComponentManager.Instance.GetEntityComponent<TransformComponent>(entity.Key);
 
-                    foreach (ModelMesh modelMesh in mcp.model.Meshes)
+                    foreach (ModelMesh modelMesh in mcp.Model.Meshes)
                     {
                         Vector3 scale = tfc.Scale;
                         Vector3 position = tfc.Position;
@@ -36,7 +36,7 @@ namespace Engine.Source.Systems
                         {
 
                             Matrix objectWorld = tfc.ObjectMatrix;
-                            effect.World = modelMesh.ParentBone.Transform * objectWorld * mcp.worldMatrix;
+                            effect.World = modelMesh.ParentBone.Transform * objectWorld * mcp.WorldMatrix;
 
                             // need to get the camera here?
                             CameraComponent cmp = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);

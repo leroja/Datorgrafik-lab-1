@@ -17,7 +17,7 @@ namespace Engine.Source.Systems
         /// the system for this component should handle the objects world matrix calculation
         /// i.e objectWorld = Matrix.CreateScale(scale) * rotation * Matrix.CreateTranslation(position);
         /// </summary>
-        public void update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             //Hämta ut Modelcomponenten
             Dictionary<int, IComponent> mc = ComponentManager.Instance.GetAllEntitiesAndComponentsWithComponentType<TransformComponent>();

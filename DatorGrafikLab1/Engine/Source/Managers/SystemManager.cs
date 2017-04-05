@@ -17,8 +17,8 @@ namespace Engine.Source.Managers
         private static SystemManager instance;
 
         public GameTime GameTime { get; set; }
-        public SpriteBatch spriteBatch { get; set; }
-        public GraphicsDevice device { get; set; }
+        public SpriteBatch SpriteBatch { get; set; }
+        public GraphicsDevice Device { get; set; }
 
         // List<IObserving> observingSystems = new List<IObserving>();
         List<IRender> renderSystems = new List<IRender>();
@@ -135,7 +135,7 @@ namespace Engine.Source.Managers
             {
                 foreach (IUpdate system in updateSystems)
                 {
-                    system.update(GameTime);
+                    system.Update(GameTime);
                 }
             }
         }
