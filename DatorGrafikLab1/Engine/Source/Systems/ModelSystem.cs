@@ -35,7 +35,7 @@ namespace Engine.Source.Systems
                         foreach (BasicEffect effect in modelMesh.Effects)
                         {
 
-                            Matrix objectWorld = tfc.objectMatrix;
+                            Matrix objectWorld = tfc.ObjectMatrix;
                             effect.World = modelMesh.ParentBone.Transform * objectWorld * mcp.worldMatrix;
 
                             // need to get the camera here?

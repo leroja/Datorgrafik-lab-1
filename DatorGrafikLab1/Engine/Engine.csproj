@@ -48,8 +48,11 @@
     <Compile Include="Source\Components\ChaseCamComponent.cs" />
     <Compile Include="Source\Components\HeightmapComponent.cs" />
     <Compile Include="Source\Components\interface\IComponent.cs" />
+    <Compile Include="Source\Components\KeyBoardComponent.cs" />
     <Compile Include="Source\Components\ModelComponent.cs" />
     <Compile Include="Source\Components\TransformComponent.cs" />
+    <Compile Include="Source\Enums\ActionsEnum.cs" />
+    <Compile Include="Source\Enums\ButtonStates.cs" />
     <Compile Include="Source\Managers\ComponentManager.cs" />
     <Compile Include="Source\Managers\SystemManager.cs" />
     <Compile Include="Source\structs.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Source\Systems\Interfaces\IRender.cs" />
     <Compile Include="Source\Systems\Interfaces\ISystem.cs" />
     <Compile Include="Source\Systems\Interfaces\IUpdate.cs" />
+    <Compile Include="Source\Systems\KeyBoardSystem.cs" />
     <Compile Include="Source\Systems\ModelSystem.cs" />
     <Compile Include="Source\Systems\TransformSystem.cs" />
   </ItemGroup>

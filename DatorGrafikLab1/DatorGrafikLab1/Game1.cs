@@ -13,11 +13,8 @@ namespace DatorGrafikLab1
     /// </summary>
     public class Game1 : Engine.Engine
     {
-        // GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Model plane;
-        //GraphicsDevice device;
-
 
         public Game1()
         {
@@ -34,8 +31,9 @@ namespace DatorGrafikLab1
         /// </summary>
         protected override void Initialize()
         {
+            Device = Graphics.GraphicsDevice;
             // TODO: Add your initialization logic here
-
+            var t = Device;
             //Entitet för planet
             int entityID = ComponentManager.Instance.CreateID();
             List<IComponent> componentList = new List<IComponent>

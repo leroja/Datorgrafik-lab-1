@@ -39,7 +39,7 @@ namespace Engine.Source.Systems
                     heightMap.Effect.View = cameraComp.ViewMatrix;
                     heightMap.Effect.Projection = cameraComp.ProjectionMatrix;
                     // Todo fix with world matrix
-                    //heightMap.Effect.World = transformComp.WorldMatrix;
+                    heightMap.Effect.World = transformComp.ObjectMatrix;
                     //heightMap.Effect.World = Matrix.CreateWorld(new Vector3(-100,0,0), new Vector3(), new Vector3());
                     
 

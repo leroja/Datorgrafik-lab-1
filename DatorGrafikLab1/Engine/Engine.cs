@@ -28,7 +28,6 @@ namespace Engine
         /// </summary>
         protected override void Initialize()
         {
-            Device = Graphics.GraphicsDevice;
             base.Initialize();
         }
 

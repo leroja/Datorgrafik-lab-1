@@ -26,11 +26,11 @@ namespace Engine.Source.Systems
                 var transform = ComponentManager.Instance.GetEntityComponent<TransformComponent>(cameraId);
 
                 var camPosition = chaseCam.OffSet;
-                var mat = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
-                camPosition = Vector3.Transform(camPosition, mat);
+                // var mat = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
+                //camPosition = Vector3.Transform(camPosition, mat);
                 camPosition += transform.Position;
 
-                baseCam.UpVector = Vector3.Transform(Vector3.Up, mat);
+                //baseCam.UpVector = Vector3.Transform(Vector3.Up, mat);
 
                 baseCam.Position = camPosition;
                 baseCam.LookAt = transform.Position;

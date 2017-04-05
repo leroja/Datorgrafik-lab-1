@@ -24,7 +24,7 @@ namespace Engine.Source.Systems
             foreach (var entity in mc)
             {
                 TransformComponent tfc = ComponentManager.Instance.GetEntityComponent<TransformComponent>(entity.Key);
-                tfc.objectMatrix = Matrix.CreateScale(tfc.scale) * tfc.rotation * Matrix.CreateTranslation(tfc.position);
+                tfc.ObjectMatrix = Matrix.CreateScale(tfc.Scale) * tfc.Rotation * Matrix.CreateTranslation(tfc.Position);
             }
         }
     }
