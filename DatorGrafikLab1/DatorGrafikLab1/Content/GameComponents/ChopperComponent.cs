@@ -9,7 +9,8 @@ namespace DatorGrafikLab1.Content.GameComponents
 {
     public class ChopperComponent : IComponent
     {
-
+        public float mainRotorAngle = 0;
+        public float tailRotorAngle = 0;
 
 
     }

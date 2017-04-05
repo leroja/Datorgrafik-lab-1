@@ -36,16 +36,32 @@ namespace DatorGrafikLab1
             var t = Device;
             //Entitet för planet
             int entityID = ComponentManager.Instance.CreateID();
+            float mainRotorAngle = 0;
+            float tailRotorAngle = 0;
+            ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
+            Matrix []meshWorldMatrices = new Matrix[3];
+            meshWorldMatrices[0] = Matrix.CreateRotationY(mainRotorAngle); 
+            meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
+            meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0)); 
+
+            ModelMesh bp = mcp.Model.Meshes[2];
+            System.Console.WriteLine(bp);
+            
+
+
+            mcp.meshWorldMatrices = meshWorldMatrices;
+
             List<IComponent> componentList = new List<IComponent>
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
-                new ModelComponent(Content.Load<Model>("Chopper")),
-                new TransformComponent(new Vector3(0, 500, 100), new Vector3(1, 1, 1)),
-                new CameraComponent(new Vector3(0, 500, -100), new Vector3(0, 0, 0), new Vector3(0, 1, 0), 1000.0f, 1.0f, Device.Viewport.AspectRatio),
+                mcp,
+                new TransformComponent(new Vector3(0, -100, 100), new Vector3(10, 10, 10)),
+                new CameraComponent(new Vector3(-200, 500, -100), new Vector3(0, 0, 0), new Vector3(0, 1, 0), 1000.0f, 1.0f, Device.Viewport.AspectRatio),
 
                 new ChopperComponent()
                 
             };
+
             var keýComp = new KeyBoardComponent();
             keýComp.KeyBoardActions.Add(ActionsEnum.Forward, Keys.Up);
 

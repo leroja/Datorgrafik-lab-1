@@ -26,6 +26,8 @@ namespace Engine.Source.Systems
                 TransformComponent tfc = ComponentManager.Instance.GetEntityComponent<TransformComponent>(entity.Key);
                 tfc.ObjectMatrix = Matrix.CreateScale(tfc.Scale) * tfc.Rotation * Matrix.CreateTranslation(tfc.Position);
             }
+
+           
         }
     }
 }

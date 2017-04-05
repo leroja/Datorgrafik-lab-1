@@ -25,11 +25,16 @@ namespace DatorGrafikLab1.Content.GameSystems
             foreach (var chopperId in choppIds)
             {
                 var chopperComp = compMan.GetEntityComponent<ChopperComponent>(chopperId);
+                chopperComp.mainRotorAngle -= 0.15f;
+                chopperComp.tailRotorAngle -= 0.15f;
+                
+
+
                 var keyBComp = compMan.GetEntityComponent<KeyBoardComponent>(chopperId);
 
                 var transformComp = compMan.GetEntityComponent<TransformComponent>(chopperId);
                 var modelComp = compMan.GetEntityComponent<ModelComponent>(chopperId);
-
+                RecalculateMetrices(chopperComp, modelComp);
 
                 var newRot = transformComp.Rotation;
                 
@@ -73,5 +78,19 @@ namespace DatorGrafikLab1.Content.GameSystems
 
             }
         }
+
+        private void RecalculateMetrices(ChopperComponent chopperComp, ModelComponent modelComp)
+        {
+            Matrix[] meshWorldMatrices = new Matrix[3];
+            meshWorldMatrices[0] = Matrix.CreateRotationY(chopperComp.mainRotorAngle);
+            meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
+            meshWorldMatrices[2] = Matrix.Invert(Matrix.CreateTranslation(modelComp.Model.Bones["Back_Rotor"].Transform.Translation)) *
+                                   Matrix.CreateRotationX(chopperComp.tailRotorAngle) *
+                                   Matrix.CreateTranslation(modelComp.Model.Bones["Back_Rotor"].Transform.Translation);
+            modelComp.meshWorldMatrices = meshWorldMatrices;
+
+        }
+
+
     }
 }
