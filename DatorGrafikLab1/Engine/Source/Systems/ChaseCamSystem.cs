@@ -26,14 +26,25 @@ namespace Engine.Source.Systems
                 var baseCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(cameraId);
                 var transform = ComponentManager.Instance.GetEntityComponent<TransformComponent>(cameraId);
 
+                var rotation = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
 
-                var mat = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
-                var camPosition = Vector3.Transform(chaseCam.OffSet, mat);
-                camPosition += transform.Position;
+                if (chaseCam.Tripy)
+                {
+                    var camPosition = chaseCam.OffSet;
+                    camPosition += transform.Position;
+                    
+                    baseCam.Position = camPosition;
+                }
+                else
+                {
+                    
+                    var camPosition = Vector3.Transform(chaseCam.OffSet, rotation);
+                    camPosition += transform.Position;
+                    
+                    baseCam.Position = camPosition;
+                }
 
-                baseCam.UpVector = Vector3.Transform(Vector3.Up, mat);
-
-                baseCam.Position = camPosition;
+                baseCam.UpVector = Vector3.Transform(Vector3.Up, rotation);
                 baseCam.LookAt = transform.Position;
             }
 

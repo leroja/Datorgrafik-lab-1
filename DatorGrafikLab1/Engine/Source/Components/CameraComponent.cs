@@ -30,6 +30,9 @@ namespace Engine.Source.Components
             this.NearPlane = NearPlane;
             this.Position = pos;
             this.UpVector = UpVector;
+
+            ViewMatrix = Matrix.CreateLookAt(Position, LookAt, UpVector);
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, AspectRatio, NearPlane, FarPlane);
         }
     }
 }

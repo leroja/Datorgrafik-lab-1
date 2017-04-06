@@ -56,7 +56,8 @@ namespace DatorGrafikLab1
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
-                    OffSet = new Vector3(0, 10, 20)
+                    OffSet = new Vector3(0, 10, 20),
+                    Tripy = false
                 },
                 new ChopperComponent()
                 
@@ -80,13 +81,15 @@ namespace DatorGrafikLab1
             int entityID1 = ComponentManager.Instance.CreateID();
             List<IComponent> componentList1 = new List<IComponent>
             {
-                new HeightmapComponent(Content.Load<Texture2D>("US_Canyon"), Device),
+                //new HeightmapComponentColour(Content.Load<Texture2D>("US_Canyon"), Device),
+                new HeightmapComponentTexture(Device, Content.Load<Texture2D>("US_Canyon"), Content.Load<Texture2D>("images")),
                 new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
             };
             ComponentManager.Instance.AddAllComponents(entityID1, componentList1);
 
             SystemManager.Instance.AddSystem(new ModelSystem());
-            SystemManager.Instance.AddSystem(new HeightmapSystem(Device));
+            SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
+            SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
             SystemManager.Instance.AddSystem(new TransformSystem());
             SystemManager.Instance.AddSystem(new KeyBoardSystem());
             SystemManager.Instance.AddSystem(new ChopperSystem());

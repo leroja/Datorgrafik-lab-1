@@ -11,11 +11,11 @@ using Engine.Source.Components;
 
 namespace Engine.Source.Systems
 {
-    public class HeightmapSystem : IRender
+    public class HeightmapSystemColour : IRender
     {
         private GraphicsDevice device;
 
-        public HeightmapSystem(GraphicsDevice device)
+        public HeightmapSystemColour(GraphicsDevice device)
         {
             this.device = device;
         }
@@ -24,7 +24,7 @@ namespace Engine.Source.Systems
         {
             ComponentManager compMan = ComponentManager.Instance;
 
-            var ents = compMan.GetAllEntitiesWithComponentType<HeightmapComponent>();
+            var ents = compMan.GetAllEntitiesWithComponentType<HeightmapComponentColour>();
 
             // Todo fix with camera
             var cameraIds = compMan.GetAllEntitiesWithComponentType<CameraComponent>();
@@ -33,7 +33,7 @@ namespace Engine.Source.Systems
             {
                 foreach(int heightMapId in ents)
                 {
-                    var heightMap = compMan.GetEntityComponent<HeightmapComponent>(heightMapId);
+                    var heightMap = compMan.GetEntityComponent<HeightmapComponentColour>(heightMapId);
                     var transformComp = compMan.GetEntityComponent<TransformComponent>(heightMapId);
 
                     heightMap.Effect.View = cameraComp.ViewMatrix;

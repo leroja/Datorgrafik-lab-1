@@ -9,7 +9,7 @@ using static Engine.Source.Structs;
 
 namespace Engine.Source.Components
 {
-    public class HeightmapComponent : IComponent
+    public class HeightmapComponentColour : IComponent
     {
         private int TerrainHeight { get; set; }
         private int TerrainWidth { get; set; }
@@ -24,7 +24,7 @@ namespace Engine.Source.Components
         public int[] Indices { get; set; }
         public BasicEffect Effect { get; set; }
 
-        public HeightmapComponent(Texture2D heightMap, GraphicsDevice device)
+        public HeightmapComponentColour(Texture2D heightMap, GraphicsDevice device)
         {
             this.HeightMap = heightMap;
             this.Device = device;

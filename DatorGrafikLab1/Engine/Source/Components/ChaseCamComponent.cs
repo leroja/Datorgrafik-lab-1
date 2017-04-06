@@ -11,5 +11,6 @@ namespace Engine.Source.Components
     {
         public Vector3 OffSet { get; set; }
 
+        public bool Tripy { get; set; }
     }
 }
