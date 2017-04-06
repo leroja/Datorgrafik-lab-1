@@ -13,19 +13,27 @@ namespace Engine.Source.Systems
 {
     public class ModelSystem : IRender
     {
+        CameraComponent defaultCam;
         public void Draw(GameTime gameTime)
         {
+            //Check for all entities with a camera
+            List<int> entitiesWithCamera = ComponentManager.Instance.GetAllEntitiesWithComponentType<CameraComponent>();
+            //pick one
+            defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entitiesWithCamera.First());
 
             Dictionary<int,IComponent> mc = ComponentManager.Instance.GetAllEntitiesAndComponentsWithComponentType<ModelComponent>();
             foreach(var entity in mc)
             {
+               
                 if (ComponentManager.Instance.CheckIfEntityHasComponent<TransformComponent>(entity.Key))
                 {
                     //Hämta ut Modelcomponenten
                     ModelComponent mcp = ComponentManager.Instance.GetEntityComponent<ModelComponent>(entity.Key);
                     //Hämta ut Transformcomponenten
                     TransformComponent tfc = ComponentManager.Instance.GetEntityComponent<TransformComponent>(entity.Key);
-                    CameraComponent cmp = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
+                    //Check if model has it's own camera, if not use default
+                    if (ComponentManager.Instance.CheckIfEntityHasComponent<CameraComponent>(entity.Key))
+                        defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
 
                     if (mcp.MeshWorldMatrices != null)
                     {
@@ -39,8 +47,8 @@ namespace Engine.Source.Systems
 
 
                                 effect.World = mesh.ParentBone.Transform * mcp.MeshWorldMatrices[index] * tfc.ObjectMatrix;
-                                effect.View = cmp.ViewMatrix;
-                                effect.Projection = cmp.ProjectionMatrix;
+                                effect.View = defaultCam.ViewMatrix;
+                                effect.Projection = defaultCam.ProjectionMatrix;
                             }
                             mesh.Draw();
                         }
@@ -48,29 +56,33 @@ namespace Engine.Source.Systems
                     else
                     {
                         foreach (ModelMesh modelMesh in mcp.Model.Meshes)
-                    {
-                        Vector3 scale = tfc.Scale;
-                        Vector3 position = tfc.Position;
-                        
-                        foreach (BasicEffect effect in modelMesh.Effects)
                         {
+                            Vector3 scale = tfc.Scale;
+                            Vector3 position = tfc.Position;
 
-                            Matrix objectWorld = tfc.ObjectMatrix;
-                            effect.World = modelMesh.ParentBone.Transform * objectWorld; //* mcp.WorldMatrix;
-                            
-                            effect.View = cmp.ViewMatrix;
-                            effect.Projection = cmp.ProjectionMatrix;
+                            //Check if model has it's own camera, if not use default
+                            if (ComponentManager.Instance.CheckIfEntityHasComponent<CameraComponent>(entity.Key))
+                                defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
 
-                            effect.EnableDefaultLighting();
-                            effect.LightingEnabled = true;
-
-                            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                            foreach (BasicEffect effect in modelMesh.Effects)
                             {
-                                pass.Apply();
-                                modelMesh.Draw();
+
+                                Matrix objectWorld = tfc.ObjectMatrix;
+                                effect.World = modelMesh.ParentBone.Transform * objectWorld; //* mcp.WorldMatrix;
+                            
+                                effect.View = defaultCam.ViewMatrix;
+                                effect.Projection = defaultCam.ProjectionMatrix;
+
+                                effect.EnableDefaultLighting();
+                                effect.LightingEnabled = true;
+
+                                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                                {
+                                    pass.Apply();
+                                    modelMesh.Draw();
+                                }
                             }
                         }
-                    }
                     }
 
                 }

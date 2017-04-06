@@ -34,6 +34,17 @@ namespace DatorGrafikLab1
             Device = Graphics.GraphicsDevice;
 
             var t = Device;
+
+            
+            int skyboxEntity = ComponentManager.Instance.CreateID();
+            List<IComponent> anotherList = new List<IComponent>
+            {
+                new ModelComponent(Content.Load<Model>("untitled")),
+                new TransformComponent(new Vector3(250, 400, -500), new Vector3(5,5,5)),
+            };
+
+            ComponentManager.Instance.AddAllComponents(skyboxEntity, anotherList);
+
             //Entitet för planet
             int entityID = ComponentManager.Instance.CreateID();
             ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
@@ -42,9 +53,6 @@ namespace DatorGrafikLab1
             meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
             meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0)); 
 
-            ModelMesh bp = mcp.Model.Meshes[2];
-            System.Console.WriteLine(bp);
-
 
             mcp.MeshWorldMatrices = meshWorldMatrices;
 
@@ -52,7 +60,7 @@ namespace DatorGrafikLab1
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
-                new TransformComponent(new Vector3(0, 100, 100), new Vector3(1, 1, 1)),
+                new TransformComponent(new Vector3(502, 51, -598), new Vector3(1, 1, 1)),
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
