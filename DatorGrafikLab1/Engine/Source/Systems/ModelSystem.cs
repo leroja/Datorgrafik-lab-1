@@ -26,7 +26,8 @@ namespace Engine.Source.Systems
                     //Hämta ut Transformcomponenten
                     TransformComponent tfc = ComponentManager.Instance.GetEntityComponent<TransformComponent>(entity.Key);
                     CameraComponent cmp = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
-                    if (mcp.meshWorldMatrices != null)
+
+                    if (mcp.MeshWorldMatrices != null)
                     {
                         for (int index = 0; index < mcp.Model.Meshes.Count; index++)
                         {
@@ -37,7 +38,7 @@ namespace Engine.Source.Systems
                                 effect.PreferPerPixelLighting = true;
 
 
-                                effect.World = mesh.ParentBone.Transform * mcp.meshWorldMatrices[index] * tfc.ObjectMatrix;
+                                effect.World = mesh.ParentBone.Transform * mcp.MeshWorldMatrices[index] * tfc.ObjectMatrix;
                                 effect.View = cmp.ViewMatrix;
                                 effect.Projection = cmp.ProjectionMatrix;
                             }
@@ -47,34 +48,29 @@ namespace Engine.Source.Systems
                     else
                     {
                         foreach (ModelMesh modelMesh in mcp.Model.Meshes)
+                    {
+                        Vector3 scale = tfc.Scale;
+                        Vector3 position = tfc.Position;
+                        
+                        foreach (BasicEffect effect in modelMesh.Effects)
                         {
-                            Vector3 scale = tfc.Scale;
-                            Vector3 position = tfc.Position;
 
-                            //System.Console.WriteLine(modelMesh.Name);
+                            Matrix objectWorld = tfc.ObjectMatrix;
+                            effect.World = modelMesh.ParentBone.Transform * objectWorld; //* mcp.WorldMatrix;
+                            
+                            effect.View = cmp.ViewMatrix;
+                            effect.Projection = cmp.ProjectionMatrix;
 
-                            foreach (BasicEffect effect in modelMesh.Effects)
+                            effect.EnableDefaultLighting();
+                            effect.LightingEnabled = true;
+
+                            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                             {
-
-                                Matrix objectWorld = tfc.ObjectMatrix;
-                                effect.World = modelMesh.ParentBone.Transform * objectWorld * mcp.WorldMatrix;
-
-                                
-                                
-                                effect.View = cmp.ViewMatrix;
-                                effect.Projection = cmp.ProjectionMatrix;
-
-                                effect.EnableDefaultLighting();
-                                effect.LightingEnabled = true;
-
-                                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                                {
-                                    pass.Apply();
-                                    modelMesh.Draw();
-                                }
+                                pass.Apply();
+                                modelMesh.Draw();
                             }
                         }
-                    
+                    }
                     }
 
                 }

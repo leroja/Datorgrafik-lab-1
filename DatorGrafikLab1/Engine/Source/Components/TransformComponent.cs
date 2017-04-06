@@ -12,18 +12,22 @@ namespace Engine.Source.Components
         //Holds data such as position, rotation and scaling.
 
         public Vector3 Position { get; set; }
-        public Matrix Rotation { get; set; }
+
+        public Vector3 Rotation { get; set; }
+
+        public Quaternion QuaternionRotation { get; set; }
+        public Vector3 Forward { get; set; }
+
         public Vector3 Scale { get; set; }
+
         public Matrix ObjectMatrix { get; set; }
+
+
         public TransformComponent(Vector3 position, Vector3 scale)
         {
             this.Position = position;
             this.Scale = scale;
-            this.Rotation = Matrix.Identity;
+            this.QuaternionRotation = Quaternion.Identity;
         }
-
-
-
-
     }
 }

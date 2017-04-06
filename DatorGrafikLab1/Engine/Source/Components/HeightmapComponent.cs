@@ -42,28 +42,14 @@ namespace Engine.Source.Components
             Effect = new BasicEffect(Device);
             Effect.EnableDefaultLighting();
 
-            // test
+            // färg
             Effect.VertexColorEnabled = true;
             // lite fog stuff
-            //Effect.FogEnabled = true;
-            //Effect.FogStart = 100;
-            //Effect.FogEnd = 600;
-            //Effect.FogColor = Color.Gray.ToVector3();
+            Effect.FogEnabled = true;
+            Effect.FogStart = 50;
+            Effect.FogEnd = 400;
+            Effect.FogColor = Color.SeaShell.ToVector3();
 
-            // else
-            //Effect.EnableDefaultLighting();
-            //Effect.LightingEnabled = true;
-
-            //Effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.5f, 0.5f);
-            //Effect.DirectionalLight0.Direction = new Vector3(0.5f, -1, 0);
-            //Effect.DirectionalLight0.SpecularColor = new Vector3(1, 1, 1);
-            //Effect.DirectionalLight0.Enabled = true;
-
-            //Effect.AmbientLightColor = new Vector3(0.1f, 0.1f, 0.1f);
-            //Effect.PreferPerPixelLighting = true;
-            //Effect.SpecularPower = 100;
-            //Effect.DiffuseColor = new Vector3(0.9f, 0.4f, 0.6f);
-            //Effect.EmissiveColor = new Vector3(0.0f, 0.0f, 0.0f);
         }
 
         private void LoadHeightData(Texture2D heightMap)
@@ -102,11 +88,11 @@ namespace Engine.Source.Components
                 {
                     Vertices[x + y * TerrainWidth].Position = new Vector3(x, HeightData[x, y], -y);
 
-                    if (HeightData[x, y] < minHeight + (maxHeight - minHeight) / 4)
+                    if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 0.25)
                         Vertices[x + y * TerrainWidth].Color = Color.Blue;
-                    else if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 2 / 4)
+                    else if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 0.5)
                         Vertices[x + y * TerrainWidth].Color = Color.Green;
-                    else if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 3 / 4)
+                    else if (HeightData[x, y] < minHeight + (maxHeight - minHeight) * 0.75)
                         Vertices[x + y * TerrainWidth].Color = Color.Brown;
                     else
                         Vertices[x + y * TerrainWidth].Color = Color.White;

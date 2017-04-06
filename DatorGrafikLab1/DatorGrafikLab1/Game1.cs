@@ -1,5 +1,5 @@
-﻿using DatorGrafikLab1.Content.GameComponents;
-using DatorGrafikLab1.Content.GameSystems;
+﻿using DatorGrafikLab1.GameComponents;
+using DatorGrafikLab1GameSystems;
 using Engine.Source.Components;
 using Engine.Source.Enums;
 using Engine.Source.Managers;
@@ -36,28 +36,28 @@ namespace DatorGrafikLab1
             var t = Device;
             //Entitet för planet
             int entityID = ComponentManager.Instance.CreateID();
-            float mainRotorAngle = 0;
-            float tailRotorAngle = 0;
             ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
             Matrix []meshWorldMatrices = new Matrix[3];
-            meshWorldMatrices[0] = Matrix.CreateRotationY(mainRotorAngle); 
+            meshWorldMatrices[0] = Matrix.CreateRotationY(0); 
             meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
             meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0)); 
 
             ModelMesh bp = mcp.Model.Meshes[2];
             System.Console.WriteLine(bp);
-            
 
 
-            mcp.meshWorldMatrices = meshWorldMatrices;
+            mcp.MeshWorldMatrices = meshWorldMatrices;
 
             List<IComponent> componentList = new List<IComponent>
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
-                new TransformComponent(new Vector3(0, -100, 100), new Vector3(10, 10, 10)),
-                new CameraComponent(new Vector3(-200, 500, -100), new Vector3(0, 0, 0), new Vector3(0, 1, 0), 1000.0f, 1.0f, Device.Viewport.AspectRatio),
-
+                new TransformComponent(new Vector3(0, 100, 100), new Vector3(1, 1, 1)),
+                new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
+                new ChaseCamComponent
+                {
+                    OffSet = new Vector3(0, 10, 20)
+                },
                 new ChopperComponent()
                 
             };
@@ -65,13 +65,13 @@ namespace DatorGrafikLab1
             var keýComp = new KeyBoardComponent();
             keýComp.KeyBoardActions.Add(ActionsEnum.Forward, Keys.Up);
 
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.A);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.D);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeY, Keys.W);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotateY, Keys.X);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.W);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.S);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeY, Keys.D);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateY, Keys.A);
 
-            //keýComp.keyBoardActions.Add(ActionsEnum.RotateZ, Keys.Up);
-            //keýComp.keyBoardActions.Add(ActionsEnum.RotatenegativeZ, Keys.Up);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateZ, Keys.Left);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeZ, Keys.Right);
 
 
             ComponentManager.Instance.AddAllComponents(entityID, componentList);
@@ -85,13 +85,14 @@ namespace DatorGrafikLab1
             };
             ComponentManager.Instance.AddAllComponents(entityID1, componentList1);
 
-            SystemManager.Instance.AddSystem(new CameraSystem());
-            SystemManager.Instance.AddSystem(new ChaseCamSystem());
             SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystem(Device));
             SystemManager.Instance.AddSystem(new TransformSystem());
             SystemManager.Instance.AddSystem(new KeyBoardSystem());
             SystemManager.Instance.AddSystem(new ChopperSystem());
+
+            SystemManager.Instance.AddSystem(new CameraSystem());
+            SystemManager.Instance.AddSystem(new ChaseCamSystem());
 
             base.Initialize();
         }
@@ -114,27 +115,6 @@ namespace DatorGrafikLab1
         protected override void UnloadContent()
         {
 
-        }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-
-            base.Draw(gameTime);
         }
     }
 }

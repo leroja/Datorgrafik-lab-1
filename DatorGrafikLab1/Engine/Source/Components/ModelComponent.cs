@@ -16,7 +16,7 @@ namespace Engine.Source.Components
         //Should this be here or in the transformcomponent?
         public Matrix WorldMatrix { get; set; }
 
-        public Matrix[] meshWorldMatrices { get; set; }
+        public Matrix[] MeshWorldMatrices { get; set; }
         
 
         public ModelComponent(Model model)

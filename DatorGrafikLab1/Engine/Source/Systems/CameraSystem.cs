@@ -24,9 +24,6 @@ namespace Engine.Source.Systems
 
                 var cameraComp = compMan.GetEntityComponent<CameraComponent>(cameraId);
 
-                //var ViewMatrix = Matrix.CreateLookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-                //var ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1.6f, 1.0f, 1000.0f);
-
                 cameraComp.ViewMatrix = Matrix.CreateLookAt(cameraComp.Position, cameraComp.LookAt, cameraComp.UpVector);
                 cameraComp.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, cameraComp.AspectRatio, cameraComp.NearPlane, cameraComp.FarPlane);
 

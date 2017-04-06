@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatorGrafikLab1.Content.GameComponents
+namespace DatorGrafikLab1.GameComponents
 {
     public class ChopperComponent : IComponent
     {
-        public float mainRotorAngle = 0;
-        public float tailRotorAngle = 0;
 
+        public float MainRotorAngle { get; set; }
+        public float TailRotorAngle { get; set; }
 
     }
 }
