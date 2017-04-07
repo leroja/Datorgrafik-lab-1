@@ -14,13 +14,12 @@ namespace Engine.Source.Systems
     {
         public void Update(GameTime gameTime)
         {
+            var chaseCameraIds = ComponentManager.Instance.GetAllEntitiesWithComponentType<ChaseCamComponent>();
 
-            var chaseCameras = ComponentManager.Instance.GetAllEntitiesWithComponentType<ChaseCamComponent>();
-
-            if (chaseCameras == null)
+            if (chaseCameraIds == null)
                 return;
 
-            foreach (var cameraId in chaseCameras)
+            foreach (var cameraId in chaseCameraIds)
             {
                 var chaseCam = ComponentManager.Instance.GetEntityComponent<ChaseCamComponent>(cameraId);
                 var baseCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(cameraId);
@@ -28,7 +27,7 @@ namespace Engine.Source.Systems
 
                 var rotation = Matrix.CreateFromQuaternion(transform.QuaternionRotation);
 
-                if (chaseCam.Tripy)
+                if (chaseCam.IsDrunk)
                 {
                     var camPosition = chaseCam.OffSet;
                     camPosition += transform.Position;
@@ -46,7 +45,6 @@ namespace Engine.Source.Systems
                 baseCam.UpVector = Vector3.Transform(Vector3.Up, rotation);
                 baseCam.LookAt = transform.Position;
             }
-
         }
     }
 }

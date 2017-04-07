@@ -48,7 +48,6 @@ namespace Engine.Source.Systems
 
                         device.Indices = heightMap.IndexBuffer;
                         device.SetVertexBuffer(heightMap.VertexBuffer);
-                        //graphicsDevice.DrawUserIndexedPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, vertices, 0, vertices.Length, indices, 0, indices.Length / 3);
                         device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightMap.Indices.Length / 3);
                     }
                 }

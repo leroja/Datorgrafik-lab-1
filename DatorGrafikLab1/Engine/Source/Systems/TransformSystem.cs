@@ -19,7 +19,6 @@ namespace Engine.Source.Systems
         /// </summary>
         public void Update(GameTime gameTime)
         {
-            //Hämta ut Modelcomponenten
             Dictionary<int, IComponent> mc = ComponentManager.Instance.GetAllEntitiesAndComponentsWithComponentType<TransformComponent>();
             foreach (var entity in mc)
             {
@@ -32,7 +31,6 @@ namespace Engine.Source.Systems
                 tfc.ObjectMatrix = Matrix.CreateScale(tfc.Scale) * Matrix.CreateFromQuaternion(tfc.QuaternionRotation) * Matrix.CreateTranslation(tfc.Position);
             }
 
-           
         }
     }
 }

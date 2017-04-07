@@ -13,6 +13,8 @@ namespace Engine
         public GraphicsDeviceManager Graphics { get; }
         public GraphicsDevice Device { get; set; }
 
+        public SpriteBatch SpriteBatch { get; set; }
+
         public Engine()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -36,7 +38,7 @@ namespace Engine
         /// </summary>
         protected override void LoadContent()
         {
-
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         /// <summary>

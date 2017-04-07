@@ -16,8 +16,7 @@ namespace DatorGrafikLab1
     /// </summary>
     public class Game1 : Engine.Engine
     {
-        SpriteBatch spriteBatch;
-
+        
         public Game1()
         {
 
@@ -32,10 +31,7 @@ namespace DatorGrafikLab1
         protected override void Initialize()
         {
             Device = Graphics.GraphicsDevice;
-
-            var t = Device;
-
-            
+                        
             int skyboxEntity = ComponentManager.Instance.CreateID();
             List<IComponent> anotherList = new List<IComponent>
             {
@@ -63,7 +59,8 @@ namespace DatorGrafikLab1
                 new ChaseCamComponent
                 {
                     OffSet = new Vector3(0, 10, 20),
-                    Tripy = false
+                    // sätt isDrunk till true om man vill ha en "drunk" kamera
+                    IsDrunk = false
                 },
                 new ChopperComponent()
             };
@@ -82,6 +79,7 @@ namespace DatorGrafikLab1
             int HeightmapEnt = ComponentManager.Instance.CreateID();
             List<IComponent> HeightmapCompList = new List<IComponent>
             {
+                // ändra här för de olika typerna av height map
                 //new HeightmapComponentColour(Content.Load<Texture2D>("US_Canyon"), Device),
                 new HeightmapComponentTexture(Device, Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024")),
                 new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
@@ -107,8 +105,7 @@ namespace DatorGrafikLab1
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);            
+
         }
         
 

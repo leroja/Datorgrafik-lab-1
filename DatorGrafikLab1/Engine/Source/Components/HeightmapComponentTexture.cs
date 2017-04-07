@@ -24,7 +24,7 @@ namespace Engine.Source.Components
         public int[] Indices { get; set; }
 
         // array to read heightMap data
-        float[,] heightMapData;
+        private float[,] heightMapData;
 
         public VertexBuffer VertexBuffer { get; set; }
         public IndexBuffer IndexBuffer { get; set; }
@@ -37,7 +37,7 @@ namespace Engine.Source.Components
             SetHeightMapData();
         }
 
-        public void SetHeightMapData()
+        private void SetHeightMapData()
         {
             width = heightMap.Width;
             height = heightMap.Height;
@@ -47,7 +47,7 @@ namespace Engine.Source.Components
             SetEffects();
         }
 
-        public void SetHeights()
+        private void SetHeights()
         {
             Color[] greyValues = new Color[width * height];
             heightMap.GetData(greyValues);
@@ -61,7 +61,7 @@ namespace Engine.Source.Components
             }
         }
 
-        public void SetIndices()
+        private void SetIndices()
         {
             // amount of triangles
             Indices = new int[6 * (width - 1) * (height - 1)];
@@ -72,7 +72,7 @@ namespace Engine.Source.Components
                 for (int x = 0; x < width - 1; x++)
                 {
                     // create double triangles
-                    Indices[number] = x + (y + 1) * width;      // up left
+                    Indices[number] = x + (y + 1) * width;          // up left
                     Indices[number + 1] = x + y * width + 1;        // down right
                     Indices[number + 2] = x + y * width;            // down left
                     Indices[number + 3] = x + (y + 1) * width;      // up left
@@ -85,7 +85,7 @@ namespace Engine.Source.Components
             IndexBuffer.SetData(Indices);
         }
 
-        public void SetVertices()
+        private void SetVertices()
         {
             vertices = new VertexPositionTexture[width * height];
             Vector2 texturePosition;
@@ -97,27 +97,22 @@ namespace Engine.Source.Components
                     vertices[x + y * width] = new VertexPositionTexture(new Vector3(x, heightMapData[x, y], -y), texturePosition);
                 }
             }
-
             VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionTexture.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
             VertexBuffer.SetData(vertices);
         }
-
-
-
-        public void SetEffects()
+        
+        private void SetEffects()
         {
             Effect = new BasicEffect(graphicsDevice)
             {
                 
                 Texture = heightMapTexture,
                 TextureEnabled = true,
-                // lite fog stuff
-                //FogEnabled = true,
+                FogEnabled = true,
                 FogStart = 75,
                 FogEnd = 400,
                 FogColor = Color.SeaShell.ToVector3()
-        };
+            };
         }
-
     }
 }

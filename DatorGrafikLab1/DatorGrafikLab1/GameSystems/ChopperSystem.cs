@@ -34,7 +34,7 @@ namespace DatorGrafikLab1GameSystems
 
                 var transformComp = compMan.GetEntityComponent<TransformComponent>(chopperId);
                 var modelComp = compMan.GetEntityComponent<ModelComponent>(chopperId);
-                RecalculateMetrices(chopperComp, modelComp);
+                ReCalculateMatrices(chopperComp, modelComp);
 
                 var newRot = transformComp.Rotation;
 
@@ -48,7 +48,6 @@ namespace DatorGrafikLab1GameSystems
                 {
                     transformComp.Position += transformComp.Forward;
                 }
-
                 if (keyBComp.State[ActionsEnum.RotateZ] == ButtonStates.Hold)
                 {
                     newRot.Z += 0.01f;
@@ -75,12 +74,10 @@ namespace DatorGrafikLab1GameSystems
                 }
 
                 transformComp.Rotation = newRot;
-
-
             }
         }
 
-        private void RecalculateMetrices(ChopperComponent chopperComp, ModelComponent modelComp)
+        private void ReCalculateMatrices(ChopperComponent chopperComp, ModelComponent modelComp)
         {
             Matrix[] meshWorldMatrices = new Matrix[3];
             meshWorldMatrices[0] = Matrix.CreateRotationY(chopperComp.MainRotorAngle);

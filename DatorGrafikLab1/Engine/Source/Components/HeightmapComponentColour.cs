@@ -42,7 +42,6 @@ namespace Engine.Source.Components
             Effect = new BasicEffect(Device);
             Effect.EnableDefaultLighting();
 
-            // färg
             Effect.VertexColorEnabled = true;
             // lite fog stuff
             Effect.FogEnabled = true;
@@ -143,7 +142,6 @@ namespace Engine.Source.Components
                 Vertices[index2].Normal += normal;
                 Vertices[index3].Normal += normal;
             }
-
             for (int i = 0; i < Vertices.Length; i++)
                 Vertices[i].Normal.Normalize();
         }
