@@ -57,9 +57,6 @@ namespace Engine.Source.Systems
                     {
                         foreach (ModelMesh modelMesh in mcp.Model.Meshes)
                         {
-                            Vector3 scale = tfc.Scale;
-                            Vector3 position = tfc.Position;
-
                             //Check if model has it's own camera, if not use default
                             if (ComponentManager.Instance.CheckIfEntityHasComponent<CameraComponent>(entity.Key))
                                 defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
@@ -87,31 +84,6 @@ namespace Engine.Source.Systems
 
                 }
             }
-
-            //Working code 
-            //foreach (ModelMesh modelMesh in plane.Meshes)
-            //{
-            //    Vector3 scale = new Vector3(5, 5, 5);
-            //    Vector3 position = new Vector3(0, 0, -50);
-
-            //    //System.Console.WriteLine(modelMesh.Name);
-            //    foreach (BasicEffect effect in modelMesh.Effects)
-            //    {
-            //        Matrix objectWorld = Matrix.CreateScale(scale) * Matrix.CreateRotationY(MathHelper.Pi) * Matrix.CreateTranslation(position);
-            //        effect.World = modelMesh.ParentBone.Transform * objectWorld * world;
-            //        effect.View = view;
-            //        effect.Projection = projection;
-
-            //        effect.EnableDefaultLighting();
-            //        effect.LightingEnabled = true;
-
-            //        foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-            //        {
-            //            pass.Apply();
-            //            modelMesh.Draw();
-            //        }
-            //    }
-            //}
         }
     }
 }

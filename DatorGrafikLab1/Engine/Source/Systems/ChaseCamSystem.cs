@@ -37,7 +37,6 @@ namespace Engine.Source.Systems
                 }
                 else
                 {
-                    
                     var camPosition = Vector3.Transform(chaseCam.OffSet, rotation);
                     camPosition += transform.Position;
                     

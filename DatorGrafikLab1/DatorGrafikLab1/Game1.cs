@@ -45,22 +45,20 @@ namespace DatorGrafikLab1
 
             ComponentManager.Instance.AddAllComponents(skyboxEntity, anotherList);
 
-            //Entitet för planet
-            int entityID = ComponentManager.Instance.CreateID();
+            //Entitet för hellocoptern
+            int ChopperEnt = ComponentManager.Instance.CreateID();
             ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
             Matrix []meshWorldMatrices = new Matrix[3];
             meshWorldMatrices[0] = Matrix.CreateRotationY(0); 
             meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
             meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0)); 
-
-
             mcp.MeshWorldMatrices = meshWorldMatrices;
 
-            List<IComponent> componentList = new List<IComponent>
+            List<IComponent> ChopperComponentList = new List<IComponent>
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
-                new TransformComponent(new Vector3(502, 51, -598), new Vector3(1, 1, 1)),
+                new TransformComponent(new Vector3(500, 51, 0), new Vector3(1, 1, 1)),
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
@@ -68,32 +66,27 @@ namespace DatorGrafikLab1
                     Tripy = false
                 },
                 new ChopperComponent()
-                
             };
-
             var keýComp = new KeyBoardComponent();
             keýComp.KeyBoardActions.Add(ActionsEnum.Forward, Keys.Up);
-
             keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.W);
             keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.S);
             keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeY, Keys.D);
             keýComp.KeyBoardActions.Add(ActionsEnum.RotateY, Keys.A);
-
             keýComp.KeyBoardActions.Add(ActionsEnum.RotateZ, Keys.Left);
             keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeZ, Keys.Right);
+            ComponentManager.Instance.AddAllComponents(ChopperEnt, ChopperComponentList);
+            ComponentManager.Instance.AddComponentToEntity(ChopperEnt, keýComp);
 
 
-            ComponentManager.Instance.AddAllComponents(entityID, componentList);
-            ComponentManager.Instance.AddComponentToEntity(entityID, keýComp);
-
-            int entityID1 = ComponentManager.Instance.CreateID();
-            List<IComponent> componentList1 = new List<IComponent>
+            int HeightmapEnt = ComponentManager.Instance.CreateID();
+            List<IComponent> HeightmapCompList = new List<IComponent>
             {
                 //new HeightmapComponentColour(Content.Load<Texture2D>("US_Canyon"), Device),
-                new HeightmapComponentTexture(Device, Content.Load<Texture2D>("US_Canyon"), Content.Load<Texture2D>("images")),
+                new HeightmapComponentTexture(Device, Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024")),
                 new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
             };
-            ComponentManager.Instance.AddAllComponents(entityID1, componentList1);
+            ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
 
             SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));

@@ -93,7 +93,7 @@ namespace Engine.Source.Components
             {
                 for (int y = 0; y < height; y++)
                 {
-                    texturePosition = new Vector2((float)x / 25.5f, (float)y / 25.5f);
+                    texturePosition = new Vector2((float)x / width, (float)y / height);
                     vertices[x + y * width] = new VertexPositionTexture(new Vector3(x, heightMapData[x, y], -y), texturePosition);
                 }
             }
@@ -112,10 +112,10 @@ namespace Engine.Source.Components
                 Texture = heightMapTexture,
                 TextureEnabled = true,
                 // lite fog stuff
-                FogEnabled = true,
-                FogStart = 50,
+                //FogEnabled = true,
+                FogStart = 75,
                 FogEnd = 400,
-                FogColor = Color.Aquamarine.ToVector3()
+                FogColor = Color.SeaShell.ToVector3()
         };
         }
 
