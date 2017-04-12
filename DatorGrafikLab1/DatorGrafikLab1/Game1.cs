@@ -30,6 +30,7 @@ namespace DatorGrafikLab1
         /// </summary>
         protected override void Initialize()
         {
+            Graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Device = Graphics.GraphicsDevice;
                         
             int skyboxEntity = ComponentManager.Instance.CreateID();
