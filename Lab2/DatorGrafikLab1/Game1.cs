@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using Engine.Source.Factories;
 
 namespace Lab2
 {
@@ -32,6 +33,8 @@ namespace Lab2
         {
             Graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Device = Graphics.GraphicsDevice;
+
+            HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
                         
             int skyboxEntity = ComponentManager.Instance.CreateID();
             List<IComponent> anotherList = new List<IComponent>
@@ -81,8 +84,10 @@ namespace Lab2
             List<IComponent> HeightmapCompList = new List<IComponent>
             {
                 // ändra här för de olika typerna av height map
-                //new HeightmapComponentColour(Content.Load<Texture2D>("US_Canyon"), Device),
-                new HeightmapComponentTexture(Device, Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024")),
+                new HeightmapComponentColour(Content.Load<Texture2D>("canyon_elev_1024"), Device),
+                //new HeightmapComponentTexture(Device, Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024")),
+                //heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024"), 1),
+                //heightmapFactory.CreateColouredHeightMap(Content.Load<Texture2D>("canyon_elev_1024")),
                 new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);

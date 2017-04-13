@@ -54,6 +54,7 @@
     <Compile Include="Source\Components\TransformComponent.cs" />
     <Compile Include="Source\Enums\ActionsEnum.cs" />
     <Compile Include="Source\Enums\ButtonStates.cs" />
+    <Compile Include="Source\Factories\HeightMapFactory.cs" />
     <Compile Include="Source\Managers\ComponentManager.cs" />
     <Compile Include="Source\Managers\SystemManager.cs" />
     <Compile Include="Source\structs.cs" />

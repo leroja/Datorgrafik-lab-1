@@ -24,6 +24,11 @@ namespace Engine.Source.Components
         public int[] Indices { get; set; }
         public BasicEffect Effect { get; set; }
 
+        public HeightmapComponentColour()
+        {
+
+        }
+
         public HeightmapComponentColour(Texture2D heightMap, GraphicsDevice device)
         {
             this.HeightMap = heightMap;
