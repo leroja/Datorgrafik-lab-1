@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Source.Random_stuff;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,11 @@ namespace Engine.Source.Components
         public VertexBuffer VertexBuffer { get; set; }
         public IndexBuffer IndexBuffer { get; set; }
 
+        public List<HeightMapChunk> HeightMapChunks { get; set; }
+
         public HeightmapComponentTexture()
         {
-
+            HeightMapChunks = new List<HeightMapChunk>();
         }
     }
 }

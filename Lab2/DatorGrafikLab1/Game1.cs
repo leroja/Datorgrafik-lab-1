@@ -32,6 +32,11 @@ namespace Lab2
         protected override void Initialize()
         {
             Device = Graphics.GraphicsDevice;
+            //RasterizerState r = new RasterizerState();
+            //r.CullMode = CullMode.None;
+            //r.FillMode = FillMode.WireFrame;
+            //Device.RasterizerState = r;
+            
 
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
                         
@@ -57,7 +62,7 @@ namespace Lab2
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
-                new TransformComponent(new Vector3(500, 51, 0), new Vector3(1, 1, 1)),
+                new TransformComponent(new Vector3(600, 500, -100), new Vector3(1, 1, 1)),
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
@@ -82,7 +87,7 @@ namespace Lab2
             int HeightmapEnt = ComponentManager.Instance.CreateID();
             List<IComponent> HeightmapCompList = new List<IComponent>
             {
-                heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024"), 1),
+                heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("Us_canyon"), Content.Load<Texture2D>("canyon_rgb_1024"), 10),
                 new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);

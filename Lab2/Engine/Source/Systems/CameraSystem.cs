@@ -25,6 +25,8 @@ namespace Engine.Source.Systems
 
                 cameraComp.ViewMatrix = Matrix.CreateLookAt(cameraComp.Position, cameraComp.LookAt, cameraComp.UpVector);
                 cameraComp.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, cameraComp.AspectRatio, cameraComp.NearPlane, cameraComp.FarPlane);
+
+                //var test = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, cameraComp.AspectRatio, cameraComp.NearPlane * 0.5f, cameraComp.FarPlane * 1.2f);
                 cameraComp.CameraFrustrum = new BoundingFrustum(cameraComp.ViewMatrix * cameraComp.ProjectionMatrix);
             }
         }

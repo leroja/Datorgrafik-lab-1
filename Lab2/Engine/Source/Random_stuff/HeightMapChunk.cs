@@ -1,0 +1,37 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Engine.Source.Random_stuff
+{
+    public class HeightMapChunk
+    {
+        public VertexBuffer VertexBuffer { get; set; }
+        public IndexBuffer IndexBuffer { get; set; }
+        public BasicEffect Effect { get; set; }
+        public BoundingBox BoundingBox { get; set; }
+        public BoundingSphere BoundingSphere { get; set; }
+
+        public Vector3 OffsetPosition { get; set; }
+        // Todo rename
+        public int indicesLenDiv3;
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public float[,] heightInfo;
+        public VertexPositionNormalTexture[] Vertices { get; set; }
+        public int[] Indices { get; set; }
+
+
+        public Texture2D Texture { get; set; }
+
+        public HeightMapChunk()
+        {
+
+        }
+
+    }
+}

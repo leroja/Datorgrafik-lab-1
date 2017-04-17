@@ -7,6 +7,7 @@ using Engine.Source.Components;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using static Engine.Source.Structs;
+using Engine.Source.Random_stuff;
 
 namespace Engine.Source.Factories
 {
@@ -20,6 +21,10 @@ namespace Engine.Source.Factories
         private VertexPositionNormalTexture[] verticesTexture;
         private int width;
         private int height;
+
+        private int fractions_per_side;
+        private int chunk_width;
+        private int chunk_height;
 
         private BasicEffect Effect;
         private int[] Indices;
@@ -37,12 +42,13 @@ namespace Engine.Source.Factories
 
         }
 
-        public HeightmapComponentTexture CreateTexturedHeightMap(Texture2D heightMap, Texture2D heightMapTexture, int fractions)
+        public HeightmapComponentTexture CreateTexturedHeightMap(Texture2D heightMap, Texture2D heightMapTexture, int fractions_per_side)
         {
             HeightmapComponentTexture heightMapComponent = new HeightmapComponentTexture();
             this.heightMap = heightMap;
             this.heightMapTexture = heightMapTexture;
-            SetHeightMapData();
+            this.fractions_per_side = fractions_per_side;
+            SetHeightMapData(ref heightMapComponent);
             heightMapComponent.Effect = Effect;
             heightMapComponent.IndexBuffer = IndexBuffer;
             heightMapComponent.Indices = Indices;
@@ -51,16 +57,20 @@ namespace Engine.Source.Factories
         }
         
 
-        private void SetHeightMapData()
+        private void SetHeightMapData(ref HeightmapComponentTexture comp)
         {
             width = heightMap.Width;
             height = heightMap.Height;
+            chunk_height = height / fractions_per_side;
+            chunk_width = width / fractions_per_side;
             SetHeights();
             SetVerticesTexture();
             SetIndices();
             CalculateNormals();
-            CopyToBuffers();
-            SetEffects();
+
+            SetUpHeightMapChunks(ref comp);
+            //CopyToBuffers();
+            //SetEffects();
         }
 
         private void SetHeights()
@@ -162,5 +172,212 @@ namespace Engine.Source.Factories
                 Texture = heightMapTexture
             };
         }
+
+        private void SetUpHeightMapChunks(ref HeightmapComponentTexture heightMapComp)
+        {
+            for (int x = 0; x < width - 1; x += chunk_width)
+            {
+                for (int y = 0; y < height - 1; y += chunk_height)
+                {
+                    
+                    Rectangle clipRect = new Rectangle(x, y, chunk_width + 1, chunk_height + 1);
+                    var offsetpos = new Vector3(x, 0, -y);
+
+                    //HeightMapChunk t = new HeightMapChunk(heightMap, clipRect, offsetpos, GetVertexTextureNormals(clipRect))
+                    HeightMapChunk t = CreateHeightMapChunk(heightMap, clipRect, offsetpos, GetVertexTextureNormals(clipRect), heightMapTexture);
+                    //{
+                    //    // todo set only a part of the whole texture
+                    //    //apply the default texture to the chunk, so that it is visible
+                    //    Texture = heightMapTexture
+                    //};
+
+                    //add the chunk to the chunklist
+                    heightMapComp.HeightMapChunks.Add(t);
+                }
+            }
+        }
+
+        private VertexPositionNormalTexture[] GetVertexTextureNormals(Rectangle rect)
+        {
+            VertexPositionNormalTexture[] terrainVerts = new VertexPositionNormalTexture[rect.Width * rect.Height];
+
+            for (int x = rect.X; x < rect.X + rect.Width; x++)
+            {
+                for (int y = rect.Y; y < rect.Y + rect.Height; y++)
+                {
+                    terrainVerts[(x - rect.X) + (y - rect.Y) * rect.Height].Normal = verticesTexture[x + y * height].Normal;
+                }
+            }
+            return terrainVerts;
+        }
+
+
+        private HeightMapChunk CreateHeightMapChunk(Texture2D terrainMap, Rectangle terrainRect, Vector3 offsetPosition, VertexPositionNormalTexture[] vertexNormals, Texture2D texture)
+        {
+            var chunk = new HeightMapChunk()
+            {
+                OffsetPosition = offsetPosition
+            };
+
+            var heightinfo = CreateHightmap(terrainMap, terrainRect);
+            var chunkVertices = InitTerrainVertices(heightinfo, terrainRect);
+            var boundingBox = CreateBoundingBox(chunkVertices);
+            //var boundingBox = CreateBoundingBox(chunkVertices);
+
+            var effect = new BasicEffect(graphicsDevice)
+            {
+                //FogEnabled = true,
+                //FogStart = 10f,
+                //FogColor = Color.LightGray.ToVector3(),
+                //FogEnd = 400f,
+                TextureEnabled = true,
+                Texture = texture
+            };
+
+            var indices = InitIndices(terrainRect);
+            chunk.indicesLenDiv3 = indices.Length / 3; // för att slipa göra den här divisionen flera gånger
+
+            //copy the calculated normal values
+            CopyNormals(vertexNormals, chunkVertices);
+
+            PrepareBuffers(ref chunk, indices, chunkVertices);
+            
+            chunk.Effect = effect;
+            chunk.BoundingBox = boundingBox;
+            return chunk;
+        }
+
+        private void CopyNormals(VertexPositionNormalTexture[] vertexNormals, VertexPositionNormalTexture[] vertices)
+        {
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                vertices[i].Normal = vertexNormals[i].Normal;
+            }
+        }
+
+        private float[,] CreateHightmap(Texture2D terrainMap, Rectangle terrainRect)
+        {
+            var width = terrainMap.Width;
+            var height = terrainMap.Height;
+
+            //get the pixels from the terrain map
+            Color[] colors = new Color[width * height];
+            terrainMap.GetData(colors);
+
+            //copy the desired portion of the map
+            var heightInfo = new float[terrainRect.Width, terrainRect.Height];
+            for (int x = terrainRect.X; x < terrainRect.X + terrainRect.Width; ++x)
+            {
+                for (int y = terrainRect.Y; y < terrainRect.Y + terrainRect.Height; ++y)
+                {
+                    heightInfo[x - terrainRect.X, y - terrainRect.Y] = colors[x + y * width].R;
+                }
+            }
+            return heightInfo;
+        }
+
+        private int[] InitIndices(Rectangle terrainRect)
+        {
+            var width = terrainRect.Width;
+            var height = terrainRect.Height;
+            var indices = new int[(width - 1) * (height - 1) * 6];
+            int indicesCount = 0; ;
+
+            for (int y = 0; y < height - 1; ++y)
+            {
+                for (int x = 0; x < width - 1; ++x)
+                {
+                    int botLeft = x + y * width;
+                    int botRight = (x + 1) + y * width;
+                    int topLeft = x + (y + 1) * width;
+                    int topRight = (x + 1) + (y + 1) * width;
+
+                    indices[indicesCount++] = topLeft;
+                    indices[indicesCount++] = botRight;
+                    indices[indicesCount++] = botLeft;
+
+                    indices[indicesCount++] = topLeft;
+                    indices[indicesCount++] = topRight;
+                    indices[indicesCount++] = botRight;
+                }
+            }
+            return indices;
+        }
+        private void InitNormals(int[] indices, VertexPositionNormalTexture[] vertices)
+        {
+            int indicesLen = indices.Length / 3;
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                vertices[i].Normal = new Vector3(0f, 0f, 0f);
+            }
+
+            for (int i = 0; i < indicesLen; ++i)
+            {
+                //get indices indexes
+                int i1 = indices[i * 3];
+                int i2 = indices[i * 3 + 1];
+                int i3 = indices[i * 3 + 2];
+
+                //get the two faces
+                Vector3 face1 = vertices[i1].Position - vertices[i3].Position;
+                Vector3 face2 = vertices[i1].Position - vertices[i2].Position;
+
+                //get the cross product between them
+                Vector3 normal = Vector3.Cross(face1, face2);
+
+                //update the normal
+                vertices[i1].Normal += normal;
+                vertices[i2].Normal += normal;
+                vertices[i3].Normal += normal;
+            }
+        }
+
+        private VertexPositionNormalTexture[] InitTerrainVertices(float[,] heightInfo, Rectangle terrainRect)
+        {
+            var width = terrainRect.Width;
+            var height = terrainRect.Height;
+            VertexPositionNormalTexture[] terrainVerts = new VertexPositionNormalTexture[width * height];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    terrainVerts[x + y * height].Position = new Vector3(x, heightInfo[x, y], -y);
+                    terrainVerts[x + y * height].TextureCoordinate.X = (float)x / (width - 1.0f);
+                    terrainVerts[x + y * height].TextureCoordinate.Y = (float)y / (height - 1.0f);
+                }
+            }
+            return terrainVerts;
+        }
+
+        private void PrepareBuffers(ref HeightMapChunk chunk, int[] indices, VertexPositionNormalTexture[] vertices)
+        {
+            chunk.IndexBuffer = new IndexBuffer(graphicsDevice, typeof(int), indices.Length, BufferUsage.WriteOnly);
+            chunk.IndexBuffer.SetData(indices);
+
+            chunk.VertexBuffer = new VertexBuffer(graphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.WriteOnly);
+            chunk.VertexBuffer.SetData(vertices);
+        }
+
+        private BoundingBox CreateBoundingBox(VertexPositionNormalTexture[] vertexArray)
+        {
+            List<Vector3> points = new List<Vector3>();
+
+            foreach (VertexPositionNormalTexture v in vertexArray)
+            {
+                points.Add(v.Position);
+            }
+
+            BoundingBox b = BoundingBox.CreateFromPoints(points);
+            return b;
+        }
+
+        private BoundingSphere CreateBoundingSphere(VertexPositionNormalTexture[] vertexArray)
+        {
+            var first = vertexArray.First();
+            var last = vertexArray.Last();
+            return BoundingSphere.CreateFromPoints(new List<Vector3> { first.Position, last.Position });
+        }
+
     }
 }
