@@ -50,11 +50,13 @@ namespace Engine.Source.Managers
             Type type = system.GetType();
             if (system is IUpdate)
             {
-                AddSystemToList<IUpdate>(updateSystems, system);
+                updateSystems.Add((IUpdate)system);
+                //AddSystemToList<IUpdate>(updateSystems, system);
             }
             if (system is IRender)
             {
-                AddSystemToList<IRender>(renderSystems, system);
+                renderSystems.Add((IRender)system);
+                //AddSystemToList<IRender>(renderSystems, system);
             }
             //if (system is IInput)
             //{
@@ -75,11 +77,15 @@ namespace Engine.Source.Managers
             Type type = system.GetType();
             if (system is IUpdate)
             {
-                RemoveSystemFromList<IUpdate>(updateSystems, system);
+                if (updateSystems.Contains(system))
+                    updateSystems.Remove((IUpdate)system);
+                //RemoveSystemFromList<IUpdate>(updateSystems, system);
             }
             if (system is IRender)
             {
-                RemoveSystemFromList<IRender>(renderSystems, system);
+                if (renderSystems.Contains(system))
+                    renderSystems.Remove((IRender)system);
+                //RemoveSystemFromList<IRender>(renderSystems, system);
             }
             //if (system is IInput)
             //{
@@ -97,20 +103,50 @@ namespace Engine.Source.Managers
         /// <typeparam name="T"> The type of the system, eg IUpdate </typeparam>
         /// <param name="system"> The name of the system </param>
         /// <returns> The requested system if it is in the manager, else null</returns>
-        public T RetrieveSystem<T>(string system) where T : ISystem
+        //public T RetrieveSystem<T>(string system) where T : ISystem
+        //{
+        //    Type type = typeof(T);
+        //    T sys;
+        //    if (type.Equals(typeof(IUpdate)))
+        //    {
+
+        //        sys = (T)updateSystems.Find(x => x.ToString().Contains(system));
+
+        //        return (sys);
+        //    }
+        //    if (type.Equals(typeof(IRender)))
+        //    {
+        //        sys = (T)renderSystems.Find(x => x.ToString().Contains(system));
+        //        return (sys);
+        //    }
+        //    //if (type.Equals(typeof(IInput)))
+        //    //{
+        //    //    sys = (T)inputSystems.Find(x => x.ToString().Contains(system));
+        //    //    return (sys);
+        //    //}
+        //    //if (type.Equals(typeof(IObserving)))
+        //    //{
+        //    //    sys = (T)observingSystems.Find(x => x.ToString().Contains(system));
+        //    //    return (sys);
+        //    //}
+        //    return default(T);
+        //}
+
+
+        public ISystem RetrieveSystem<T>(string system) where T : ISystem
         {
             Type type = typeof(T);
-            T sys;
+            ISystem sys;
             if (type.Equals(typeof(IUpdate)))
             {
 
-                sys = (T)updateSystems.Find(x => x.ToString().Contains(system));
+                sys = updateSystems.Find(x => x.ToString().Contains(system));
 
                 return (sys);
             }
             if (type.Equals(typeof(IRender)))
             {
-                sys = (T)renderSystems.Find(x => x.ToString().Contains(system));
+                sys = renderSystems.Find(x => x.ToString().Contains(system));
                 return (sys);
             }
             //if (type.Equals(typeof(IInput)))
@@ -125,6 +161,7 @@ namespace Engine.Source.Managers
             //}
             return default(T);
         }
+
 
         /// <summary>
         /// Runs all updateable systems
@@ -175,13 +212,13 @@ namespace Engine.Source.Managers
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <param name="system"></param>
-        private void AddSystemToList<T>(List<T> list, ISystem system)
-        {
-            if (!list.Contains((T)system))
-            {
-                list.Add((T)system);
-            }
-        }
+        //private void AddSystemToList<T>(List<T> list, ISystem system)
+        //{
+        //    if (!list.Contains((T)system))
+        //    {
+        //        list.Add((T)system);
+        //    }
+        //}
 
         /// <summary>
         /// removes the system from the correct list
@@ -189,12 +226,12 @@ namespace Engine.Source.Managers
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <param name="system"></param>
-        private void RemoveSystemFromList<T>(List<T> list, ISystem system)
-        {
-            if (list.Contains((T)system))
-            {
-                list.Remove((T)system);
-            }
-        }
+        //private void RemoveSystemFromList<T>(List<T> list, ISystem system)
+        //{
+        //    if (list.Contains((T)system))
+        //    {
+        //        list.Remove((T)system);
+        //    }
+        //}
     }
 }

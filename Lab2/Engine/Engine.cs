@@ -19,6 +19,7 @@ namespace Engine
         {
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Graphics.GraphicsProfile = GraphicsProfile.HiDef;
         }
 
         /// <summary>

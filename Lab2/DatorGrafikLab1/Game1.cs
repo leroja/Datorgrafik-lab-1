@@ -31,7 +31,6 @@ namespace Lab2
         /// </summary>
         protected override void Initialize()
         {
-            Graphics.GraphicsProfile = GraphicsProfile.HiDef;
             Device = Graphics.GraphicsDevice;
 
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
@@ -83,11 +82,7 @@ namespace Lab2
             int HeightmapEnt = ComponentManager.Instance.CreateID();
             List<IComponent> HeightmapCompList = new List<IComponent>
             {
-                // ändra här för de olika typerna av height map
-                new HeightmapComponentColour(Content.Load<Texture2D>("canyon_elev_1024"), Device),
-                //new HeightmapComponentTexture(Device, Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024")),
-                //heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024"), 1),
-                //heightmapFactory.CreateColouredHeightMap(Content.Load<Texture2D>("canyon_elev_1024")),
+                heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("canyon_elev_1024"), Content.Load<Texture2D>("canyon_rgb_1024"), 1),
                 new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);

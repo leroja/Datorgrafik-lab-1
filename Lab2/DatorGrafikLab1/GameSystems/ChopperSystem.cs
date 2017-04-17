@@ -14,26 +14,24 @@ namespace Lab2.GameSystems
 {
     public class ChopperSystem : IUpdate
     {
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            ComponentManager compMan = ComponentManager.Instance;
-
-            var choppIds = compMan.GetAllEntitiesWithComponentType<ChopperComponent>();
+            var choppIds = ComponentManager.GetAllEntitiesWithComponentType<ChopperComponent>();
             if (choppIds == null)
                 return;
 
             foreach (var chopperId in choppIds)
             {
-                var chopperComp = compMan.GetEntityComponent<ChopperComponent>(chopperId);
+                var chopperComp = ComponentManager.GetEntityComponent<ChopperComponent>(chopperId);
                 chopperComp.MainRotorAngle -= 0.15f;
                 chopperComp.TailRotorAngle -= 0.15f;
                 
 
 
-                var keyBComp = compMan.GetEntityComponent<KeyBoardComponent>(chopperId);
+                var keyBComp = ComponentManager.GetEntityComponent<KeyBoardComponent>(chopperId);
 
-                var transformComp = compMan.GetEntityComponent<TransformComponent>(chopperId);
-                var modelComp = compMan.GetEntityComponent<ModelComponent>(chopperId);
+                var transformComp = ComponentManager.GetEntityComponent<TransformComponent>(chopperId);
+                var modelComp = ComponentManager.GetEntityComponent<ModelComponent>(chopperId);
                 ReCalculateMatrices(chopperComp, modelComp);
 
                 var newRot = transformComp.Rotation;
@@ -42,6 +40,13 @@ namespace Lab2.GameSystems
                 newRot.X = 0;
                 newRot.Z = 0;
                 newRot.Y = 0;
+
+                //if (newRot.X > MathHelper.TwoPi)
+                //    newRot.X -= MathHelper.TwoPi;
+                //if (newRot.Y > MathHelper.TwoPi)
+                //    newRot.Y -= MathHelper.TwoPi;
+                //if (newRot.Z > MathHelper.TwoPi)
+                //    newRot.Z -= MathHelper.TwoPi;
 
 
                 if (keyBComp.State[ActionsEnum.Forward] == ButtonStates.Hold)

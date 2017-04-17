@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Engine.Source.Systems.Interfaces
 {
-    public interface IRender : ISystem
+    public abstract class IRender : ISystem
     {
-        void Draw(GameTime gameTime);
+        public abstract void Draw(GameTime gameTime);
         
     }
 }

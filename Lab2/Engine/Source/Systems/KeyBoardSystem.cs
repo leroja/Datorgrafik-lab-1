@@ -24,7 +24,7 @@ namespace Engine.Source.Systems
         /// 
         /// </summary>
         /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             UpdateStates();
 

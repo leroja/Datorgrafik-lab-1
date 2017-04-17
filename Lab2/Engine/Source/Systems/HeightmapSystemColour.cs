@@ -20,21 +20,19 @@ namespace Engine.Source.Systems
             this.device = device;
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
-            ComponentManager compMan = ComponentManager.Instance;
-
-            var ents = compMan.GetAllEntitiesWithComponentType<HeightmapComponentColour>();
+            var ents = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentColour>();
 
             // Todo fix with camera
-            var cameraIds = compMan.GetAllEntitiesWithComponentType<CameraComponent>();
-            var cameraComp = compMan.GetEntityComponent<CameraComponent>(cameraIds[0]);
+            var cameraIds = ComponentManager.GetAllEntitiesWithComponentType<CameraComponent>();
+            var cameraComp = ComponentManager.GetEntityComponent<CameraComponent>(cameraIds[0]);
             if (ents != null)
             {
                 foreach(int heightMapId in ents)
                 {
-                    var heightMap = compMan.GetEntityComponent<HeightmapComponentColour>(heightMapId);
-                    var transformComp = compMan.GetEntityComponent<TransformComponent>(heightMapId);
+                    var heightMap = ComponentManager.GetEntityComponent<HeightmapComponentColour>(heightMapId);
+                    var transformComp = ComponentManager.GetEntityComponent<TransformComponent>(heightMapId);
 
                     heightMap.Effect.View = cameraComp.ViewMatrix;
                     heightMap.Effect.Projection = cameraComp.ProjectionMatrix;

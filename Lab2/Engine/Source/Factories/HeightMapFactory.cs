@@ -18,7 +18,6 @@ namespace Engine.Source.Factories
         private Texture2D heightMap;
         private Texture2D heightMapTexture;
         private VertexPositionNormalTexture[] verticesTexture;
-        private VertexPositionColorNormal[] verticesColour;
         private int width;
         private int height;
 
@@ -30,8 +29,7 @@ namespace Engine.Source.Factories
 
         private VertexBuffer VertexBuffer;
         private IndexBuffer IndexBuffer;
-
-        private string type;
+        
 
         public HeightMapFactory(GraphicsDevice graphicsDevice)
         {
@@ -44,38 +42,21 @@ namespace Engine.Source.Factories
             HeightmapComponentTexture heightMapComponent = new HeightmapComponentTexture();
             this.heightMap = heightMap;
             this.heightMapTexture = heightMapTexture;
-            this.type = "Texture";
-            SetHeightMapData(type);
+            SetHeightMapData();
             heightMapComponent.Effect = Effect;
             heightMapComponent.IndexBuffer = IndexBuffer;
             heightMapComponent.Indices = Indices;
             heightMapComponent.VertexBuffer = VertexBuffer;
             return heightMapComponent;
         }
+        
 
-        public HeightmapComponentColour CreateColouredHeightMap(Texture2D heightMap)
-        {
-            HeightmapComponentColour heightMapComponent = new HeightmapComponentColour();
-
-            this.heightMap = heightMap;
-            this.type = "Colour";
-            SetHeightMapData(type);
-            heightMapComponent.Effect = Effect;
-            heightMapComponent.IndexBuffer = IndexBuffer;
-            heightMapComponent.Indices = Indices;
-            heightMapComponent.VertexBuffer = VertexBuffer;
-            return heightMapComponent;
-        }
-
-        private void SetHeightMapData(string type)
+        private void SetHeightMapData()
         {
             width = heightMap.Width;
             height = heightMap.Height;
             SetHeights();
-            if (type.Contains("Texture"))
-                SetVerticesTexture();
-            else
-                SetUpVerticesColour();
+            SetVerticesTexture();
             SetIndices();
             CalculateNormals();
             CopyToBuffers();
@@ -119,42 +100,7 @@ namespace Engine.Source.Factories
                 }
             }
         }
-
-        // Todo fix with the vertices for Colour everywhere
-        private void SetUpVerticesColour()
-        {
-            float minHeight = float.MaxValue;
-            float maxHeight = float.MinValue;
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    if (heightMapData[x, y] < minHeight)
-                        minHeight = heightMapData[x, y];
-                    if (heightMapData[x, y] > maxHeight)
-                        maxHeight = heightMapData[x, y];
-                }
-            }
-
-            verticesColour = new VertexPositionColorNormal[width * height];
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    verticesColour[x + y * width].Position = new Vector3(x, heightMapData[x, y], -y);
-
-                    if (heightMapData[x, y] < minHeight + (maxHeight - minHeight) * 0.25)
-                        verticesColour[x + y * width].Color = Color.Blue;
-                    else if (heightMapData[x, y] < minHeight + (maxHeight - minHeight) * 0.5)
-                        verticesColour[x + y * width].Color = Color.Green;
-                    else if (heightMapData[x, y] < minHeight + (maxHeight - minHeight) * 0.75)
-                        verticesColour[x + y * width].Color = Color.Brown;
-                    else
-                        verticesColour[x + y * width].Color = Color.White;
-                }
-            }
-        }
-
+                
         private void SetVerticesTexture()
         {
             verticesTexture = new VertexPositionNormalTexture[width * height];
@@ -195,15 +141,9 @@ namespace Engine.Source.Factories
 
         private void CopyToBuffers()
         {
-            if (type.Contains("Texture")) {
-                VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionNormalTexture.VertexDeclaration, verticesTexture.Length, BufferUsage.WriteOnly);
-                VertexBuffer.SetData(verticesTexture);
-            }
-            else
-            {
-                VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionColorNormal.VertexDeclaration, verticesColour.Length, BufferUsage.WriteOnly);
-                VertexBuffer.SetData(verticesColour);
-            }
+            VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionNormalTexture.VertexDeclaration, verticesTexture.Length, BufferUsage.WriteOnly);
+            VertexBuffer.SetData(verticesTexture);
+            
             IndexBuffer = new IndexBuffer(graphicsDevice, typeof(int), Indices.Length, BufferUsage.WriteOnly);
             IndexBuffer.SetData(Indices);
         }
@@ -213,25 +153,14 @@ namespace Engine.Source.Factories
             Effect = new BasicEffect(graphicsDevice)
             {
                 //LightingEnabled = true,
-                
+
                 FogEnabled = true,
                 FogStart = 75,
                 FogEnd = 400,
-                FogColor = Color.SeaShell.ToVector3()
+                FogColor = Color.SeaShell.ToVector3(),
+                TextureEnabled = true,
+                Texture = heightMapTexture
             };
-            if (type.Contains("Texture"))
-            {
-                Effect.TextureEnabled = true;
-                Effect.Texture = heightMapTexture;
-                //Effect.EnableDefaultLighting();
-            }
-            else
-            {
-                Effect.VertexColorEnabled = true;
-                Effect.EnableDefaultLighting();
-            }
-            
         }
-
     }
 }

@@ -7,8 +7,8 @@ using Microsoft.Xna.Framework;
 
 namespace Engine.Source.Systems.Interfaces
 {
-    public interface IUpdate : ISystem
+    public abstract class IUpdate : ISystem
     {
-        void Update(GameTime gameTime);
+        public abstract void Update(GameTime gameTime);
     }
 }

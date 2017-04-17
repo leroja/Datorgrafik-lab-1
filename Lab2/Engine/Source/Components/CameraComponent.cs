@@ -13,6 +13,7 @@ namespace Engine.Source.Components
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
 
+        public BoundingFrustum CameraFrustrum { get; set; }
 
         public Vector3 Position { get; set; }
         public Vector3 LookAt { get; set; }
@@ -33,6 +34,7 @@ namespace Engine.Source.Components
 
             ViewMatrix = Matrix.CreateLookAt(Position, LookAt, UpVector);
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, AspectRatio, NearPlane, FarPlane);
+            CameraFrustrum = new BoundingFrustum(ViewMatrix * ProjectionMatrix);
         }
     }
 }

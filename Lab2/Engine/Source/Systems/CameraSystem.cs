@@ -12,20 +12,20 @@ namespace Engine.Source.Systems
 {
     public class CameraSystem : IUpdate
     {
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            ComponentManager compMan = ComponentManager.Instance;
 
-            var cameraIds = compMan.GetAllEntitiesWithComponentType<CameraComponent>();
+            var cameraIds = ComponentManager.GetAllEntitiesWithComponentType<CameraComponent>();
             if (cameraIds == null)
                 return;
 
             foreach (int cameraId in cameraIds){
 
-                var cameraComp = compMan.GetEntityComponent<CameraComponent>(cameraId);
+                var cameraComp = ComponentManager.GetEntityComponent<CameraComponent>(cameraId);
 
                 cameraComp.ViewMatrix = Matrix.CreateLookAt(cameraComp.Position, cameraComp.LookAt, cameraComp.UpVector);
                 cameraComp.ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, cameraComp.AspectRatio, cameraComp.NearPlane, cameraComp.FarPlane);
+                cameraComp.CameraFrustrum = new BoundingFrustum(cameraComp.ViewMatrix * cameraComp.ProjectionMatrix);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace Engine.Source.Systems
     public class ModelSystem : IRender
     {
         CameraComponent defaultCam;
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             //Check for all entities with a camera
             List<int> entitiesWithCamera = ComponentManager.Instance.GetAllEntitiesWithComponentType<CameraComponent>();

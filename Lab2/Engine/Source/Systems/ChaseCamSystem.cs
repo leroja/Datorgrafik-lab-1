@@ -12,7 +12,7 @@ namespace Engine.Source.Systems
 {
     public class ChaseCamSystem : IUpdate
     {
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             var chaseCameraIds = ComponentManager.Instance.GetAllEntitiesWithComponentType<ChaseCamComponent>();
 
