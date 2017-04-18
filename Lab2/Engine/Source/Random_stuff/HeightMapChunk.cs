@@ -17,8 +17,8 @@ namespace Engine.Source.Random_stuff
         public BoundingSphere BoundingSphere { get; set; }
 
         public Vector3 OffsetPosition { get; set; }
-        // Todo rename
-        public int indicesLenDiv3;
+        
+        public int indicesDiv3;
         public int Width { get; set; }
         public int Height { get; set; }
         public float[,] heightInfo;

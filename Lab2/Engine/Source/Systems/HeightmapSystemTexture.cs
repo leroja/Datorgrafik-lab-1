@@ -14,14 +14,11 @@ namespace Engine.Source.Systems
     public class HeightmapSystemTexture : IRender
     {
         private GraphicsDevice device;
-
-        private DebugRenderBoundingBox boxRenderer;
+        
 
         public HeightmapSystemTexture(GraphicsDevice device)
         {
             this.device = device;
-
-            boxRenderer = new DebugRenderBoundingBox(device);
         }
 
         public override void Draw(GameTime gameTime)
@@ -29,7 +26,7 @@ namespace Engine.Source.Systems
             
             var ents = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>();
 
-            // Todo fix with camera
+            
             var cameraIds = ComponentManager.GetAllEntitiesWithComponentType<CameraComponent>();
             var cameraComp = ComponentManager.GetEntityComponent<CameraComponent>(cameraIds[0]);
             if (ents != null)
@@ -45,10 +42,10 @@ namespace Engine.Source.Systems
                         chunk.Effect.Projection = cameraComp.ProjectionMatrix;
                         chunk.Effect.View = cameraComp.ViewMatrix;
                         chunk.Effect.World = transformComp.ObjectMatrix * Matrix.CreateTranslation(chunk.OffsetPosition);
-                        //chunk.Effect.EnableDefaultLighting();
+                        
 
                         BoundingBox box = ConvertBoundingBoxToWorldCoords(chunk.BoundingBox, chunk.Effect.World);
-                        //var box = chunk.BoundingBox;
+                        
                         if (box.Intersects(cameraComp.CameraFrustrum))
                         {
                             device.Indices = chunk.IndexBuffer;
@@ -56,12 +53,11 @@ namespace Engine.Source.Systems
                             foreach (EffectPass p in chunk.Effect.CurrentTechnique.Passes)
                             {
                                 p.Apply();
-                                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, chunk.indicesLenDiv3);
+                                device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, chunk.indicesDiv3);
                             }
 
                             inView++;
                         }
-                        boxRenderer.RenderBoundingBox(chunk.BoundingBox, chunk.Effect.World, cameraComp.ViewMatrix, cameraComp.ProjectionMatrix);
                     }
                     System.Console.WriteLine(inView);
 
@@ -84,6 +80,7 @@ namespace Engine.Source.Systems
             }
         }
 
+        // tror detta är onödigt arbete om heightmapen alltid är på samma position
         private BoundingBox ConvertBoundingBoxToWorldCoords(BoundingBox box, Matrix world)
         {
             Vector3 pos = Vector3.Transform(Vector3.Zero, Matrix.Invert(world));

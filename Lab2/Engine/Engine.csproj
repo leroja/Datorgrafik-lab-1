@@ -52,7 +52,6 @@
     <Compile Include="Source\Components\KeyBoardComponent.cs" />
     <Compile Include="Source\Components\ModelComponent.cs" />
     <Compile Include="Source\Components\TransformComponent.cs" />
-    <Compile Include="Source\DebugRenderBoundingBox.cs" />
     <Compile Include="Source\Enums\ActionsEnum.cs" />
     <Compile Include="Source\Enums\ButtonStates.cs" />
     <Compile Include="Source\Factories\HeightMapFactory.cs" />

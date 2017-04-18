@@ -175,24 +175,20 @@ namespace Engine.Source.Factories
 
         private void SetUpHeightMapChunks(ref HeightmapComponentTexture heightMapComp)
         {
-            for (int x = 0; x < width - 1; x += chunk_width)
-            {
-                for (int y = 0; y < height - 1; y += chunk_height)
+            for (int x = 0; x < width - chunk_width; x += chunk_width)
+            { 
+                for (int y = 0; y < height - chunk_height; y += chunk_height)
                 {
                     
                     Rectangle clipRect = new Rectangle(x, y, chunk_width + 1, chunk_height + 1);
                     var offsetpos = new Vector3(x, 0, -y);
 
-                    //HeightMapChunk t = new HeightMapChunk(heightMap, clipRect, offsetpos, GetVertexTextureNormals(clipRect))
-                    HeightMapChunk t = CreateHeightMapChunk(heightMap, clipRect, offsetpos, GetVertexTextureNormals(clipRect), heightMapTexture);
-                    //{
-                    //    // todo set only a part of the whole texture
-                    //    //apply the default texture to the chunk, so that it is visible
-                    //    Texture = heightMapTexture
-                    //};
+                    //HeightMapChunk chunk = CreateHeightMapChunk(heightMap, new Rectangle(x, y, chunk_width, chunk_height),
+                    //new Vector3(x, 0, -y), GetVertexTextureNormals(new Rectangle(x, y, chunk_width, chunk_height)), heightMapTexture);
 
-                    //add the chunk to the chunklist
-                    heightMapComp.HeightMapChunks.Add(t);
+                    HeightMapChunk chunk = CreateHeightMapChunk(heightMap, clipRect, offsetpos, GetVertexTextureNormals(clipRect), heightMapTexture);
+                    
+                    heightMapComp.HeightMapChunks.Add(chunk);
                 }
             }
         }
@@ -222,20 +218,20 @@ namespace Engine.Source.Factories
             var heightinfo = CreateHightmap(terrainMap, terrainRect);
             var chunkVertices = InitTerrainVertices(heightinfo, terrainRect);
             var boundingBox = CreateBoundingBox(chunkVertices);
-            //var boundingBox = CreateBoundingBox(chunkVertices);
+            var sphere = CreateBoundingSphere(chunkVertices);
 
             var effect = new BasicEffect(graphicsDevice)
             {
-                //FogEnabled = true,
-                //FogStart = 10f,
-                //FogColor = Color.LightGray.ToVector3(),
-                //FogEnd = 400f,
+                FogEnabled = true,
+                FogStart = 10f,
+                FogColor = Color.LightGray.ToVector3(),
+                FogEnd = 400f,
                 TextureEnabled = true,
                 Texture = texture
             };
 
             var indices = InitIndices(terrainRect);
-            chunk.indicesLenDiv3 = indices.Length / 3; // för att slipa göra den här divisionen flera gånger
+            chunk.indicesDiv3 = indices.Length / 3; // för att slipa göra den här divisionen flera gånger
 
             //copy the calculated normal values
             CopyNormals(vertexNormals, chunkVertices);
@@ -378,6 +374,5 @@ namespace Engine.Source.Factories
             var last = vertexArray.Last();
             return BoundingSphere.CreateFromPoints(new List<Vector3> { first.Position, last.Position });
         }
-
     }
 }

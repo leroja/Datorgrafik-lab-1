@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{28A11787-1990-47C4-BFC0-FCA1B9E2031B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab2", "DatorGrafikLab1\lab2.csproj", "{0162FD0A-CC32-4754-A656-0A4087602749}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab2", "lab2\lab2.csproj", "{0162FD0A-CC32-4754-A656-0A4087602749}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

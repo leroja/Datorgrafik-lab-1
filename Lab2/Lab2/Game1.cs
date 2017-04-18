@@ -1,21 +1,26 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Lab2.GameComponents;
+using Lab2.GameSystems;
+using Engine.Source.Components;
+using Engine.Source.Enums;
+using Engine.Source.Managers;
+using Engine.Source.Systems;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using Engine.Source.Factories;
 
 namespace Lab2
 {
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Engine.Engine
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
+        
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+
         }
 
         /// <summary>
@@ -26,7 +31,76 @@ namespace Lab2
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Device = Graphics.GraphicsDevice;
+            //RasterizerState r = new RasterizerState();
+            //r.CullMode = CullMode.None;
+            //r.FillMode = FillMode.WireFrame;
+            //Device.RasterizerState = r;
+            
+
+            HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
+                        
+            int skyboxEntity = ComponentManager.Instance.CreateID();
+            List<IComponent> anotherList = new List<IComponent>
+            {
+                new ModelComponent(Content.Load<Model>("untitled")),
+                new TransformComponent(new Vector3(250, 400, -500), new Vector3(5,5,5)),
+            };
+
+            ComponentManager.Instance.AddAllComponents(skyboxEntity, anotherList);
+
+            //Entitet för hellocoptern
+            int ChopperEnt = ComponentManager.Instance.CreateID();
+            ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
+            Matrix []meshWorldMatrices = new Matrix[3];
+            meshWorldMatrices[0] = Matrix.CreateRotationY(0); 
+            meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
+            meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0)); 
+            mcp.MeshWorldMatrices = meshWorldMatrices;
+
+            List<IComponent> ChopperComponentList = new List<IComponent>
+            {
+                //Skapa och lägg till alla komponenter som vi behöver för modellen
+                mcp,
+                new TransformComponent(new Vector3(600, 500, -100), new Vector3(1, 1, 1)),
+                new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
+                new ChaseCamComponent
+                {
+                    OffSet = new Vector3(0, 10, 20),
+                    // sätt isDrunk till true om man vill ha en "drunk" kamera
+                    IsDrunk = false
+                },
+                new ChopperComponent()
+            };
+            var keýComp = new KeyBoardComponent();
+            keýComp.KeyBoardActions.Add(ActionsEnum.Forward, Keys.Up);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.W);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.S);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeY, Keys.D);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateY, Keys.A);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotateZ, Keys.Left);
+            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeZ, Keys.Right);
+            ComponentManager.Instance.AddAllComponents(ChopperEnt, ChopperComponentList);
+            ComponentManager.Instance.AddComponentToEntity(ChopperEnt, keýComp);
+
+
+            int HeightmapEnt = ComponentManager.Instance.CreateID();
+            List<IComponent> HeightmapCompList = new List<IComponent>
+            {
+                heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("US_canyon"), Content.Load<Texture2D>("grass"), 10),
+                new TransformComponent(new Vector3(-300, -100, 0), new Vector3(1, 1, 1))
+            };
+            ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
+
+            SystemManager.Instance.AddSystem(new ModelSystem());
+            SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
+            SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
+            SystemManager.Instance.AddSystem(new TransformSystem());
+            SystemManager.Instance.AddSystem(new KeyBoardSystem());
+            SystemManager.Instance.AddSystem(new ChopperSystem());
+
+            SystemManager.Instance.AddSystem(new CameraSystem());
+            SystemManager.Instance.AddSystem(new ChaseCamSystem());
 
             base.Initialize();
         }
@@ -37,11 +111,9 @@ namespace Lab2
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
         }
+        
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -49,35 +121,7 @@ namespace Lab2
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
-        }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
         }
     }
 }

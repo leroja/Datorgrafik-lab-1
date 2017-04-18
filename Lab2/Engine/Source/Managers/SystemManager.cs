@@ -19,11 +19,9 @@ namespace Engine.Source.Managers
         public GameTime GameTime { get; set; }
         public SpriteBatch SpriteBatch { get; set; }
         public GraphicsDevice Device { get; set; }
-
-        // List<IObserving> observingSystems = new List<IObserving>();
+        
         List<IRender> renderSystems = new List<IRender>();
         List<IUpdate> updateSystems = new List<IUpdate>();
-        // List<IInput> inputSystems = new List<IInput>();
 
         private SystemManager()
         {
@@ -51,21 +49,11 @@ namespace Engine.Source.Managers
             if (system is IUpdate)
             {
                 updateSystems.Add((IUpdate)system);
-                //AddSystemToList<IUpdate>(updateSystems, system);
             }
             if (system is IRender)
             {
                 renderSystems.Add((IRender)system);
-                //AddSystemToList<IRender>(renderSystems, system);
             }
-            //if (system is IInput)
-            //{
-            //    AddSystemToList<IInput>(inputSystems, system);
-            //}
-            //if (system is IObserving)
-            //{
-            //    AddSystemToList<IObserving>(observingSystems, system);
-            //}
         }
 
         /// <summary>
@@ -79,22 +67,12 @@ namespace Engine.Source.Managers
             {
                 if (updateSystems.Contains(system))
                     updateSystems.Remove((IUpdate)system);
-                //RemoveSystemFromList<IUpdate>(updateSystems, system);
             }
             if (system is IRender)
             {
                 if (renderSystems.Contains(system))
                     renderSystems.Remove((IRender)system);
-                //RemoveSystemFromList<IRender>(renderSystems, system);
             }
-            //if (system is IInput)
-            //{
-            //    RemoveSystemFromList<IInput>(inputSystems, system);
-            //}
-            //if (system is IObserving)
-            //{
-            //    RemoveSystemFromList<IObserving>(observingSystems, system);
-            //}
         }
 
         /// <summary>
@@ -103,36 +81,6 @@ namespace Engine.Source.Managers
         /// <typeparam name="T"> The type of the system, eg IUpdate </typeparam>
         /// <param name="system"> The name of the system </param>
         /// <returns> The requested system if it is in the manager, else null</returns>
-        //public T RetrieveSystem<T>(string system) where T : ISystem
-        //{
-        //    Type type = typeof(T);
-        //    T sys;
-        //    if (type.Equals(typeof(IUpdate)))
-        //    {
-
-        //        sys = (T)updateSystems.Find(x => x.ToString().Contains(system));
-
-        //        return (sys);
-        //    }
-        //    if (type.Equals(typeof(IRender)))
-        //    {
-        //        sys = (T)renderSystems.Find(x => x.ToString().Contains(system));
-        //        return (sys);
-        //    }
-        //    //if (type.Equals(typeof(IInput)))
-        //    //{
-        //    //    sys = (T)inputSystems.Find(x => x.ToString().Contains(system));
-        //    //    return (sys);
-        //    //}
-        //    //if (type.Equals(typeof(IObserving)))
-        //    //{
-        //    //    sys = (T)observingSystems.Find(x => x.ToString().Contains(system));
-        //    //    return (sys);
-        //    //}
-        //    return default(T);
-        //}
-
-
         public ISystem RetrieveSystem<T>(string system) where T : ISystem
         {
             Type type = typeof(T);
@@ -149,16 +97,6 @@ namespace Engine.Source.Managers
                 sys = renderSystems.Find(x => x.ToString().Contains(system));
                 return (sys);
             }
-            //if (type.Equals(typeof(IInput)))
-            //{
-            //    sys = (T)inputSystems.Find(x => x.ToString().Contains(system));
-            //    return (sys);
-            //}
-            //if (type.Equals(typeof(IObserving)))
-            //{
-            //    sys = (T)observingSystems.Find(x => x.ToString().Contains(system));
-            //    return (sys);
-            //}
             return default(T);
         }
 
@@ -178,20 +116,6 @@ namespace Engine.Source.Managers
         }
 
         /// <summary>
-        /// Runs all input systems
-        /// </summary>
-        //public void RunInputSystems()
-        //{
-        //    if (updateSystems.Count > 0)
-        //    {
-        //        foreach (IInput system in inputSystems)
-        //        {
-        //            system.update(GameTime);
-        //        }
-        //    }
-        //}
-
-        /// <summary>
         /// Runs all rendering systems
         /// </summary>
         public void RunRenderSystems()
@@ -204,34 +128,5 @@ namespace Engine.Source.Managers
                 }
             }
         }
-
-
-        /// <summary>
-        /// a private method that adds the system to the correct list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="system"></param>
-        //private void AddSystemToList<T>(List<T> list, ISystem system)
-        //{
-        //    if (!list.Contains((T)system))
-        //    {
-        //        list.Add((T)system);
-        //    }
-        //}
-
-        /// <summary>
-        /// removes the system from the correct list
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="system"></param>
-        //private void RemoveSystemFromList<T>(List<T> list, ISystem system)
-        //{
-        //    if (list.Contains((T)system))
-        //    {
-        //        list.Remove((T)system);
-        //    }
-        //}
     }
 }
