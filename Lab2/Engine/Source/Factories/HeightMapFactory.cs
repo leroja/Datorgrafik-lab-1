@@ -240,6 +240,8 @@ namespace Engine.Source.Factories
             
             chunk.Effect = effect;
             chunk.BoundingBox = boundingBox;
+            chunk.Vertices = chunkVertices;
+            chunk.Rectangle = terrainRect;
             return chunk;
         }
 

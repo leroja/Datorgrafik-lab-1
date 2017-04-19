@@ -62,7 +62,7 @@ namespace Lab2
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
-                new TransformComponent(new Vector3(600, 500, -100), new Vector3(1, 1, 1)),
+                new TransformComponent(new Vector3(600, 130, 0), new Vector3(1, 1, 1)),
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
@@ -73,13 +73,16 @@ namespace Lab2
                 new ChopperComponent()
             };
             var keýComp = new KeyBoardComponent();
-            keýComp.KeyBoardActions.Add(ActionsEnum.Forward, Keys.Up);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.W);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.S);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeY, Keys.D);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotateY, Keys.A);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotateZ, Keys.Left);
-            keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeZ, Keys.Right);
+            keýComp.KeyBoardActions.Add("Forward", Keys.Up);
+            keýComp.KeyBoardActions.Add("Backward", Keys.Down);
+            keýComp.KeyBoardActions.Add("Right", Keys.Right);
+            keýComp.KeyBoardActions.Add("Left", Keys.Left);
+            //keýComp.KeyBoardActions.Add(ActionsEnum.RotatenegativeX, Keys.W);
+            //keýComp.KeyBoardActions.Add(ActionsEnum.RotateX, Keys.S);
+            keýComp.KeyBoardActions.Add("RotatenegativeY", Keys.D);
+            keýComp.KeyBoardActions.Add("RotateY", Keys.A);
+            //keýComp.KeyBoardActions.Add("RotateZ", Keys.Q);
+            //keýComp.KeyBoardActions.Add("RotatenegativeZ", Keys.E);
             ComponentManager.Instance.AddAllComponents(ChopperEnt, ChopperComponentList);
             ComponentManager.Instance.AddComponentToEntity(ChopperEnt, keýComp);
 

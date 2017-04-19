@@ -49,34 +49,109 @@ namespace Lab2.GameSystems
                 //    newRot.Z -= MathHelper.TwoPi;
 
 
-                if (keyBComp.State[ActionsEnum.Forward] == ButtonStates.Hold)
+                if (keyBComp.State["Forward"] == ButtonStates.Hold)
                 {
                     transformComp.Position += transformComp.Forward;
                 }
-                if (keyBComp.State[ActionsEnum.RotateZ] == ButtonStates.Hold)
+                if (keyBComp.State["Backward"] == ButtonStates.Hold)
                 {
-                    newRot.Z += 0.01f;
+                    transformComp.Position -= transformComp.Forward;
                 }
-                if (keyBComp.State[ActionsEnum.RotatenegativeZ] == ButtonStates.Hold)
+                if (keyBComp.State["Right"] == ButtonStates.Hold)
                 {
-                    newRot.Z += -0.01f;
+                    transformComp.Position += transformComp.Right;
                 }
-                if (keyBComp.State[ActionsEnum.RotateY] == ButtonStates.Hold)
+                if (keyBComp.State["Left"] == ButtonStates.Hold)
                 {
-                    newRot.Y += 0.01f;
+                    transformComp.Position -= transformComp.Right;
                 }
-                if (keyBComp.State[ActionsEnum.RotatenegativeY] == ButtonStates.Hold)
+
+                //if (keyBComp.State["RotateZ"] == ButtonStates.Hold)
+                //{
+                //    newRot.Z += 0.01f;
+                //}
+                //if (keyBComp.State["RotatenegativeZ"] == ButtonStates.Hold)
+                //{
+                //    newRot.Z += -0.01f;
+                //}
+
+                if (keyBComp.State["RotateY"] == ButtonStates.Hold)
                 {
-                    newRot.Y -= 0.01f;
+                    newRot.Y += 0.02f;
                 }
-                if (keyBComp.State[ActionsEnum.RotateX] == ButtonStates.Hold)
+                if (keyBComp.State["RotatenegativeY"] == ButtonStates.Hold)
                 {
-                    newRot.X += 0.01f;
+                    newRot.Y -= 0.02f;
                 }
-                if (keyBComp.State[ActionsEnum.RotatenegativeX] == ButtonStates.Hold)
+                //if (keyBComp.State[ActionsEnum.RotateX] == ButtonStates.Hold)
+                //{
+                //    newRot.X += 0.01f;
+                //}
+                //if (keyBComp.State[ActionsEnum.RotatenegativeX] == ButtonStates.Hold)
+                //{
+                //    newRot.X -= 0.01f;
+                //}
+
+
+                //var heightmaps = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>();
+
+                //foreach (var heightmap in heightmaps)
+                //{
+                //    var heghtmapComp = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightmap);
+                //    foreach (var chunk in heghtmapComp.HeightMapChunks)
+                //    {
+                //        var lastVerticePos = chunk.Vertices[chunk.Vertices.Length - 1].Position;
+
+                //        //Check which heightmap we are on
+                //        if (transformComp.Position.X >= chunk.Vertices[0].Position.X &&
+                //            transformComp.Position.X < lastVerticePos.X + 1
+                //            && transformComp.Position.Z < chunk.Vertices[0].Position.Z + 1 &&
+                //            transformComp.Position.Z >= lastVerticePos.Z)
+                //        {
+                //            var normalizedZ = (int)(-chunk.Height - transformComp.Position.Z);
+                //            var normalizedX = (int)(transformComp.Position.X - chunk.Width);
+
+                //            var index = (int)normalizedZ * chunk.Width + normalizedX;
+
+                //            var y = chunk.Vertices[index];
+
+                //            var hmPos = new Vector3(transformComp.Position.X, y.Position.Y, transformComp.Position.Z);
+                //            transformComp.Position = Vector3.Lerp(transformComp.Position, hmPos, 0.3f);
+                //        }
+                //    }
+
+                //var lastVerticePos = heightmap.Vertices[heightmap.Vertices.Length - 1].Position;
+
+                ////Check which heightmap we are on
+                //if (transform.Position.X >= heightmap.Vertices[0].Position.X &&
+                //    transform.Position.X < lastVerticePos.X + 1
+                //    && transform.Position.Z < heightmap.Vertices[0].Position.Z + 1 &&
+                //    transform.Position.Z >= lastVerticePos.Z)
+                //{
+                //    var normalizedZ = (int)(-heightmap.ChunkHeight - transform.Position.Z);
+                //    var normalizedX = (int)(transform.Position.X - heightmap.ChunkWidth);
+
+                //    var index = (int)normalizedZ * heightmap.HeightMapChunkWidth + normalizedX;
+
+                //    var y = heightmap.Vertices[index];
+
+                //    var hmPos = new Vector3(transform.Position.X, y.Position.Y, transform.Position.Z);
+                //    transform.Position = Vector3.Lerp(transform.Position, hmPos, 0.3f);
+                //}
+
+                //}
+
+                var heightmapId = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>()[0];
+                HeightmapComponentTexture heightmapComp = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightmapId);
+                var heightMapTransformComp = ComponentManager.GetEntityComponent<TransformComponent>(heightmapId);
+
+                foreach (var chunk in heightmapComp.HeightMapChunks)
                 {
-                    newRot.X -= 0.01f;
+                    
                 }
+
+
+
 
                 transformComp.Rotation = newRot;
             }

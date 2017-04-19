@@ -25,7 +25,7 @@ namespace Engine.Source.Random_stuff
         public VertexPositionNormalTexture[] Vertices { get; set; }
         public int[] Indices { get; set; }
 
-
+        public Rectangle Rectangle { get; set; }
         public Texture2D Texture { get; set; }
 
         public HeightMapChunk()

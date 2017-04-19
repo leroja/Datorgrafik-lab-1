@@ -10,13 +10,13 @@ namespace Engine.Source.Components
 {
     public class KeyBoardComponent : IComponent
     {
-        public Dictionary<ActionsEnum, Keys> KeyBoardActions { get; set; }
-        public Dictionary<ActionsEnum, ButtonStates> State { get; set; }
+        public Dictionary<string, Keys> KeyBoardActions { get; set; }
+        public Dictionary<string, ButtonStates> State { get; set; }
 
         public KeyBoardComponent()
         {
-            KeyBoardActions = new Dictionary<ActionsEnum, Keys>();
-            State = new Dictionary<ActionsEnum, ButtonStates>();
+            KeyBoardActions = new Dictionary<string, Keys>();
+            State = new Dictionary<string, ButtonStates>();
         }
     }
 }

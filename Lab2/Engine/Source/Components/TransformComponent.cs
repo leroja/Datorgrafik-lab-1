@@ -17,6 +17,8 @@ namespace Engine.Source.Components
 
         public Quaternion QuaternionRotation { get; set; }
         public Vector3 Forward { get; set; }
+        public Vector3 Up { get; set; }
+        public Vector3 Right { get; set; }
 
         public Vector3 Scale { get; set; }
 

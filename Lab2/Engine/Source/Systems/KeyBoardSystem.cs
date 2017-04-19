@@ -56,7 +56,7 @@ namespace Engine.Source.Systems
         public void UpdateActionStates(KeyBoardComponent keyboardComp)
         {
 
-            foreach (ActionsEnum action in keyboardComp.KeyBoardActions.Keys)
+            foreach (string action in keyboardComp.KeyBoardActions.Keys)
             {
                 Keys key = keyboardComp.KeyBoardActions[action];
                 bool newState = CurState.IsKeyDown(key);

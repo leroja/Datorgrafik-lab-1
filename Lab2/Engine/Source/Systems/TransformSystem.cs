@@ -27,8 +27,8 @@ namespace Engine.Source.Systems
 
                 tfc.QuaternionRotation *= rotationQuaternion;
                 tfc.Forward = Vector3.Transform(Vector3.Forward, tfc.QuaternionRotation);
-                var up = Vector3.Transform(Vector3.Up, tfc.QuaternionRotation);
-                var right = Vector3.Transform(Vector3.Right, tfc.QuaternionRotation);
+                tfc.Up = Vector3.Transform(Vector3.Up, tfc.QuaternionRotation);
+                tfc.Right = Vector3.Transform(Vector3.Right, tfc.QuaternionRotation);
 
                 tfc.ObjectMatrix = Matrix.CreateScale(tfc.Scale) * Matrix.CreateFromQuaternion(tfc.QuaternionRotation) * Matrix.CreateTranslation(tfc.Position);
             }
