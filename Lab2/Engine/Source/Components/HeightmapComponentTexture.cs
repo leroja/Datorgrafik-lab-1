@@ -16,6 +16,8 @@ namespace Engine.Source.Components
         public VertexBuffer VertexBuffer { get; set; }
         public IndexBuffer IndexBuffer { get; set; }
 
+
+        public float[,] HeightMapData { get; set; }
         public List<HeightMapChunk> HeightMapChunks { get; set; }
 
         public HeightmapComponentTexture()

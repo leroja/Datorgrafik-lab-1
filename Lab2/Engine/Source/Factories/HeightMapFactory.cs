@@ -67,6 +67,7 @@ namespace Engine.Source.Factories
             SetVerticesTexture();
             SetIndices();
             CalculateNormals();
+            comp.HeightMapData = heightMapData;
 
             SetUpHeightMapChunks(ref comp);
             //CopyToBuffers();
@@ -82,7 +83,7 @@ namespace Engine.Source.Factories
             {
                 for (int y = 0; y < height; y++)
                 {
-                    heightMapData[x, y] = greyValues[x + y * width].R;
+                    heightMapData[x, y] = greyValues[x + y * width].R * 0.2f;
                 }
             }
         }
@@ -242,6 +243,8 @@ namespace Engine.Source.Factories
             chunk.BoundingBox = boundingBox;
             chunk.Vertices = chunkVertices;
             chunk.Rectangle = terrainRect;
+            chunk.Width = terrainRect.Width;
+            chunk.Height = terrainRect.Height;
             return chunk;
         }
 
@@ -268,7 +271,7 @@ namespace Engine.Source.Factories
             {
                 for (int y = terrainRect.Y; y < terrainRect.Y + terrainRect.Height; ++y)
                 {
-                    heightInfo[x - terrainRect.X, y - terrainRect.Y] = colors[x + y * width].R;
+                    heightInfo[x - terrainRect.X, y - terrainRect.Y] = colors[x + y * width].R * 0.2f;
                 }
             }
             return heightInfo;

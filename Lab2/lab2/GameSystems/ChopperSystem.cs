@@ -66,14 +66,14 @@ namespace Lab2.GameSystems
                     transformComp.Position -= transformComp.Right;
                 }
 
-                //if (keyBComp.State["RotateZ"] == ButtonStates.Hold)
-                //{
-                //    newRot.Z += 0.01f;
-                //}
-                //if (keyBComp.State["RotatenegativeZ"] == ButtonStates.Hold)
-                //{
-                //    newRot.Z += -0.01f;
-                //}
+                if (keyBComp.State["RotateZ"] == ButtonStates.Hold)
+                {
+                    newRot.Z += 0.01f;
+                }
+                if (keyBComp.State["RotatenegativeZ"] == ButtonStates.Hold)
+                {
+                    newRot.Z += -0.01f;
+                }
 
                 if (keyBComp.State["RotateY"] == ButtonStates.Hold)
                 {
@@ -83,42 +83,53 @@ namespace Lab2.GameSystems
                 {
                     newRot.Y -= 0.02f;
                 }
-                //if (keyBComp.State[ActionsEnum.RotateX] == ButtonStates.Hold)
-                //{
-                //    newRot.X += 0.01f;
-                //}
-                //if (keyBComp.State[ActionsEnum.RotatenegativeX] == ButtonStates.Hold)
-                //{
-                //    newRot.X -= 0.01f;
-                //}
+                if (keyBComp.State["RotateX"] == ButtonStates.Hold)
+                {
+                    newRot.X += 0.01f;
+                }
+                if (keyBComp.State["RotatenegativeX"] == ButtonStates.Hold)
+                {
+                    newRot.X -= 0.01f;
+                }
 
 
-                //var heightmaps = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>();
+                var heightmaps = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>();
 
-                //foreach (var heightmap in heightmaps)
-                //{
-                //    var heghtmapComp = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightmap);
-                //    foreach (var chunk in heghtmapComp.HeightMapChunks)
-                //    {
-                //        var lastVerticePos = chunk.Vertices[chunk.Vertices.Length - 1].Position;
+                foreach (var heightmap in heightmaps)
+                {
+                    var heghtmapComp = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightmap);
+                    var heightMapTransformComp = ComponentManager.GetEntityComponent<TransformComponent>(heightmap);
 
-                //        //Check which heightmap we are on
-                //        if (transformComp.Position.X >= chunk.Vertices[0].Position.X &&
-                //            transformComp.Position.X < lastVerticePos.X + 1
-                //            && transformComp.Position.Z < chunk.Vertices[0].Position.Z + 1 &&
-                //            transformComp.Position.Z >= lastVerticePos.Z)
-                //        {
-                //            var normalizedZ = (int)(-chunk.Height - transformComp.Position.Z);
-                //            var normalizedX = (int)(transformComp.Position.X - chunk.Width);
+                    //t.position = new Vector3(t.position.X, 1.7f + TerrainMapRenderSystem.GetTerrainHeight(tcomp, t.position.X, Math.Abs(t.position.Z)), t.position.Z);
+                    //transformComp.Position = new Vector3(transformComp.Position.X, GetTerrainHeight(heghtmapComp, transformComp.Position.X + heightMapTransformComp.Position.X, Math.Abs(transformComp.Position.Z + heightMapTransformComp.Position.Z)) /*+ heightMapTransformComp.Position.Y*/, transformComp.Position.Z + heightMapTransformComp.Position.Z);
 
-                //            var index = (int)normalizedZ * chunk.Width + normalizedX;
+                    //System.Console.WriteLine(transformComp.Position.Y);
+                    //transformComp.Position.Y += heightMapTransformComp.Position.Y;
 
-                //            var y = chunk.Vertices[index];
+                    //foreach (var chunk in heghtmapComp.HeightMapChunks)
+                    //{
+                    //    var lastVerticePos = chunk.Vertices[chunk.Vertices.Length - 1].Position + heightMapTransformComp.Position + new Vector3(chunk.Rectangle.X, 0, chunk.Rectangle.Y);
 
-                //            var hmPos = new Vector3(transformComp.Position.X, y.Position.Y, transformComp.Position.Z);
-                //            transformComp.Position = Vector3.Lerp(transformComp.Position, hmPos, 0.3f);
-                //        }
-                //    }
+                    //    //Check which heightmap we are on
+                    //    if (transformComp.Position.X >= chunk.Vertices[0].Position.X + heightMapTransformComp.Position.X &&
+                    //        transformComp.Position.X < lastVerticePos.X + 1
+                    //        && transformComp.Position.Z < chunk.Vertices[0].Position.Z + 1 + heightMapTransformComp.Position.Z &&
+                    //        transformComp.Position.Z >= lastVerticePos.Z)
+                    //    {
+                    //        var normalizedZ = (int)(-chunk.Rectangle.Y - heightMapTransformComp.Position.Z - transformComp.Position.Z);
+                    //        var normalizedX = (int)(transformComp.Position.X - chunk.Rectangle.X - heightMapTransformComp.Position.X);
+
+                    //        var index = (int)normalizedZ * chunk.Width + normalizedX;
+
+                    //        var y = chunk.Vertices[index];
+
+                    //        var hmPos = new Vector3(transformComp.Position.X, y.Position.Y + heightMapTransformComp.Position.Y, transformComp.Position.Z);
+                    //        //transformComp.Position = Vector3.Lerp(transformComp.Position, hmPos, 0.2f);
+                    //        transformComp.Position = hmPos;
+                    //        break;
+                    //    }
+                    //}
+                }
 
                 //var lastVerticePos = heightmap.Vertices[heightmap.Vertices.Length - 1].Position;
 
@@ -141,14 +152,14 @@ namespace Lab2.GameSystems
 
                 //}
 
-                var heightmapId = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>()[0];
-                HeightmapComponentTexture heightmapComp = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightmapId);
-                var heightMapTransformComp = ComponentManager.GetEntityComponent<TransformComponent>(heightmapId);
+                //var heightmapId = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>()[0];
+                //HeightmapComponentTexture heightmapComp = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightmapId);
+                //var heightMapTransformComp = ComponentManager.GetEntityComponent<TransformComponent>(heightmapId);
 
-                foreach (var chunk in heightmapComp.HeightMapChunks)
-                {
-                    
-                }
+                //foreach (var chunk in heightmapComp.HeightMapChunks)
+                //{
+
+                //}
 
 
 
@@ -166,9 +177,57 @@ namespace Lab2.GameSystems
                                    Matrix.CreateRotationX(chopperComp.TailRotorAngle) *
                                    Matrix.CreateTranslation(modelComp.Model.Bones["Back_Rotor"].Transform.Translation);
             modelComp.MeshWorldMatrices = meshWorldMatrices;
-
+            
         }
 
+        ////t.position = new Vector3(t.position.X, 1.7f + TerrainMapRenderSystem.GetTerrainHeight(tcomp, t.position.X, Math.Abs(t.position.Z)), t.position.Z);
+        //private float GetTerrainHeight(HeightmapComponentTexture terrain, float x, float z)
+        //{
+        //    if (x < 0
+        //        || z < 0
+        //        || x > terrain.HeightMapData.GetLength(0) - 1
+        //        || z > terrain.HeightMapData.GetLength(1) - 1)
+        //    {
+        //        return 10f;
+        //    }
+        //    //find the two x vertices
+        //    int xLow = (int)x;
+        //    int xHigh = xLow + 1;
+        //    //get the relative x value between the two points
+        //    float xRel = (x - xLow) / ((float)xHigh - (float)xLow);
+
+        //    //find the two z verticies
+        //    int zLow = (int)z;
+        //    int zHigh = zLow + 1;
+
+        //    //get the relative z value between the two points
+        //    float zRel = (z - zLow) / ((float)zHigh - (float)zLow);
+
+        //    //get the minY and MaxY values from the four vertices
+        //    float heightLowXLowZ = terrain.HeightMapData[xLow, zLow];
+        //    float heightLowXHighZ = terrain.HeightMapData[xLow, zHigh];
+        //    float heightHighXLowZ = terrain.HeightMapData[xHigh, zLow];
+        //    float heightHighXHighZ = terrain.HeightMapData[xHigh, zHigh];
+
+        //    //test if the position is above the low triangle
+        //    bool posAboveLowTriangle = (xRel + zRel < 1);
+
+        //    float resultHeight;
+
+        //    if (posAboveLowTriangle)
+        //    {
+        //        resultHeight = heightLowXLowZ;
+        //        resultHeight += zRel * (heightLowXHighZ - heightLowXLowZ);
+        //        resultHeight += xRel * (heightHighXLowZ - heightLowXLowZ);
+        //    }
+        //    else
+        //    {
+        //        resultHeight = heightHighXHighZ;
+        //        resultHeight += (1.0f - zRel) * (heightHighXLowZ - heightHighXHighZ);
+        //        resultHeight += (1.0f - xRel) * (heightLowXHighZ - heightHighXHighZ);
+        //    }
+        //    return resultHeight;
+        //}
 
     }
 }
