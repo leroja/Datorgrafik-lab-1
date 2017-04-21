@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Engine.Source.Factories;
+using DatorGrafikLab1;
 
 namespace Lab2
 {
@@ -39,62 +40,22 @@ namespace Lab2
             
 
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
-                        
-            int skyboxEntity = ComponentManager.Instance.CreateID();
-            List<IComponent> anotherList = new List<IComponent>
-            {
-                new ModelComponent(Content.Load<Model>("untitled")),
-                new TransformComponent(new Vector3(250, 400, -500), new Vector3(5,5,5)),
-            };
-
-            //ComponentManager.Instance.AddAllComponents(skyboxEntity, anotherList);
-
-            //Entitet för hellocoptern
-            int ChopperEnt = ComponentManager.Instance.CreateID();
-            ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
-            Matrix []meshWorldMatrices = new Matrix[3];
-            meshWorldMatrices[0] = Matrix.CreateRotationY(0); 
-            meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
-            meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0)); 
-            mcp.MeshWorldMatrices = meshWorldMatrices;
-
-            List<IComponent> ChopperComponentList = new List<IComponent>
-            {
-                //Skapa och lägg till alla komponenter som vi behöver för modellen
-                mcp,
-                new TransformComponent(new Vector3(-300, -0, 0), new Vector3(1, 1, 1)),
-                new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
-                new ChaseCamComponent
-                {
-                    OffSet = new Vector3(0, 10, 20),
-                    // sätt isDrunk till true om man vill ha en "drunk" kamera
-                    IsDrunk = false
-                },
-                new ChopperComponent()
-            };
-            var keýComp = new KeyBoardComponent();
-            keýComp.KeyBoardActions.Add("Forward", Keys.Up);
-            keýComp.KeyBoardActions.Add("Backward", Keys.Down);
-            keýComp.KeyBoardActions.Add("Right", Keys.Right);
-            keýComp.KeyBoardActions.Add("Left", Keys.Left);
-            keýComp.KeyBoardActions.Add("RotatenegativeX", Keys.W);
-            keýComp.KeyBoardActions.Add("RotateX", Keys.S);
-            keýComp.KeyBoardActions.Add("RotatenegativeY", Keys.D);
-            keýComp.KeyBoardActions.Add("RotateY", Keys.A);
-            keýComp.KeyBoardActions.Add("RotateZ", Keys.Q);
-            keýComp.KeyBoardActions.Add("RotatenegativeZ", Keys.E);
-            ComponentManager.Instance.AddAllComponents(ChopperEnt, ChopperComponentList);
-            ComponentManager.Instance.AddComponentToEntity(ChopperEnt, keýComp);
-
-
+            EntityFactory factory = new EntityFactory(Content);
+            factory.CreateSkyBox();
+            factory.CreateChopper(Device);
+            
             int HeightmapEnt = ComponentManager.Instance.CreateID();
+
+            HeightmapComponentTexture hmp = heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("Canyon_elev_1024"), Content.Load<Texture2D>("grass"), 10);
+
             List<IComponent> HeightmapCompList = new List<IComponent>
             {
-                heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("Canyon_elev_1024"), Content.Load<Texture2D>("grass"), 10),
-                new TransformComponent(new Vector3(-300, -0, 0), new Vector3(1, 1, 1))
+                hmp,
+                new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1))
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
 
+            factory.CreateManyTrees(hmp, heightmapFactory.width, heightmapFactory.height, heightmapFactory.verticesTexture);
             SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
             SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
