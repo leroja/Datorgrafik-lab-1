@@ -154,30 +154,6 @@
 /processorParam:TextureFormat=DxtCompressed
 /build:Leaf_Oak.fbx
 
-#begin TexturesCom_Branches0018_1_alphamasked_S.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TexturesCom_Branches0018_1_alphamasked_S.png
-
-#begin TexturesCom_Branches0018_1_alphamasked_Snor.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TexturesCom_Branches0018_1_alphamasked_Snor.png
-
 #begin tileable_tree_bark_texture_by_ftourini-d3l69hz.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -201,4 +177,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:tileable_tree_bark_texture_by_ftourini-d3l69hznor.jpg
+
+#begin TexturesGreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TexturesGreen.png
+
+#begin TexturesSnor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TexturesSnor.png
 

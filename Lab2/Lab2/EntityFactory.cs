@@ -74,7 +74,10 @@ namespace DatorGrafikLab1
             int treeEntity;
 
             List<IComponent> components;
+            ModelComponent mcp;
             Model tree = Content.Load<Model>("Leaf_Oak");
+            Texture2D treeGreen = Content.Load<Texture2D>("TexturesGreen");
+            Texture2D treePurple = Content.Load<Texture2D>("TexturesSnor");
 
             int printedTrees = 0;
             bool printNextTree = true;
@@ -100,10 +103,18 @@ namespace DatorGrafikLab1
                                 float rand2 = (float)random.Next(1000) / 1000.0f;
 
                                 float randomScale = (float)(random.Next(1, 5)/100.0f);
+                                
+
+                                if (printedTrees%2 == 0)
+                                {
+                                    mcp = new ModelComponent(tree,treeGreen);
+                                }
+                                else
+                                    mcp = new ModelComponent(tree, treePurple);
 
                                 treeEntity = ComponentManager.Instance.CreateID();
                                 components = new List<IComponent>(){
-                                    new ModelComponent(tree),
+                                    mcp,
                                     new TransformComponent(new Vector3((float)x - rand1, hmp.HeightMapData[x, y], -(float)y - rand2), new Vector3(randomScale,randomScale,randomScale))
                                 };
                                 ComponentManager.Instance.AddAllComponents(treeEntity, components);
