@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatorGrafikLab1.Humanoid
+namespace Lab2.Humanoid
 {
     public class HumanoidComponent : IComponent
     {

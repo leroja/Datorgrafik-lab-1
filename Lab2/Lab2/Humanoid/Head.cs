@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Source.Components;
+using Engine.Source.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -7,18 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HumanoidTest
+namespace Lab2.Humanoid
 {
     public class Head : CuboidMesh
     {
-        private List<IGameObject> _children = new List<IGameObject>();
-
         private Vector3 _rotation = Vector3.Zero;
         private Vector3 _position = new Vector3(0, 1f, 0);
         private Vector3 _jointPos;
-
-        BasicEffect _effect;
-
+        
         public Head(GraphicsDevice graphics, Vector3 jointPos)
             : base(graphics, 1.5f, 1.5f, 1.5f)
         {
@@ -37,9 +35,6 @@ namespace HumanoidTest
                 Matrix.CreateTranslation(_position) *
                 Matrix.CreateFromQuaternion(Quaternion.CreateFromYawPitchRoll(_rotation.X, _rotation.Y, _rotation.Z)) *
                 Matrix.CreateTranslation(_jointPos);
-
-            foreach (IGameObject go in _children)
-                go.Update(gameTime);
         }
 
         public override void Draw(BasicEffect effect, Matrix world)
@@ -49,9 +44,6 @@ namespace HumanoidTest
 
             GraphicsDevice.SetVertexBuffer(VertexBuffer);
             GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 36);
-
-            foreach (IGameObject go in _children)
-                go.Draw(effect, World * world);
         }
     }
 }

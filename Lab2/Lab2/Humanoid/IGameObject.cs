@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HumanoidTest
+namespace Lab2.Humanoid
 {
     public interface IGameObject
     {

@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Source.Components;
+using Engine.Source.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -7,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HumanoidTest
+namespace Lab2.Humanoid
 {
     public class Body : CuboidMesh
     {
@@ -33,6 +35,12 @@ namespace HumanoidTest
                 _position.Z -= 0.01f;
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                _position.X -= 0.02f;
+                _position.Z += 0.02f;
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 _rotation = new Vector3(_rotation.X + 0.01f, _rotation.Y, _rotation.Z);
 
@@ -49,8 +57,14 @@ namespace HumanoidTest
 
         public override void Draw(BasicEffect effect, Matrix world)
         {
+            //var cameraId = ComponentManager.Instance.GetAllEntitiesWithComponentType<CameraComponent>()[0];
+            //var cameraComp = ComponentManager.Instance.GetEntityComponent<CameraComponent>(cameraId);
+
             effect.World = World * world;
+            //effect.Projection = cameraComp.ProjectionMatrix;
+            //effect.View = cameraComp.ViewMatrix;
             effect.CurrentTechnique.Passes[0].Apply();
+
 
             GraphicsDevice.SetVertexBuffer(VertexBuffer);
             GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 36);

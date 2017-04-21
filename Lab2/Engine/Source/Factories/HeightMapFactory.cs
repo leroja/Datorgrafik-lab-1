@@ -18,9 +18,9 @@ namespace Engine.Source.Factories
         // heightMap
         private Texture2D heightMap;
         private Texture2D heightMapTexture;
-        public VertexPositionNormalTexture[] verticesTexture { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
+        public VertexPositionNormalTexture[] VerticesTexture { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
 
         private int fractions_per_side;
         private int chunk_width;
@@ -59,10 +59,10 @@ namespace Engine.Source.Factories
 
         private void SetHeightMapData(ref HeightmapComponentTexture comp)
         {
-            width = heightMap.Width;
-            height = heightMap.Height;
-            chunk_height = height / fractions_per_side;
-            chunk_width = width / fractions_per_side;
+            Width = heightMap.Width;
+            Height = heightMap.Height;
+            chunk_height = Height / fractions_per_side;
+            chunk_width = Width / fractions_per_side;
             SetHeights();
             SetVerticesTexture();
             SetIndices();
@@ -76,30 +76,30 @@ namespace Engine.Source.Factories
 
         private void SetHeights()
         {
-            Color[] greyValues = new Color[width * height];
+            Color[] greyValues = new Color[Width * Height];
             heightMap.GetData(greyValues);
-            heightMapData = new float[width, height];
-            for (int x = 0; x < width; x++)
+            heightMapData = new float[Width, Height];
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    heightMapData[x, y] = greyValues[x + y * width].R * 0.2f;
+                    heightMapData[x, y] = greyValues[x + y * Width].R * 0.2f;
                 }
             }
         }
 
         private void SetIndices()
         {
-            Indices = new int[(width - 1) * (height - 1) * 6];
+            Indices = new int[(Width - 1) * (Height - 1) * 6];
             int counter = 0;
-            for (int y = 0; y < height - 1; y++)
+            for (int y = 0; y < Height - 1; y++)
             {
-                for (int x = 0; x < width - 1; x++)
+                for (int x = 0; x < Width - 1; x++)
                 {
-                    int lowerLeft = (x + y * width);
-                    int lowerRight = ((x + 1) + y * width);
-                    int topLeft = (x + (y + 1) * width);
-                    int topRight = ((x + 1) + (y + 1) * width);
+                    int lowerLeft = (x + y * Width);
+                    int lowerRight = ((x + 1) + y * Width);
+                    int topLeft = (x + (y + 1) * Width);
+                    int topRight = ((x + 1) + (y + 1) * Width);
 
                     Indices[counter++] = topLeft;
                     Indices[counter++] = lowerRight;
@@ -114,14 +114,14 @@ namespace Engine.Source.Factories
                 
         private void SetVerticesTexture()
         {
-            verticesTexture = new VertexPositionNormalTexture[width * height];
+            VerticesTexture = new VertexPositionNormalTexture[Width * Height];
             Vector2 texturePosition;
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    texturePosition = new Vector2((float)x / width, (float)y / height);
-                    verticesTexture[x + y * width] = new VertexPositionNormalTexture(new Vector3(x, heightMapData[x, y], -y), Vector3.One, texturePosition);
+                    texturePosition = new Vector2((float)x / Width, (float)y / Height);
+                    VerticesTexture[x + y * Width] = new VertexPositionNormalTexture(new Vector3(x, heightMapData[x, y], -y), Vector3.One, texturePosition);
                 }
             }
         }
@@ -129,8 +129,8 @@ namespace Engine.Source.Factories
 
         private void CalculateNormals()
         {
-            for (int i = 0; i < verticesTexture.Length; i++)
-                verticesTexture[i].Normal = new Vector3(0, 0, 0);
+            for (int i = 0; i < VerticesTexture.Length; i++)
+                VerticesTexture[i].Normal = new Vector3(0, 0, 0);
 
             for (int i = 0; i < Indices.Length / 3; i++)
             {
@@ -138,22 +138,22 @@ namespace Engine.Source.Factories
                 int index2 = Indices[i * 3 + 1];
                 int index3 = Indices[i * 3 + 2];
 
-                Vector3 side1 = verticesTexture[index1].Position - verticesTexture[index3].Position;
-                Vector3 side2 = verticesTexture[index1].Position - verticesTexture[index2].Position;
+                Vector3 side1 = VerticesTexture[index1].Position - VerticesTexture[index3].Position;
+                Vector3 side2 = VerticesTexture[index1].Position - VerticesTexture[index2].Position;
                 Vector3 normal = Vector3.Cross(side1, side2);
 
-                verticesTexture[index1].Normal += normal;
-                verticesTexture[index2].Normal += normal;
-                verticesTexture[index3].Normal += normal;
+                VerticesTexture[index1].Normal += normal;
+                VerticesTexture[index2].Normal += normal;
+                VerticesTexture[index3].Normal += normal;
             }
-            for (int i = 0; i < verticesTexture.Length; i++)
-                verticesTexture[i].Normal.Normalize();
+            for (int i = 0; i < VerticesTexture.Length; i++)
+                VerticesTexture[i].Normal.Normalize();
         }
 
         private void CopyToBuffers()
         {
-            VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionNormalTexture.VertexDeclaration, verticesTexture.Length, BufferUsage.WriteOnly);
-            VertexBuffer.SetData(verticesTexture);
+            VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionNormalTexture.VertexDeclaration, VerticesTexture.Length, BufferUsage.WriteOnly);
+            VertexBuffer.SetData(VerticesTexture);
             
             IndexBuffer = new IndexBuffer(graphicsDevice, typeof(int), Indices.Length, BufferUsage.WriteOnly);
             IndexBuffer.SetData(Indices);
@@ -176,9 +176,9 @@ namespace Engine.Source.Factories
 
         private void SetUpHeightMapChunks(ref HeightmapComponentTexture heightMapComp)
         {
-            for (int x = 0; x < width - chunk_width; x += chunk_width)
+            for (int x = 0; x < Width - chunk_width; x += chunk_width)
             { 
-                for (int y = 0; y < height - chunk_height; y += chunk_height)
+                for (int y = 0; y < Height - chunk_height; y += chunk_height)
                 {
                     
                     Rectangle clipRect = new Rectangle(x, y, chunk_width + 1, chunk_height + 1);
@@ -202,7 +202,7 @@ namespace Engine.Source.Factories
             {
                 for (int y = rect.Y; y < rect.Y + rect.Height; y++)
                 {
-                    terrainVerts[(x - rect.X) + (y - rect.Y) * rect.Height].Normal = verticesTexture[x + y * height].Normal;
+                    terrainVerts[(x - rect.X) + (y - rect.Y) * rect.Height].Normal = VerticesTexture[x + y * Height].Normal;
                 }
             }
             return terrainVerts;

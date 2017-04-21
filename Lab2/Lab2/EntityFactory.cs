@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatorGrafikLab1
+namespace Lab2
 {
     class EntityFactory
     {
@@ -28,6 +28,7 @@ namespace DatorGrafikLab1
                 new ModelComponent(Content.Load<Model>("untitled")),
                 new TransformComponent(new Vector3(250, 400, -500), new Vector3(5,5,5)),
             };
+            ComponentManager.Instance.AddAllComponents(skyboxEntity, anotherList);
         }
 
         public void CreateChopper(GraphicsDevice Device)
@@ -44,11 +45,11 @@ namespace DatorGrafikLab1
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
-                new TransformComponent(new Vector3(-300, -0, 0), new Vector3(1, 1, 1)),
+                new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1)),
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
-                    OffSet = new Vector3(0, 10, 20),
+                    OffSet = new Vector3(0, 10, 35),
                     // sätt isDrunk till true om man vill ha en "drunk" kamera
                     IsDrunk = false
                 },
@@ -88,7 +89,6 @@ namespace DatorGrafikLab1
                 for (int y = 0; y < height; y++)
                 {
                     float terrainHeight = hmp.HeightMapData[x, y];
-                    
 
                     if ((terrainHeight > 8) && (terrainHeight < 14))
                     {
@@ -123,19 +123,10 @@ namespace DatorGrafikLab1
                                 if (x > width)
                                     x = 0;
                             }
-                            
-
-                            
-                            
-
                         }
-
-                        
-                        
                     }
                 }
             }
-
         }
     }
 }

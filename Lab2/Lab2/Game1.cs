@@ -9,8 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Engine.Source.Factories;
-using DatorGrafikLab1.Humanoid;
-using DatorGrafikLab1;
+using Lab2.Humanoid;
 
 namespace Lab2
 {
@@ -20,8 +19,9 @@ namespace Lab2
     public class Game1 : Engine.Engine
     {
 
-        
-        
+        private Body _body;
+        private BasicEffect _effect;
+
         public Game1()
         {
 
@@ -40,13 +40,14 @@ namespace Lab2
             //r.CullMode = CullMode.None;
             //r.FillMode = FillMode.WireFrame;
             //Device.RasterizerState = r;
-            
+            //GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+
 
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
             EntityFactory factory = new EntityFactory(Content);
-            factory.CreateSkyBox();
+            //factory.CreateSkyBox();
             factory.CreateChopper(Device);
-            
+
             int HeightmapEnt = ComponentManager.Instance.CreateID();
 
             HeightmapComponentTexture hmp = heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("Canyon_elev_1024"), Content.Load<Texture2D>("grass"), 10);
@@ -58,7 +59,7 @@ namespace Lab2
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
 
-            factory.CreateManyTrees(hmp, heightmapFactory.width, heightmapFactory.height, heightmapFactory.verticesTexture);
+            factory.CreateManyTrees(hmp, heightmapFactory.Width, heightmapFactory.Height, heightmapFactory.VerticesTexture);
             SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
             SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
@@ -78,7 +79,16 @@ namespace Lab2
         /// </summary>
         protected override void LoadContent()
         {
+            _body = new Body(GraphicsDevice);
 
+            _effect = new BasicEffect(GraphicsDevice)
+            {
+                TextureEnabled = true,
+                Texture = Content.Load<Texture2D>("Canyon_rgb"),
+
+                Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 16 / 9f, 0.01f, 1000f),
+                View = Matrix.CreateLookAt(new Vector3(10f, 10f, 10f), new Vector3(0, 0, 0), Vector3.Up)
+            };
         }
         
 
@@ -93,6 +103,7 @@ namespace Lab2
 
         protected override void Update(GameTime gameTime)
         {
+            _body.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -100,6 +111,8 @@ namespace Lab2
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            _body.Draw(_effect, Matrix.Identity);
 
             base.Draw(gameTime);
         }

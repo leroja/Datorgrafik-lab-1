@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace DatorGrafikLab1.Humanoid
+namespace Lab2.Humanoid
 {
     public class HumanoidSystemRender : IRender
     {
