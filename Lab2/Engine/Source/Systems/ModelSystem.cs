@@ -42,10 +42,17 @@ namespace Engine.Source.Systems
                             ModelMesh mesh = mcp.Model.Meshes[index];
                             foreach (BasicEffect effect in mesh.Effects)
                             {
+                                if (mcp.isTextured)
+                                {
+                                    effect.TextureEnabled = true;
+                                    effect.Texture = mcp.modelTexture;
+                                }
+                                
                                 effect.EnableDefaultLighting();
                                 effect.PreferPerPixelLighting = true;
-
-
+                               
+                                
+                                
                                 effect.World = mesh.ParentBone.Transform * mcp.MeshWorldMatrices[index] * tfc.ObjectMatrix;
                                 effect.View = defaultCam.ViewMatrix;
                                 effect.Projection = defaultCam.ProjectionMatrix;
@@ -64,14 +71,22 @@ namespace Engine.Source.Systems
                             foreach (BasicEffect effect in modelMesh.Effects)
                             {
 
+                                if (mcp.isTextured)
+                                {
+                                    effect.TextureEnabled = true;
+                                    effect.Texture = mcp.modelTexture;
+                                }
+                                
+                                effect.EnableDefaultLighting();
+                                effect.PreferPerPixelLighting = true;
+                                
+
                                 Matrix objectWorld = tfc.ObjectMatrix;
                                 effect.World = modelMesh.ParentBone.Transform * objectWorld; //* mcp.WorldMatrix;
                             
                                 effect.View = defaultCam.ViewMatrix;
                                 effect.Projection = defaultCam.ProjectionMatrix;
 
-                                effect.EnableDefaultLighting();
-                                effect.LightingEnabled = true;
 
                                 foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                                 {

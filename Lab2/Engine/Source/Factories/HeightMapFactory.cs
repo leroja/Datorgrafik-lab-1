@@ -18,9 +18,9 @@ namespace Engine.Source.Factories
         // heightMap
         private Texture2D heightMap;
         private Texture2D heightMapTexture;
-        private VertexPositionNormalTexture[] verticesTexture;
-        private int width;
-        private int height;
+        public VertexPositionNormalTexture[] verticesTexture { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
 
         private int fractions_per_side;
         private int chunk_width;
@@ -379,5 +379,7 @@ namespace Engine.Source.Factories
             var last = vertexArray.Last();
             return BoundingSphere.CreateFromPoints(new List<Vector3> { first.Position, last.Position });
         }
+
+        
     }
 }

@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EntityFactory.cs" />
     <Compile Include="GameComponents\ChopperComponent.cs" />
     <Compile Include="GameSystems\ChopperSystem.cs" />
     <Compile Include="Game1.cs" />
