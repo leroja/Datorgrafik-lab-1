@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Engine.Source.Factories;
+using DatorGrafikLab1.Humanoid;
 
 namespace Lab2
 {
@@ -17,6 +18,8 @@ namespace Lab2
     /// </summary>
     public class Game1 : Engine.Engine
     {
+
+        
         
         public Game1()
         {
@@ -95,6 +98,9 @@ namespace Lab2
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
 
+            
+
+
             SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
             SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
@@ -125,6 +131,19 @@ namespace Lab2
         protected override void UnloadContent()
         {
 
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+
+            base.Update(gameTime);
+        }
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            base.Draw(gameTime);
         }
     }
 }

@@ -44,6 +44,14 @@
     <Compile Include="GameComponents\ChopperComponent.cs" />
     <Compile Include="GameSystems\ChopperSystem.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Humanoid\Body.cs" />
+    <Compile Include="Humanoid\CuboidMesh.cs" />
+    <Compile Include="Humanoid\Head.cs" />
+    <Compile Include="Humanoid\HumanoidComponent.cs" />
+    <Compile Include="Humanoid\HumanoidSystemRender.cs" />
+    <Compile Include="Humanoid\HumanoidSystemUpdate.cs" />
+    <Compile Include="Humanoid\IGameObject.cs" />
+    <Compile Include="Humanoid\Leg.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,6 +75,7 @@
       <Name>Engine</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
