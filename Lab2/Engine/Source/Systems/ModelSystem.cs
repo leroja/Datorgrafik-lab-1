@@ -20,7 +20,7 @@ namespace Engine.Source.Systems
             List<int> entitiesWithCamera = ComponentManager.Instance.GetAllEntitiesWithComponentType<CameraComponent>();
             //pick one
             defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entitiesWithCamera.First());
-
+            var i = 0;
             Dictionary<int,IComponent> mc = ComponentManager.Instance.GetAllEntitiesAndComponentsWithComponentType<ModelComponent>();
             foreach(var entity in mc)
             {
@@ -34,70 +34,92 @@ namespace Engine.Source.Systems
                     //Check if model has it's own camera, if not use default
                     if (ComponentManager.Instance.CheckIfEntityHasComponent<CameraComponent>(entity.Key))
                         defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
-
-                    if (mcp.MeshWorldMatrices != null)
+                    
+                    // onödigt att göra detta varje gång för statiska object
+                    var sphere = GetModelBoundingSphere(mcp, entity.Key);
+                    if (defaultCam.CameraFrustrum.Intersects(sphere))
                     {
-                        for (int index = 0; index < mcp.Model.Meshes.Count; index++)
+                        i++;
+                        if (mcp.MeshWorldMatrices != null)
                         {
-                            ModelMesh mesh = mcp.Model.Meshes[index];
-                            foreach (BasicEffect effect in mesh.Effects)
+                            for (int index = 0; index < mcp.Model.Meshes.Count; index++)
                             {
-                                if (mcp.isTextured)
+                                ModelMesh mesh = mcp.Model.Meshes[index];
+                                foreach (BasicEffect effect in mesh.Effects)
                                 {
-                                    effect.TextureEnabled = true;
-                                    effect.Texture = mcp.modelTexture;
+                                    if (mcp.isTextured)
+                                    {
+                                        effect.TextureEnabled = true;
+                                        effect.Texture = mcp.modelTexture;
+                                    }
+
+                                    effect.EnableDefaultLighting();
+                                    effect.PreferPerPixelLighting = true;
+
+
+
+                                    effect.World = mesh.ParentBone.Transform * mcp.MeshWorldMatrices[index] * tfc.ObjectMatrix;
+                                    effect.View = defaultCam.ViewMatrix;
+                                    effect.Projection = defaultCam.ProjectionMatrix;
                                 }
-                                
-                                effect.EnableDefaultLighting();
-                                effect.PreferPerPixelLighting = true;
-                               
-                                
-                                
-                                effect.World = mesh.ParentBone.Transform * mcp.MeshWorldMatrices[index] * tfc.ObjectMatrix;
-                                effect.View = defaultCam.ViewMatrix;
-                                effect.Projection = defaultCam.ProjectionMatrix;
+                                mesh.Draw();
                             }
-                            mesh.Draw();
                         }
-                    }
-                    else
-                    {
-                        foreach (ModelMesh modelMesh in mcp.Model.Meshes)
+                        else
                         {
-                            //Check if model has it's own camera, if not use default
-                            if (ComponentManager.Instance.CheckIfEntityHasComponent<CameraComponent>(entity.Key))
-                                defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entity.Key);
-
-                            foreach (BasicEffect effect in modelMesh.Effects)
+                            foreach (ModelMesh modelMesh in mcp.Model.Meshes)
                             {
-
-                                if (mcp.isTextured)
+                                foreach (BasicEffect effect in modelMesh.Effects)
                                 {
-                                    effect.TextureEnabled = true;
-                                    effect.Texture = mcp.modelTexture;
-                                }
-                                
-                                effect.EnableDefaultLighting();
-                                effect.PreferPerPixelLighting = true;
-                                
 
-                                Matrix objectWorld = tfc.ObjectMatrix;
-                                effect.World = modelMesh.ParentBone.Transform * objectWorld; //* mcp.WorldMatrix;
-                            
-                                effect.View = defaultCam.ViewMatrix;
-                                effect.Projection = defaultCam.ProjectionMatrix;
+                                    if (mcp.isTextured)
+                                    {
+                                        effect.TextureEnabled = true;
+                                        effect.Texture = mcp.modelTexture;
+                                    }
+
+                                    effect.EnableDefaultLighting();
+                                    effect.PreferPerPixelLighting = true;
 
 
-                                foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-                                {
-                                    pass.Apply();
-                                    modelMesh.Draw();
+                                    Matrix objectWorld = tfc.ObjectMatrix;
+                                    effect.World = modelMesh.ParentBone.Transform * objectWorld;
+
+                                    effect.View = defaultCam.ViewMatrix;
+                                    effect.Projection = defaultCam.ProjectionMatrix;
+
+
+                                    foreach (EffectPass pass in effect.CurrentTechnique.Passes)
+                                    {
+                                        pass.Apply();
+                                        modelMesh.Draw();
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            System.Console.WriteLine(i);
+        }
+
+        private BoundingSphere GetModelBoundingSphere(ModelComponent modelComp, int entityId)
+        {
+            var transformComp = ComponentManager.GetEntityComponent<TransformComponent>(entityId);
+            var sphere = new BoundingSphere(transformComp.Position, 0);
+
+            var boneTransforms = new Matrix[modelComp.Model.Bones.Count];
+            modelComp.Model.CopyAbsoluteBoneTransformsTo(boneTransforms);
+
+            foreach (var mesh in modelComp.Model.Meshes)
+            {
+                var meshTransform = boneTransforms[mesh.ParentBone.Index] * transformComp.ObjectMatrix;
+
+                var s = mesh.BoundingSphere;
+                s = s.Transform(meshTransform);
+                sphere = BoundingSphere.CreateMerged(sphere, s);
+            }
+            return sphere;
         }
     }
 }

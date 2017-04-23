@@ -35,8 +35,7 @@ namespace Engine.Source.Systems
                 {
                     var heightMap = ComponentManager.GetEntityComponent<HeightmapComponentTexture>(heightMapId);
                     var transformComp = ComponentManager.GetEntityComponent<TransformComponent>(heightMapId);
-
-                    var inView = 0;
+                    
                     foreach (var chunk in heightMap.HeightMapChunks)
                     {
                         chunk.Effect.Projection = cameraComp.ProjectionMatrix;
@@ -55,11 +54,8 @@ namespace Engine.Source.Systems
                                 p.Apply();
                                 device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, chunk.indicesDiv3);
                             }
-
-                            inView++;
                         }
                     }
-                    System.Console.WriteLine(inView);
 
                     //heightMap.Effect.View = cameraComp.ViewMatrix;
                     //heightMap.Effect.Projection = cameraComp.ProjectionMatrix;
