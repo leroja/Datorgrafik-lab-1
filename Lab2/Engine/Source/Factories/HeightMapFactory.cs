@@ -184,6 +184,7 @@ namespace Engine.Source.Factories
                     Rectangle clipRect = new Rectangle(x, y, chunk_width + 1, chunk_height + 1);
                     var offsetpos = new Vector3(x, 0, -y);
 
+                    // Uncomment in för att se att det verkligen är chunks
                     //HeightMapChunk chunk = CreateHeightMapChunk(heightMap, new Rectangle(x, y, chunk_width, chunk_height),
                     //new Vector3(x, 0, -y), GetVertexTextureNormals(new Rectangle(x, y, chunk_width, chunk_height)), heightMapTexture);
 
@@ -219,7 +220,6 @@ namespace Engine.Source.Factories
             var heightinfo = CreateHightmap(terrainMap, terrainRect);
             var chunkVertices = InitTerrainVertices(heightinfo, terrainRect);
             var boundingBox = CreateBoundingBox(chunkVertices);
-            var sphere = CreateBoundingSphere(chunkVertices);
 
             var effect = new BasicEffect(graphicsDevice)
             {
@@ -234,7 +234,6 @@ namespace Engine.Source.Factories
             var indices = InitIndices(terrainRect);
             chunk.indicesDiv3 = indices.Length / 3; // för att slipa göra den här divisionen flera gånger
 
-            //copy the calculated normal values
             CopyNormals(vertexNormals, chunkVertices);
 
             PrepareBuffers(ref chunk, indices, chunkVertices);
@@ -260,12 +259,10 @@ namespace Engine.Source.Factories
         {
             var width = terrainMap.Width;
             var height = terrainMap.Height;
-
-            //get the pixels from the terrain map
+            
             Color[] colors = new Color[width * height];
             terrainMap.GetData(colors);
-
-            //copy the desired portion of the map
+            
             var heightInfo = new float[terrainRect.Width, terrainRect.Height];
             for (int x = terrainRect.X; x < terrainRect.X + terrainRect.Width; ++x)
             {
@@ -314,19 +311,14 @@ namespace Engine.Source.Factories
 
             for (int i = 0; i < indicesLen; ++i)
             {
-                //get indices indexes
                 int i1 = indices[i * 3];
                 int i2 = indices[i * 3 + 1];
                 int i3 = indices[i * 3 + 2];
-
-                //get the two faces
+                
                 Vector3 face1 = vertices[i1].Position - vertices[i3].Position;
                 Vector3 face2 = vertices[i1].Position - vertices[i2].Position;
-
-                //get the cross product between them
                 Vector3 normal = Vector3.Cross(face1, face2);
-
-                //update the normal
+                
                 vertices[i1].Normal += normal;
                 vertices[i2].Normal += normal;
                 vertices[i3].Normal += normal;
@@ -368,7 +360,6 @@ namespace Engine.Source.Factories
             {
                 points.Add(v.Position);
             }
-
             BoundingBox b = BoundingBox.CreateFromPoints(points);
             return b;
         }
@@ -379,7 +370,5 @@ namespace Engine.Source.Factories
             var last = vertexArray.Last();
             return BoundingSphere.CreateFromPoints(new List<Vector3> { first.Position, last.Position });
         }
-
-        
     }
 }

@@ -32,16 +32,16 @@ namespace Lab2.Humanoid
                 if (_rotation.Y < MAXROTATION)
                 {
                     if (direction)
-                        _rotation = new Vector3(_rotation.X, _rotation.Y + 0.01f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y + 0.02f, _rotation.Z);
                     else
-                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.01f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.02f, _rotation.Z);
                 }
                 else
                 {
                     if (!direction)
-                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.01f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.02f, _rotation.Z);
                     else
-                        _rotation = new Vector3(_rotation.X, _rotation.Y + 0.01f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y + 0.02f, _rotation.Z);
                 }
 
                 if (_rotation.Y > MAXROTATION || _rotation.Y < -MAXROTATION)
@@ -52,16 +52,16 @@ namespace Lab2.Humanoid
                 if (_rotation.Y < MAXROTATION)
                 {
                     if (direction)
-                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.02f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.03f, _rotation.Z);
                     else
-                        _rotation = new Vector3(_rotation.X, _rotation.Y + 0.02f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y + 0.03f, _rotation.Z);
                 }
                 else
                 {
                     if (!direction)
-                        _rotation = new Vector3(_rotation.X, _rotation.Y -+ 0.02f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y -+ 0.03f, _rotation.Z);
                     else
-                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.02f, _rotation.Z);
+                        _rotation = new Vector3(_rotation.X, _rotation.Y - 0.03f, _rotation.Z);
                 }
 
                 if (_rotation.Y > MAXROTATION || _rotation.Y < -MAXROTATION)

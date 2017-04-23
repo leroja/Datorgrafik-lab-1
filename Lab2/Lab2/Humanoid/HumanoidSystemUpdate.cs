@@ -12,7 +12,12 @@ namespace Lab2.Humanoid
     {
         public override void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            var ids = ComponentManager.GetAllEntitiesWithComponentType<HumanoidComponent>();
+            foreach (var id in ids)
+            {
+                var humanoidComp = ComponentManager.GetEntityComponent<HumanoidComponent>(id);
+                humanoidComp.Humanoid.Update(gameTime);
+            }
         }
     }
 }

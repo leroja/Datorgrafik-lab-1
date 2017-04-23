@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Engine.Source.Components;
 
 namespace Lab2.Humanoid
 {
@@ -12,7 +13,17 @@ namespace Lab2.Humanoid
     {
         public override void Draw(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            var ids = ComponentManager.GetAllEntitiesWithComponentType<HumanoidComponent>();
+            var CameraId = ComponentManager.GetAllEntitiesWithComponentType<CameraComponent>()[0];
+            var camera = ComponentManager.GetEntityComponent<CameraComponent>(CameraId);
+            foreach (var id in ids)
+            {
+                var humanoidComp = ComponentManager.GetEntityComponent<HumanoidComponent>(id);
+                humanoidComp.Effect.Projection = camera.ProjectionMatrix;
+                humanoidComp.Effect.View = camera.ViewMatrix;
+
+                humanoidComp.Humanoid.Draw(humanoidComp.Effect, Matrix.Identity);
+            }
         }
     }
 }

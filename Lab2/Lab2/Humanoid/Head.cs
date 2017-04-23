@@ -26,10 +26,10 @@ namespace Lab2.Humanoid
         public override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.D2))
-                _rotation = new Vector3(_rotation.X, _rotation.Y + 0.01f, _rotation.Z);
+                _rotation = new Vector3(_rotation.X + 0.01f, _rotation.Y, _rotation.Z);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D1))
-                _rotation = new Vector3(_rotation.X, _rotation.Y - 0.01f, _rotation.Z);
+                _rotation = new Vector3(_rotation.X - 0.01f, _rotation.Y, _rotation.Z);
 
             World = Matrix.Identity *
                 Matrix.CreateTranslation(_position) *

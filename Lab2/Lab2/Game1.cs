@@ -19,8 +19,8 @@ namespace Lab2
     public class Game1 : Engine.Engine
     {
 
-        private Body _body;
-        private BasicEffect _effect;
+        //private Body _body;
+        //private BasicEffect _effect;
 
         public Game1()
         {
@@ -46,7 +46,8 @@ namespace Lab2
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
             EntityFactory factory = new EntityFactory(Content);
             //factory.CreateSkyBox();
-            factory.CreateChopper(Device);
+            //factory.CreateChopper(Device);
+            factory.CreateHumanoidEntity(Content.Load<Texture2D>("canyon_rgb"),Device);
 
             int HeightmapEnt = ComponentManager.Instance.CreateID();
 
@@ -66,10 +67,13 @@ namespace Lab2
             SystemManager.Instance.AddSystem(new TransformSystem());
             SystemManager.Instance.AddSystem(new KeyBoardSystem());
             SystemManager.Instance.AddSystem(new ChopperSystem());
+            
+            SystemManager.Instance.AddSystem(new HumanoidSystemUpdate());
+            SystemManager.Instance.AddSystem(new HumanoidSystemRender());
 
             SystemManager.Instance.AddSystem(new CameraSystem());
             SystemManager.Instance.AddSystem(new ChaseCamSystem());
-
+            
             base.Initialize();
         }
 
@@ -79,16 +83,7 @@ namespace Lab2
         /// </summary>
         protected override void LoadContent()
         {
-            _body = new Body(GraphicsDevice);
-
-            _effect = new BasicEffect(GraphicsDevice)
-            {
-                TextureEnabled = true,
-                Texture = Content.Load<Texture2D>("Canyon_rgb"),
-
-                Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 16 / 9f, 0.01f, 1000f),
-                View = Matrix.CreateLookAt(new Vector3(10f, 10f, 10f), new Vector3(0, 0, 0), Vector3.Up)
-            };
+            
         }
         
 
@@ -99,22 +94,6 @@ namespace Lab2
         protected override void UnloadContent()
         {
 
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            _body.Update(gameTime);
-
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _body.Draw(_effect, Matrix.Identity);
-
-            base.Draw(gameTime);
         }
     }
 }

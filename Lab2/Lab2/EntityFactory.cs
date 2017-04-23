@@ -1,6 +1,7 @@
 ﻿using Engine.Source.Components;
 using Engine.Source.Managers;
 using Lab2.GameComponents;
+using Lab2.Humanoid;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -128,5 +129,32 @@ namespace Lab2
                 }
             }
         }
+
+        public void CreateHumanoidEntity(Texture2D texture, GraphicsDevice graphics)
+        {
+            var humanoidEntity = ComponentManager.Instance.CreateID();
+
+            var effect = new BasicEffect(graphics)
+            {
+                TextureEnabled = true,
+                Texture = texture
+            };
+            List<IComponent> componentList = new List<IComponent>()
+            {
+                new HumanoidComponent(new Body(graphics, humanoidEntity), effect),
+                new TransformComponent(new Vector3(10, 50, -10), new Vector3(1, 1, 1)),
+                new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, graphics.Viewport.AspectRatio),
+                new ChaseCamComponent
+                {
+                    OffSet = new Vector3(0, 0, 35),
+                    // sätt isDrunk till true om man vill ha en "drunk" kamera
+                    IsDrunk = false
+                },
+
+            };
+
+            ComponentManager.Instance.AddAllComponents(humanoidEntity, componentList);
+        }
+
     }
 }

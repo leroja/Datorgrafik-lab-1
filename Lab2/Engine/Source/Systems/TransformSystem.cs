@@ -23,7 +23,7 @@ namespace Engine.Source.Systems
             foreach (var entity in mc)
             {
                 TransformComponent tfc = ComponentManager.Instance.GetEntityComponent<TransformComponent>(entity.Key);
-                var rotationQuaternion = Quaternion.CreateFromYawPitchRoll(tfc.Rotation.Y, tfc.Rotation.X, tfc.Rotation.Z);
+                var rotationQuaternion = Quaternion.CreateFromYawPitchRoll(tfc.Rotation.X, tfc.Rotation.Y, tfc.Rotation.Z);
 
                 tfc.QuaternionRotation *= rotationQuaternion;
                 tfc.Forward = Vector3.Transform(Vector3.Forward, tfc.QuaternionRotation);
