@@ -146,13 +146,11 @@ namespace Lab2
                 new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, graphics.Viewport.AspectRatio),
                 new ChaseCamComponent
                 {
-                    OffSet = new Vector3(0, 0, 35),
-                    // sätt isDrunk till true om man vill ha en "drunk" kamera
+                    OffSet = new Vector3(0, 10, 35),
                     IsDrunk = false
                 },
 
             };
-
             ComponentManager.Instance.AddAllComponents(humanoidEntity, componentList);
         }
 

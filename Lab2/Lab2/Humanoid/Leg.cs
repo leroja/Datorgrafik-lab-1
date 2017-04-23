@@ -76,11 +76,15 @@ namespace Lab2.Humanoid
 
         public override void Draw(BasicEffect effect, Matrix world)
         {
-            effect.World = World * world;
-            effect.CurrentTechnique.Passes[0].Apply();
+            GraphicsDevice.SetVertexBuffer(vertexBuffer);
+            GraphicsDevice.Indices = indexBuffer;
 
-            GraphicsDevice.SetVertexBuffer(VertexBuffer);
-            GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 36);
+            effect.World = World * world;
+            foreach (EffectPass ep in effect.CurrentTechnique.Passes)
+            {
+                ep.Apply();
+                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 12);
+            }
         }
     }
 }

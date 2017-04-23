@@ -12,19 +12,26 @@ namespace Lab2.Humanoid
     {
         protected GraphicsDevice GraphicsDevice;
         protected VertexBuffer VertexBuffer;
-        public const short TEXTURE_WRAP_N = 1;
 
+        protected VertexPositionNormalTexture[] vertices;
+        protected VertexBuffer vertexBuffer;
+
+        protected short[] indices;
+        protected IndexBuffer indexBuffer;
+        
         protected Matrix World = Matrix.Identity;
-        private float _sizeX = 1f;
-        private float _sizeY = 1f;
-        private float _sizeZ = 1f;
+        private float _sizeX;
+        private float _sizeY;
+        private float _sizeZ;
 
-        public CuboidMesh(GraphicsDevice graphics)
-        {
-            GraphicsDevice = graphics;
+        // Normals
+        private static readonly Vector3 RIGHT = new Vector3(1, 0, 0); // +X
+        private static readonly Vector3 LEFT = new Vector3(-1, 0, 0); // -X
+        private static readonly Vector3 UP = new Vector3(0, 1, 0); // +Y
+        private static readonly Vector3 DOWN = new Vector3(0, -1, 0); // -Y
+        private static readonly Vector3 FORWARD = new Vector3(0, 0, 1); // +Z
+        private static readonly Vector3 BACKWARD = new Vector3(0, 0, -1); // -Z
 
-            Initialize();
-        }
 
         public CuboidMesh(GraphicsDevice graphics, float sizeX, float sizeY, float sizeZ)
         {
@@ -39,110 +46,106 @@ namespace Lab2.Humanoid
 
         private void Initialize()
         {
-            VertexPositionNormalTexture[] nonIndexedCube = new VertexPositionNormalTexture[36];
+            SetupIndices();
+            SetupVertices();
+            SetupVertexBuffer();
+            SetupIndexBuffer();
+        }
 
+
+        private void SetupVertices()
+        {
+            List<VertexPositionNormalTexture> vertexList = new List<VertexPositionNormalTexture>(36);
+            
             float dX = _sizeX / 2;
             float dY = _sizeY / 2;
             float dZ = _sizeZ / 2;
-
-            Vector3 topLeftFront = new Vector3(-dX, dY, dZ);
-            Vector3 bottomLeftFront = new Vector3(-dX, -dY, dZ);
-            Vector3 topRightFront = new Vector3(dX, dY, dZ);
-            Vector3 bottomRightFront = new Vector3(dX, -dY, dZ);
-            Vector3 topLeftBack = new Vector3(-dX, dY, -dZ);
-            Vector3 topRightBack = new Vector3(dX, dY, -dZ);
-            Vector3 bottomLeftBack = new Vector3(-dX, -dY, -dZ);
-            Vector3 bottomRightBack = new Vector3(dX, -dY, -dZ);
-
+            
+            Vector3 FRONT_TOP_LEFT = new Vector3(-dX, dY, dZ);
+            Vector3 FRONT_TOP_RIGHT = new Vector3(dX, dY, dZ);
+            Vector3 FRONT_BOTTOM_LEFT = new Vector3(-dX, -dY, dZ);
+            Vector3 FRONT_BOTTOM_RIGHT = new Vector3(dX, -dY, dZ);
+            Vector3 BACK_TOP_LEFT = new Vector3(-dX, dY, -dZ);
+            Vector3 BACK_TOP_RIGHT = new Vector3(dX, dY, -dZ);
+            Vector3 BACK_BOTTOM_LEFT = new Vector3(-dX, -dY, -dZ);
+            Vector3 BACK_BOTTOM_RIGHT = new Vector3(dX, -dY, -dZ);
+            
             // Front face
-            nonIndexedCube[0] =
-                    new VertexPositionNormalTexture(topLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[1] =
-                    new VertexPositionNormalTexture(bottomLeftFront, new Vector3(), new Vector2(TEXTURE_WRAP_N,0));
-            nonIndexedCube[2] =
-                    new VertexPositionNormalTexture(topRightFront, new Vector3(), new Vector2(0,0));
-            nonIndexedCube[3] =
-                    new VertexPositionNormalTexture(bottomLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[4] =
-                    new VertexPositionNormalTexture(bottomRightFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, TEXTURE_WRAP_N));
-            nonIndexedCube[5] =
-                    new VertexPositionNormalTexture(topRightFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
-
-            // Back face 
-            nonIndexedCube[6] =
-                    new VertexPositionNormalTexture(topLeftBack, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[7] =
-                    new VertexPositionNormalTexture(topRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
-            nonIndexedCube[8] =
-                    new VertexPositionNormalTexture(bottomLeftBack, new Vector3(), new Vector2(0,0));
-            nonIndexedCube[9] =
-                    new VertexPositionNormalTexture(bottomLeftBack, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[10] =
-                    new VertexPositionNormalTexture(topRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, TEXTURE_WRAP_N));
-            nonIndexedCube[11] =
-                    new VertexPositionNormalTexture(bottomRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_LEFT, FORWARD, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_RIGHT, FORWARD, new Vector2(1, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_LEFT, FORWARD, new Vector2(0, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_LEFT, FORWARD, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_RIGHT, FORWARD, new Vector2(1, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_RIGHT, FORWARD, new Vector2(1, 0)));
 
             // Top face
-            nonIndexedCube[12] =
-                    new VertexPositionNormalTexture(topLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[13] =
-                    new VertexPositionNormalTexture(topRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
-            nonIndexedCube[14] =
-                    new VertexPositionNormalTexture(topLeftBack, new Vector3(), new Vector2(0, 0));
-            nonIndexedCube[15] =
-                    new VertexPositionNormalTexture(topLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[16] =
-                    new VertexPositionNormalTexture(topRightFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, TEXTURE_WRAP_N));
-            nonIndexedCube[17] =
-                    new VertexPositionNormalTexture(topRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_LEFT, UP, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_RIGHT, UP, new Vector2(1, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_LEFT, UP, new Vector2(0, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_LEFT, UP, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_RIGHT, UP, new Vector2(1, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_RIGHT, UP, new Vector2(1, 0)));
 
-            // Bottom face 
-            nonIndexedCube[18] =
-                    new VertexPositionNormalTexture(bottomLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[19] =
-                    new VertexPositionNormalTexture(bottomLeftBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
-            nonIndexedCube[20] =
-                    new VertexPositionNormalTexture(bottomRightBack, new Vector3(), new Vector2(0, 0));
-            nonIndexedCube[21] =
-                    new VertexPositionNormalTexture(bottomLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[22] =
-                    new VertexPositionNormalTexture(bottomRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, TEXTURE_WRAP_N));
-            nonIndexedCube[23] =
-                    new VertexPositionNormalTexture(bottomRightFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
+            // Right face
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_RIGHT, RIGHT, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_RIGHT, RIGHT, new Vector2(1, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_RIGHT, RIGHT, new Vector2(0, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_RIGHT, RIGHT, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_RIGHT, RIGHT, new Vector2(1, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_RIGHT, RIGHT, new Vector2(1, 0)));
+
+            // Bottom face
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_LEFT, DOWN, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_RIGHT, DOWN, new Vector2(1, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_LEFT, DOWN, new Vector2(0, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_LEFT, DOWN, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_RIGHT, DOWN, new Vector2(1, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_RIGHT, DOWN, new Vector2(1, 0)));
 
             // Left face
-            nonIndexedCube[24] =
-                    new VertexPositionNormalTexture(topLeftFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[25] =
-                    new VertexPositionNormalTexture(bottomLeftBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
-            nonIndexedCube[26] =
-                    new VertexPositionNormalTexture(bottomLeftFront, new Vector3(), new Vector2(0, 0));
-            nonIndexedCube[27] =
-                    new VertexPositionNormalTexture(topLeftBack, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[28] =
-                    new VertexPositionNormalTexture(bottomLeftBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, TEXTURE_WRAP_N));
-            nonIndexedCube[29] =
-                    new VertexPositionNormalTexture(topLeftFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_LEFT, LEFT, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_LEFT, LEFT, new Vector2(1, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_LEFT, LEFT, new Vector2(0, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_LEFT, LEFT, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_TOP_LEFT, LEFT, new Vector2(1, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(FRONT_BOTTOM_LEFT, LEFT, new Vector2(1, 0)));
 
-            // Right face 
-            nonIndexedCube[30] =
-                    new VertexPositionNormalTexture(topRightFront, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[31] =
-                    new VertexPositionNormalTexture(bottomRightFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
-            nonIndexedCube[32] =
-                    new VertexPositionNormalTexture(bottomRightBack, new Vector3(), new Vector2(0, 0));
-            nonIndexedCube[33] =
-                    new VertexPositionNormalTexture(topRightBack, new Vector3(), new Vector2(0, TEXTURE_WRAP_N));
-            nonIndexedCube[34] =
-                    new VertexPositionNormalTexture(topRightFront, new Vector3(), new Vector2(TEXTURE_WRAP_N, TEXTURE_WRAP_N));
-            nonIndexedCube[35] =
-                    new VertexPositionNormalTexture(bottomRightBack, new Vector3(), new Vector2(TEXTURE_WRAP_N, 0));
+            // Back face
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_RIGHT, BACKWARD, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_LEFT, BACKWARD, new Vector2(1, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_RIGHT, BACKWARD, new Vector2(0, 0)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_RIGHT, BACKWARD, new Vector2(0, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_TOP_LEFT, BACKWARD, new Vector2(1, 1)));
+            vertexList.Add(new VertexPositionNormalTexture(BACK_BOTTOM_LEFT, BACKWARD, new Vector2(1, 0)));
 
-            VertexBuffer = new VertexBuffer(GraphicsDevice, VertexPositionNormalTexture.VertexDeclaration, 36, BufferUsage.WriteOnly);
-            VertexBuffer.SetData(nonIndexedCube);
-
+            vertices = vertexList.ToArray();
         }
 
+        private void SetupVertexBuffer()
+        {
+            if (vertexBuffer == null)
+            {
+                vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.None);
+                vertexBuffer.SetData(vertices);
+            }
+        }
+
+        private void SetupIndices()
+        {
+            List<short> indexList = new List<short>(36);
+
+            for (short i = 0; i < 36; ++i)
+                indexList.Add(i);
+
+            indices = indexList.ToArray();
+        }
+
+        private void SetupIndexBuffer()
+        {
+            indexBuffer = new IndexBuffer(GraphicsDevice, typeof(short), indices.Length, BufferUsage.None);
+            indexBuffer.SetData(indices);
+        }
+        
         public virtual void Update(GameTime gameTime) { }
         public virtual void Draw(BasicEffect effect, Matrix world) { }
 

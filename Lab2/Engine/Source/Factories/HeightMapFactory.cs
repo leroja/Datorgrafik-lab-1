@@ -301,29 +301,6 @@ namespace Engine.Source.Factories
             }
             return indices;
         }
-        private void InitNormals(int[] indices, VertexPositionNormalTexture[] vertices)
-        {
-            int indicesLen = indices.Length / 3;
-            for (int i = 0; i < vertices.Length; ++i)
-            {
-                vertices[i].Normal = new Vector3(0f, 0f, 0f);
-            }
-
-            for (int i = 0; i < indicesLen; ++i)
-            {
-                int i1 = indices[i * 3];
-                int i2 = indices[i * 3 + 1];
-                int i3 = indices[i * 3 + 2];
-                
-                Vector3 face1 = vertices[i1].Position - vertices[i3].Position;
-                Vector3 face2 = vertices[i1].Position - vertices[i2].Position;
-                Vector3 normal = Vector3.Cross(face1, face2);
-                
-                vertices[i1].Normal += normal;
-                vertices[i2].Normal += normal;
-                vertices[i3].Normal += normal;
-            }
-        }
 
         private VertexPositionNormalTexture[] InitTerrainVertices(float[,] heightInfo, Rectangle terrainRect)
         {
