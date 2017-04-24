@@ -82,7 +82,6 @@ namespace Lab2
             Texture2D treePurple = Content.Load<Texture2D>("TexturesSnor");
 
             int printedTrees = 0;
-            bool printNextTree = true;
             Random random = new Random();
 
             for (int x = 0; x < width; x++)
@@ -98,17 +97,17 @@ namespace Lab2
                         float minFlatness = (float)Math.Cos(MathHelper.ToRadians(15));
                         if (flatness > minFlatness)
                         {
-                            if (printNextTree == true && printedTrees <= 100)
+                            if (printedTrees <= 100)
                             {
                                 float rand1 = (float)random.Next(1000) / 1000.0f;
                                 float rand2 = (float)random.Next(1000) / 1000.0f;
 
                                 float randomScale = (float)(random.Next(1, 5)/100.0f);
-                                
 
-                                if (printedTrees%2 == 0)
+
+                                if (printedTrees % 2 == 0)
                                 {
-                                    mcp = new ModelComponent(tree,treeGreen);
+                                    mcp = new ModelComponent(tree, treeGreen);
                                 }
                                 else
                                     mcp = new ModelComponent(tree, treePurple);
