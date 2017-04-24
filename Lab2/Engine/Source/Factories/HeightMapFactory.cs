@@ -14,8 +14,7 @@ namespace Engine.Source.Factories
     public class HeightMapFactory
     {
         private GraphicsDevice graphicsDevice;
-
-        // heightMap
+        
         private Texture2D heightMap;
         private Texture2D heightMapTexture;
         public VertexPositionNormalTexture[] VerticesTexture { get; set; }
@@ -28,8 +27,7 @@ namespace Engine.Source.Factories
 
         private BasicEffect Effect;
         private int[] Indices;
-
-        // array to read heightMap data
+        
         private float[,] heightMapData;
 
         private VertexBuffer VertexBuffer;
@@ -70,8 +68,6 @@ namespace Engine.Source.Factories
             comp.HeightMapData = heightMapData;
 
             SetUpHeightMapChunks(ref comp);
-            //CopyToBuffers();
-            //SetEffects();
         }
 
         private void SetHeights()
@@ -125,8 +121,7 @@ namespace Engine.Source.Factories
                 }
             }
         }
-
-
+        
         private void CalculateNormals()
         {
             for (int i = 0; i < VerticesTexture.Length; i++)
@@ -148,30 +143,6 @@ namespace Engine.Source.Factories
             }
             for (int i = 0; i < VerticesTexture.Length; i++)
                 VerticesTexture[i].Normal.Normalize();
-        }
-
-        private void CopyToBuffers()
-        {
-            VertexBuffer = new VertexBuffer(graphicsDevice, VertexPositionNormalTexture.VertexDeclaration, VerticesTexture.Length, BufferUsage.WriteOnly);
-            VertexBuffer.SetData(VerticesTexture);
-            
-            IndexBuffer = new IndexBuffer(graphicsDevice, typeof(int), Indices.Length, BufferUsage.WriteOnly);
-            IndexBuffer.SetData(Indices);
-        }
-
-        private void SetEffects()
-        {
-            Effect = new BasicEffect(graphicsDevice)
-            {
-                //LightingEnabled = true,
-
-                FogEnabled = true,
-                FogStart = 75,
-                FogEnd = 400,
-                FogColor = Color.SeaShell.ToVector3(),
-                TextureEnabled = true,
-                Texture = heightMapTexture
-            };
         }
 
         private void SetUpHeightMapChunks(ref HeightmapComponentTexture heightMapComp)
@@ -208,8 +179,7 @@ namespace Engine.Source.Factories
             }
             return terrainVerts;
         }
-
-
+        
         private HeightMapChunk CreateHeightMapChunk(Texture2D terrainMap, Rectangle terrainRect, Vector3 offsetPosition, VertexPositionNormalTexture[] vertexNormals, Texture2D texture)
         {
             var chunk = new HeightMapChunk()

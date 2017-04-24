@@ -23,9 +23,7 @@ namespace Engine.Source.Systems
 
         public override void Draw(GameTime gameTime)
         {
-            
             var ents = ComponentManager.GetAllEntitiesWithComponentType<HeightmapComponentTexture>();
-
             
             var cameraIds = ComponentManager.GetAllEntitiesWithComponentType<CameraComponent>();
             var cameraComp = ComponentManager.GetEntityComponent<CameraComponent>(cameraIds[0]);
@@ -56,27 +54,10 @@ namespace Engine.Source.Systems
                             }
                         }
                     }
-
-                    //heightMap.Effect.View = cameraComp.ViewMatrix;
-                    //heightMap.Effect.Projection = cameraComp.ProjectionMatrix;
-                    //Todo fix with world matrix
-                    //heightMap.Effect.World = transformComp.ObjectMatrix;
-
-                    //device.Indices = heightMap.IndexBuffer;
-                    //device.SetVertexBuffer(heightMap.VertexBuffer);
-
-                    //foreach (var pass in heightMap.Effect.CurrentTechnique.Passes)
-                    //{
-                    //    pass.Apply();
-
-
-                    //    device.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, heightMap.Indices.Length / 3);
-                    //}
                 }
             }
         }
-
-        // tror detta är onödigt arbete om heightmapen alltid är på samma position
+        
         private BoundingBox ConvertBoundingBoxToWorldCoords(BoundingBox box, Matrix world)
         {
             Vector3 pos = Vector3.Transform(Vector3.Zero, Matrix.Invert(world));

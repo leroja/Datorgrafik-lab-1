@@ -14,7 +14,6 @@ namespace Engine.Source.Systems
     {
         public override void Update(GameTime gameTime)
         {
-
             var cameraIds = ComponentManager.GetAllEntitiesWithComponentType<CameraComponent>();
             if (cameraIds == null)
                 return;

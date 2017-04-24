@@ -14,9 +14,6 @@ namespace Lab2.Humanoid
     public class Body : CuboidMesh
     {
         private List<IGameObject> _children = new List<IGameObject>();
-
-        //private Vector3 _rotation = Vector3.Zero;
-        //private Vector3 _position = Vector3.Zero;
         private int entityId;
 
         public Body(GraphicsDevice graphics, int entityId)
@@ -48,11 +45,9 @@ namespace Lab2.Humanoid
             var rot = transformComp.Rotation;
             rot.X = 0;
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                //transformComp.Rotation = new Vector3(transformComp.Rotation.X + 0.01f, transformComp.Rotation.Y, transformComp.Rotation.Z);
                 rot.X += 0.02f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                //transformComp.Rotation = new Vector3(transformComp.Rotation.X - 0.01f, transformComp.Rotation.Y, transformComp.Rotation.Z);
                 rot.X -= 0.02f;
             transformComp.Rotation = rot;
             try

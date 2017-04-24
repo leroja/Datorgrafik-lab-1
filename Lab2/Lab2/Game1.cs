@@ -18,10 +18,6 @@ namespace Lab2
     /// </summary>
     public class Game1 : Engine.Engine
     {
-
-        //private Body _body;
-        //private BasicEffect _effect;
-
         public Game1()
         {
 

@@ -20,7 +20,6 @@ namespace Engine.Source.Systems
             List<int> entitiesWithCamera = ComponentManager.Instance.GetAllEntitiesWithComponentType<CameraComponent>();
             //pick one
             defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entitiesWithCamera.First());
-            var i = 0;
             Dictionary<int,IComponent> mc = ComponentManager.Instance.GetAllEntitiesAndComponentsWithComponentType<ModelComponent>();
             foreach(var entity in mc)
             {
@@ -39,7 +38,6 @@ namespace Engine.Source.Systems
                     var sphere = GetModelBoundingSphere(mcp, entity.Key);
                     if (defaultCam.CameraFrustrum.Intersects(sphere))
                     {
-                        i++;
                         if (mcp.MeshWorldMatrices != null)
                         {
                             for (int index = 0; index < mcp.Model.Meshes.Count; index++)
@@ -55,9 +53,7 @@ namespace Engine.Source.Systems
 
                                     effect.EnableDefaultLighting();
                                     effect.PreferPerPixelLighting = true;
-
-
-
+                                    
                                     effect.World = mesh.ParentBone.Transform * mcp.MeshWorldMatrices[index] * tfc.ObjectMatrix;
                                     effect.View = defaultCam.ViewMatrix;
                                     effect.Projection = defaultCam.ProjectionMatrix;
@@ -71,7 +67,6 @@ namespace Engine.Source.Systems
                             {
                                 foreach (BasicEffect effect in modelMesh.Effects)
                                 {
-
                                     if (mcp.isTextured)
                                     {
                                         effect.TextureEnabled = true;
@@ -80,15 +75,13 @@ namespace Engine.Source.Systems
 
                                     effect.EnableDefaultLighting();
                                     effect.PreferPerPixelLighting = true;
-
-
+                                    
                                     Matrix objectWorld = tfc.ObjectMatrix;
                                     effect.World = modelMesh.ParentBone.Transform * objectWorld;
 
                                     effect.View = defaultCam.ViewMatrix;
                                     effect.Projection = defaultCam.ProjectionMatrix;
-
-
+                                    
                                     foreach (EffectPass pass in effect.CurrentTechnique.Passes)
                                     {
                                         pass.Apply();
@@ -100,7 +93,6 @@ namespace Engine.Source.Systems
                     }
                 }
             }
-            System.Console.WriteLine(i);
         }
 
         private BoundingSphere GetModelBoundingSphere(ModelComponent modelComp, int entityId)

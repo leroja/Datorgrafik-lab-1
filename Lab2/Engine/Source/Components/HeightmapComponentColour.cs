@@ -9,6 +9,7 @@ using static Engine.Source.Structs;
 
 namespace Engine.Source.Components
 {
+    // används inte
     public class HeightmapComponentColour : IComponent
     {
         private int TerrainHeight { get; set; }
