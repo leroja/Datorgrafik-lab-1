@@ -102,7 +102,7 @@ namespace Lab2
                                 float rand1 = (float)random.Next(1000) / 1000.0f;
                                 float rand2 = (float)random.Next(1000) / 1000.0f;
 
-                                float randomScale = (float)(random.Next(1, 5)/100.0f);
+                                float randomScale = (float)(random.Next(1, 5)/50.0f);
 
 
                                 if (printedTrees % 2 == 0)
