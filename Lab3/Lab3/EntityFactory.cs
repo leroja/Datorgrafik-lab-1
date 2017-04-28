@@ -42,12 +42,14 @@ namespace Lab3
             meshWorldMatrices[2] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
             mcp.MeshWorldMatrices = meshWorldMatrices;
 
+            CameraComponent cmp = new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio);
+
             List<IComponent> ChopperComponentList = new List<IComponent>
             {
                 //Skapa och lägg till alla komponenter som vi behöver för modellen
                 mcp,
                 new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1)),
-                new CameraComponent(new Vector3(0, 100, 120), new Vector3(0, 500, 0), new Vector3(0, 1, 0), 10000.0f, 1.0f, Device.Viewport.AspectRatio),
+                cmp,
                 new ChaseCamComponent
                 {
                     OffSet = new Vector3(0, 10, 35),
@@ -69,6 +71,7 @@ namespace Lab3
             keýComp.KeyBoardActions.Add("RotatenegativeZ", Keys.E);
             ComponentManager.Instance.AddAllComponents(ChopperEnt, ChopperComponentList);
             ComponentManager.Instance.AddComponentToEntity(ChopperEnt, keýComp);
+            TryingShaders(ChopperEnt, cmp);
         }
         
         public void CreateManyTrees(HeightmapComponentTexture hmp, int width, int height, VertexPositionNormalTexture[] terrainVertices)
@@ -184,5 +187,13 @@ namespace Lab3
 
             ComponentManager.Instance.AddAllComponents(FreeRoamEnt, componentList);
         }
+        private void TryingShaders(int Entityid, CameraComponent cmp)
+        {
+            Effect ChopperEffect = Content.Load<Effect>("TestShaders");
+
+            ComponentManager.Instance.AddComponentToEntity(Entityid, new ShaderComponent(ChopperEffect));
+
+        }
+
     }
 }

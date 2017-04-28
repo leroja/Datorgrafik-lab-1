@@ -18,6 +18,7 @@ namespace Lab3
     /// </summary>
     public class Game1 : Engine.Engine
     {
+        
         public Game1()
         {
 
