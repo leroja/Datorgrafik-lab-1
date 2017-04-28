@@ -21,6 +21,8 @@ namespace Engine.Source.Systems
             //pick one
             defaultCam = ComponentManager.Instance.GetEntityComponent<CameraComponent>(entitiesWithCamera.First());
             Dictionary<int,IComponent> mc = ComponentManager.Instance.GetAllEntitiesAndComponentsWithComponentType<ModelComponent>();
+            if (mc == null)
+                return;
             foreach(var entity in mc)
             {
                

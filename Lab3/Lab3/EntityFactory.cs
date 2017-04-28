@@ -35,7 +35,7 @@ namespace Lab3
         public void CreateChopper(GraphicsDevice Device)
         {
             int ChopperEnt = ComponentManager.Instance.CreateID();
-            ModelComponent mcp = new ModelComponent(Content.Load<Model>("Chopper"));
+            ModelComponent mcp = new ModelComponent(Content.Load<Model>("Lab Models/Chopper"));
             Matrix[] meshWorldMatrices = new Matrix[3];
             meshWorldMatrices[0] = Matrix.CreateRotationY(0);
             meshWorldMatrices[1] = Matrix.CreateTranslation(new Vector3(0, 0, 0));
@@ -77,9 +77,9 @@ namespace Lab3
 
             List<IComponent> components;
             ModelComponent mcp;
-            Model tree = Content.Load<Model>("Leaf_Oak");
-            Texture2D treeGreen = Content.Load<Texture2D>("TexturesGreen");
-            Texture2D treePurple = Content.Load<Texture2D>("TexturesSnor");
+            Model tree = Content.Load<Model>("Lab Models/Leaf_Oak");
+            Texture2D treeGreen = Content.Load<Texture2D>("Lab Models/TexturesGreen");
+            Texture2D treePurple = Content.Load<Texture2D>("Lab Models/TexturesSnor");
 
             int printedTrees = 0;
             Random random = new Random();
@@ -153,5 +153,36 @@ namespace Lab3
             ComponentManager.Instance.AddAllComponents(humanoidEntity, componentList);
         }
 
+        public void CreateFreeRoamCam(Vector3 position, GraphicsDevice graphics)
+        {
+            var FreeRoamEnt = ComponentManager.Instance.CreateID();
+
+            List<IComponent> componentList = new List<IComponent>()
+            {
+                new CameraComponent(position, new Vector3(0, 50, 0), Vector3.Up, 10000.0f, 1.0f, graphics.Viewport.AspectRatio),
+                new FreeRoamCamComponent(){
+                    LookAtOffSet = new Vector3(0, 10, -35),
+                },
+                new TransformComponent(position, Vector3.One),
+
+            };
+            var keýComp = new KeyBoardComponent();
+            keýComp.KeyBoardActions.Add("Forward", Keys.Up);
+            keýComp.KeyBoardActions.Add("Backward", Keys.Down);
+            keýComp.KeyBoardActions.Add("Right", Keys.Right);
+            keýComp.KeyBoardActions.Add("Left", Keys.Left);
+            keýComp.KeyBoardActions.Add("RotatenegativeX", Keys.D);
+            keýComp.KeyBoardActions.Add("RotateX", Keys.A);
+            keýComp.KeyBoardActions.Add("RotatenegativeY", Keys.W);
+            keýComp.KeyBoardActions.Add("RotateY", Keys.S);
+            keýComp.KeyBoardActions.Add("RotateZ", Keys.Q);
+            keýComp.KeyBoardActions.Add("RotatenegativeZ", Keys.E);
+            keýComp.KeyBoardActions.Add("Up", Keys.Space);
+            keýComp.KeyBoardActions.Add("Down", Keys.LeftShift);
+
+            componentList.Add(keýComp);
+
+            ComponentManager.Instance.AddAllComponents(FreeRoamEnt, componentList);
+        }
     }
 }

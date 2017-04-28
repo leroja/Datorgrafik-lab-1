@@ -42,12 +42,14 @@ namespace Lab3
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
             EntityFactory factory = new EntityFactory(Content);
             //factory.CreateSkyBox();
-            factory.CreateChopper(Device);
-            //factory.CreateHumanoidEntity(Content.Load<Texture2D>("canyon_rgb"),Device);
+            //factory.CreateChopper(Device);
+            //factory.CreateHumanoidEntity(Content.Load<Texture2D>("HeightMap/canyon_rgb"),Device);
+
+            factory.CreateFreeRoamCam(new Vector3(0,70,0), Device);
 
             int HeightmapEnt = ComponentManager.Instance.CreateID();
 
-            HeightmapComponentTexture hmp = heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("Canyon_elev_1024"), Content.Load<Texture2D>("grass"), 10);
+            HeightmapComponentTexture hmp = heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("HeightMap/Canyon_elev_1024"), Content.Load<Texture2D>("HeightMap/grass"), 10);
 
             List<IComponent> HeightmapCompList = new List<IComponent>
             {
@@ -56,7 +58,7 @@ namespace Lab3
             };
             ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
 
-            //factory.CreateManyTrees(hmp, heightmapFactory.Width, heightmapFactory.Height, heightmapFactory.VerticesTexture);
+            factory.CreateManyTrees(hmp, heightmapFactory.Width, heightmapFactory.Height, heightmapFactory.VerticesTexture);
             SystemManager.Instance.AddSystem(new ModelSystem());
             SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
             SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
@@ -69,6 +71,7 @@ namespace Lab3
 
             SystemManager.Instance.AddSystem(new CameraSystem());
             SystemManager.Instance.AddSystem(new ChaseCamSystem());
+            SystemManager.Instance.AddSystem(new FreeRoamCamSystem());
             
             base.Initialize();
         }

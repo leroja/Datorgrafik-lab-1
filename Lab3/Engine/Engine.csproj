@@ -46,6 +46,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Components\CameraComponent.cs" />
     <Compile Include="Source\Components\ChaseCamComponent.cs" />
+    <Compile Include="Source\Components\FreeRoamCamComponent.cs" />
     <Compile Include="Source\Components\HeightmapComponentColour.cs" />
     <Compile Include="Source\Components\HeightmapComponentTexture.cs" />
     <Compile Include="Source\Components\interface\IComponent.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Source\structs.cs" />
     <Compile Include="Source\Systems\CameraSystem.cs" />
     <Compile Include="Source\Systems\ChaseCamSystem.cs" />
+    <Compile Include="Source\Systems\FreeRoamCamSystem.cs" />
     <Compile Include="Source\Systems\HeightmapSystemColour.cs" />
     <Compile Include="Source\Systems\HeightmapSystemTexture.cs" />
     <Compile Include="Source\Systems\Interfaces\IRender.cs" />
