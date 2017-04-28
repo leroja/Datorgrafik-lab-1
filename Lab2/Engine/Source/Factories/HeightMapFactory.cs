@@ -25,13 +25,13 @@ namespace Engine.Source.Factories
         private int chunk_width;
         private int chunk_height;
 
-        private BasicEffect Effect;
+        //private BasicEffect Effect;
         private int[] Indices;
         
         private float[,] heightMapData;
 
-        private VertexBuffer VertexBuffer;
-        private IndexBuffer IndexBuffer;
+        //private VertexBuffer VertexBuffer;
+        //private IndexBuffer IndexBuffer;
         
 
         public HeightMapFactory(GraphicsDevice graphicsDevice)
@@ -47,10 +47,10 @@ namespace Engine.Source.Factories
             this.heightMapTexture = heightMapTexture;
             this.fractions_per_side = fractions_per_side;
             SetHeightMapData(ref heightMapComponent);
-            heightMapComponent.Effect = Effect;
-            heightMapComponent.IndexBuffer = IndexBuffer;
+            //heightMapComponent.Effect = Effect;
+            //heightMapComponent.IndexBuffer = IndexBuffer;
             heightMapComponent.Indices = Indices;
-            heightMapComponent.VertexBuffer = VertexBuffer;
+            //heightMapComponent.VertexBuffer = VertexBuffer;
             return heightMapComponent;
         }
         

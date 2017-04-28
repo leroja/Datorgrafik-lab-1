@@ -13,10 +13,13 @@ namespace Lab2.Humanoid
         public override void Update(GameTime gameTime)
         {
             var ids = ComponentManager.GetAllEntitiesWithComponentType<HumanoidComponent>();
-            foreach (var id in ids)
+            if (ids != null)
             {
-                var humanoidComp = ComponentManager.GetEntityComponent<HumanoidComponent>(id);
-                humanoidComp.Humanoid.Update(gameTime);
+                foreach (var id in ids)
+                {
+                    var humanoidComp = ComponentManager.GetEntityComponent<HumanoidComponent>(id);
+                    humanoidComp.Humanoid.Update(gameTime);
+                }
             }
         }
     }

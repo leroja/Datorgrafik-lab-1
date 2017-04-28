@@ -63,7 +63,7 @@ namespace Lab2
             SystemManager.Instance.AddSystem(new TransformSystem());
             SystemManager.Instance.AddSystem(new KeyBoardSystem());
             SystemManager.Instance.AddSystem(new ChopperSystem());
-            
+            SystemManager.Instance.AddSystem(new WindowTitleFPSSystem(this));
             SystemManager.Instance.AddSystem(new HumanoidSystemUpdate());
             SystemManager.Instance.AddSystem(new HumanoidSystemRender());
 

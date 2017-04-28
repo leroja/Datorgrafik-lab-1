@@ -52,7 +52,6 @@
     <Compile Include="Source\Components\KeyBoardComponent.cs" />
     <Compile Include="Source\Components\ModelComponent.cs" />
     <Compile Include="Source\Components\TransformComponent.cs" />
-    <Compile Include="Source\Enums\ActionsEnum.cs" />
     <Compile Include="Source\Enums\ButtonStates.cs" />
     <Compile Include="Source\Factories\HeightMapFactory.cs" />
     <Compile Include="Source\Managers\ComponentManager.cs" />
@@ -69,6 +68,7 @@
     <Compile Include="Source\Systems\KeyBoardSystem.cs" />
     <Compile Include="Source\Systems\ModelSystem.cs" />
     <Compile Include="Source\Systems\TransformSystem.cs" />
+    <Compile Include="Source\Systems\WindowTitleFPSSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
