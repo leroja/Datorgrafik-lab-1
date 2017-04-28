@@ -159,9 +159,14 @@ namespace Lab3
         private void TryingShaders(int Entityid, CameraComponent cmp)
         {
             Effect ChopperEffect = Content.Load<Effect>("TestShaders");
-
             ComponentManager.Instance.AddComponentToEntity(Entityid, new ShaderComponent(ChopperEffect));
 
+        }
+
+        public void CreateHangar()
+        {
+            int EntityId = ComponentManager.Instance.CreateID();
+            Model hangar = Content.Load<Model>("");
         }
 
     }
