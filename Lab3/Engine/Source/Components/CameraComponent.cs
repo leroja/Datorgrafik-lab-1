@@ -23,6 +23,8 @@ namespace Engine.Source.Components
         public float NearPlane { get; set; }
         public float AspectRatio { get; set; }
 
+        public Vector3 ViewVector { get; private set; }
+
         public CameraComponent(Vector3 pos, Vector3 LookAt, Vector3 UpVector, float FarPlane, float NearPlane, float AspectRatio)
         {
             this.AspectRatio = AspectRatio;
@@ -32,7 +34,13 @@ namespace Engine.Source.Components
             this.Position = pos;
             this.UpVector = UpVector;
 
-            ViewMatrix = Matrix.CreateLookAt(Position, LookAt, UpVector);
+            //Vector3 cameraLocation = Position * new Vector3((float)Math.Sin(angle), 0, (float)Math.Cos(angle));
+            Vector3 cameraTarget = new Vector3(0, 0, 0);
+            ViewVector = Vector3.Transform(cameraTarget - Position, Matrix.CreateRotationY(0));
+            ViewVector.Normalize();
+            ViewMatrix = Matrix.CreateLookAt(Position, cameraTarget, new Vector3(0, 1, 0));
+
+            //ViewMatrix = Matrix.CreateLookAt(Position, LookAt, UpVector);
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, AspectRatio, NearPlane, FarPlane);
             CameraFrustrum = new BoundingFrustum(ViewMatrix * ProjectionMatrix);
         }

@@ -202,3 +202,9 @@
 /processorParam:TextureFormat=Color
 /build:TexturesSnor.png
 
+#begin TestShaders.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:TestShaders.fx
+
