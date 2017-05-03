@@ -17,9 +17,11 @@ namespace Lab3
     class EntityFactory
     {
         ContentManager Content;
+        Effect shader;
         public EntityFactory(ContentManager Content)
         {
             this.Content = Content;
+            shader = Content.Load<Effect>("TestShaders");
         }
         public void CreateSkyBox()
         {
@@ -118,6 +120,7 @@ namespace Lab3
                                 treeEntity = ComponentManager.Instance.CreateID();
                                 components = new List<IComponent>(){
                                     mcp,
+                                    new ShaderComponent(shader),
                                     new TransformComponent(new Vector3((float)x - rand1, hmp.HeightMapData[x, y], -(float)y - rand2), new Vector3(randomScale,randomScale,randomScale))
                                 };
                                 ComponentManager.Instance.AddAllComponents(treeEntity, components);
@@ -198,6 +201,11 @@ namespace Lab3
         {
             int EntityId = ComponentManager.Instance.CreateID();
             Model hangar = Content.Load<Model>("");
+        }
+
+        public void AddEffectToHeightMap()
+        {
+
         }
 
     }

@@ -112,6 +112,9 @@ namespace Engine.Source.Systems
             Matrix world;
             Effect effect = shader.ShaderEffect;
 
+           
+            
+
             for (int index = 0; index < mcp.Model.Meshes.Count; index++)
             {
                 ModelMesh mesh = mcp.Model.Meshes[index];
@@ -121,18 +124,25 @@ namespace Engine.Source.Systems
                 else
                     world = mesh.ParentBone.Transform * tfc.ObjectMatrix;
 
-                foreach (ModelMeshPart part in mesh.MeshParts)
+                foreach (EffectTechnique pass in effect.Techniques)
                 {
-                    part.Effect = effect;
-                    effect.Parameters["World"].SetValue(world);
-                    effect.Parameters["View"].SetValue(defaultCam.ViewMatrix);
-                    effect.Parameters["Projection"].SetValue(defaultCam.ProjectionMatrix);
-                    effect.Parameters["AmbientColor"].SetValue(Color.DeepPink.ToVector4());
-                    effect.Parameters["AmbientIntensity"].SetValue(0.5f);
-                    effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(mesh.ParentBone.Transform * world));
-                    effect.Parameters["ViewVector"].SetValue(defaultCam.ViewVector);
+                    foreach (ModelMeshPart part in mesh.MeshParts)
+                    {
+                        part.Effect = effect;
+                        effect.Parameters["World"].SetValue(world);
+                        effect.Parameters["View"].SetValue(defaultCam.ViewMatrix);
+                        effect.Parameters["Projection"].SetValue(defaultCam.ProjectionMatrix);
+                        effect.Parameters["AmbientColor"].SetValue(Color.DeepPink.ToVector4());
+                        effect.Parameters["AmbientIntensity"].SetValue(0.5f);
+                        effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(mesh.ParentBone.Transform * world));
+                        effect.Parameters["ViewVector"].SetValue(defaultCam.ViewVector);
+                        effect.Parameters["fogStart"].SetValue(defaultCam.NearPlane);
+                        effect.Parameters["fogEnd"].SetValue(defaultCam.FarPlane * 4);
+                        effect.Parameters["shaderTexture"].SetValue(mcp.modelTexture);
+                    }
+                    mesh.Draw();
                 }
-                mesh.Draw();
+                
             }
             
 
