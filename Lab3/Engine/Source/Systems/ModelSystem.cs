@@ -145,6 +145,9 @@ namespace Engine.Source.Systems
                             effect.Parameters["FogColor"].SetValue(shader.FogColor);
                             effect.Parameters["FogEnabled"].SetValue(true);
                         }
+                        effect.Parameters["Shininess"].SetValue(shader.Shininess);
+                        effect.Parameters["SpecularColor"].SetValue(shader.SpecularColor);
+                        effect.Parameters["SpecularIntensity"].SetValue(shader.SpecularIntensity);
                         
                     }
                     mesh.Draw();

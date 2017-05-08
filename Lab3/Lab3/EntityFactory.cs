@@ -119,7 +119,7 @@ namespace Lab3
 
                                 treeEntity = ComponentManager.Instance.CreateID();
                                 ShaderComponent shc = new ShaderComponent(shader);
-                                shc.ActivateAppropriateFogSettings();
+                                shc.RealisticSettings();
                                 components = new List<IComponent>(){
                                     shc,
                                     mcp,
@@ -201,14 +201,23 @@ namespace Lab3
 
         public void CreateHangar()
         {
+            
             int EntityId = ComponentManager.Instance.CreateID();
-            Model hangar = Content.Load<Model>("");
+            Model hangar = Content.Load<Model>("Lab Models/Chopper");
+            ModelComponent mcp = new ModelComponent(hangar);
+            TransformComponent tcp = new TransformComponent(new Vector3(300, 50, -200), new Vector3(10, 10, 10));
+            ShaderComponent shc = new ShaderComponent(shader);
+            shc.RealisticSettings();
+
+            List<IComponent> componentList = new List<IComponent>()
+            {
+                shc,
+                mcp,
+                tcp,
+            };
+
+            ComponentManager.Instance.AddAllComponents(EntityId, componentList);
         }
-
-        public void AddEffectToHeightMap()
-        {
-
-        }
-
+            
     }
 }

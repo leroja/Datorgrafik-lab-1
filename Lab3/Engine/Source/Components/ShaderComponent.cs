@@ -20,6 +20,9 @@ namespace Engine.Source.Components
         public float FogEnd { get; set; }
         public Vector4 FogColor { get; set; }
         public bool FogEnabled { get; set; }
+        public float Shininess { get; set; }
+        public Vector4 SpecularColor { get; set; }
+        public float SpecularIntensity { get; set; }
 
 
         public ShaderComponent(Effect effect)
@@ -33,8 +36,10 @@ namespace Engine.Source.Components
             FogEnabled = false;
             FogStart = 0;
             FogEnd = 0;
-            FogColor = Color.SeaShell.ToVector4();
-            
+            FogColor = Color.White.ToVector4();
+            Shininess = 50;
+            SpecularColor = Color.White.ToVector4();
+            SpecularIntensity = 0;
         }
 
         public void AmbientLightSettings(Color AmbientColor, float AmbientIntensity)
@@ -42,7 +47,7 @@ namespace Engine.Source.Components
             this.AmbientColor = AmbientColor.ToVector4();
             this.AmbientIntensity = AmbientIntensity;
         }
-        public void DirectionallightSettings(Vector3 DiffuseLightDirection, Color DiffuseColor, float DiffuseIntensity)
+        public void DirectionalLightSettings(Vector3 DiffuseLightDirection, Color DiffuseColor, float DiffuseIntensity)
         {
             this.DiffuseLightDirection = DiffuseLightDirection;
             Diffusecolor = DiffuseColor.ToVector4();
@@ -61,6 +66,29 @@ namespace Engine.Source.Components
             this.FogEnd = FogEnd;
             this.FogStart = FogStart;
             FogEnabled = true;
+        }
+
+        public void SpecularSettings(float Shininess, Color Specularcolor, float SpecularIntensity)
+        {
+            this.Shininess = Shininess;
+            this.SpecularIntensity = SpecularIntensity;
+            SpecularColor = Specularcolor.ToVector4();
+        }
+
+        public void FunnyTheme()
+        {
+            AmbientLightSettings(Color.ForestGreen, 1f);
+            DirectionalLightSettings(new Vector3(0.2f, 0.2f, 0),Color.BlueViolet,1f);
+            SpecularSettings(200, Color.DarkMagenta, 1f);
+            AddCustomFog(400, 50, Color.DeepPink);
+        }
+
+        public void RealisticSettings()
+        {
+            AmbientLightSettings(Color.White, 0.4f);
+            DirectionalLightSettings(new Vector3(-1f, 0f, 0), Color.White, 0.8f);
+            SpecularSettings(80, Color.WhiteSmoke, 0.2f);
+            ActivateAppropriateFogSettings();
         }
     }
 }

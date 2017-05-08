@@ -12,16 +12,16 @@ matrix View;
 matrix Projection;
 matrix WorldInverseTranspose;
 
-float4 AmbientColor = float4(0.2f, 0.2f, 0.2f, 0.2f);
-float AmbientIntensity = 0.1f;
+float4 AmbientColor;
+float AmbientIntensity;
 
-float3 DiffuseLightDirection = float3(0, 1, 0);
-float4 DiffuseColor = float4(1, 1, 1, 1);
-float DiffuseIntensity = 1.0;
+float3 DiffuseLightDirection;
+float4 DiffuseColor;
+float DiffuseIntensity;
 
-float Shininess = 200;
-float4 SpecularColor = float4(1, 1, 1, 1);
-float SpecularIntensity = 1;
+float Shininess;
+float4 SpecularColor;
+float SpecularIntensity;
 
 float3 ViewVector = float3(1, 0, 0);
 
@@ -32,7 +32,7 @@ float4 FogColor = (1, 0, 0, 1);
 bool FogEnabled = 0;
 float3 CameraPosition;
 
-
+bool TextureEnabled = 1;
 texture ModelTexture;
 
 sampler2D textureSampler = sampler_state
@@ -100,29 +100,41 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
+    float3 normal = normalize(input.Normal);
+    float4 returnColor = { 1, 1, 1, 1 };
+    float4 textureColor = { 0, 0, 0, 0 };
+    float4 lights = { 0, 0, 0, 0 };
 
-	float3 light = normalize(DiffuseLightDirection);
-	float3 normal = normalize(input.Normal);
-	float3 r = normalize(2 * dot(light, normal) * normal - light);
-    float3 v = normalize(mul(normalize(ViewVector), (float3x4)World));
 
-	float dotProduct = dot(r, v);
-	float4 specular = SpecularIntensity * SpecularColor * max(pow(dotProduct, Shininess), 0) * length(input.Color);
+    lights += AmbientColor * AmbientIntensity;
 
-    float4 textureColor = tex2D(textureSampler, input.TextureCoordinate);
-    textureColor.a = 1;
-
-    
-    float ambient = AmbientColor * AmbientIntensity;
-    float color = textureColor * (input.Color);
-    float finalColor = saturate(color + ambient + specular);
-
-    if (FogEnabled)
+    if (TextureEnabled)
     {
-        return lerp(finalColor, FogColor, input.fogFactor);
+        textureColor = tex2D(textureSampler, input.TextureCoordinate);
+        lights = (0, 0, 0, 0);
+        lights += AmbientColor * AmbientIntensity * textureColor;
     }
 
-    return finalColor;
+    float nl = max(0, dot(normalize(DiffuseLightDirection), normal));
+    lights += DiffuseIntensity * DiffuseColor * nl;
+    float3 light = normalize(DiffuseLightDirection);
+    float3 r = normalize(2 * dot(light, normal) * normal - light);
+    float3 v = normalize(ViewVector);
+
+    float dotProduct = dot(r, v);
+    float4 specular = SpecularIntensity * SpecularColor * max(pow(abs(dotProduct), Shininess), 0);
+				
+    lights += specular;
+		
+    returnColor = saturate(returnColor * lights);
+	
+    returnColor.a = 1;
+	
+    if (FogEnabled)
+    {
+        return lerp(returnColor, FogColor, input.fogFactor);
+    }
+    return returnColor;
 
 }
 
