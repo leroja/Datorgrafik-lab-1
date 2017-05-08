@@ -118,9 +118,11 @@ namespace Lab3
                                     mcp = new ModelComponent(tree, treePurple);
 
                                 treeEntity = ComponentManager.Instance.CreateID();
+                                ShaderComponent shc = new ShaderComponent(shader);
+                                shc.ActivateAppropriateFogSettings();
                                 components = new List<IComponent>(){
+                                    shc,
                                     mcp,
-                                    new ShaderComponent(shader),
                                     new TransformComponent(new Vector3((float)x - rand1, hmp.HeightMapData[x, y], -(float)y - rand2), new Vector3(randomScale,randomScale,randomScale))
                                 };
                                 ComponentManager.Instance.AddAllComponents(treeEntity, components);
