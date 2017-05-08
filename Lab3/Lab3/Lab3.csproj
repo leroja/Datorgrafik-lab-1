@@ -55,6 +55,7 @@
     <Compile Include="Humanoid\Leg.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShadowMapping.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -64,6 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Effects\DrawModel.fx" />
+    <Content Include="Content\Effects\TestL.fx" />
     <Content Include="Content\TestShaders.fx" />
     <Content Include="Icon.ico" />
   </ItemGroup>

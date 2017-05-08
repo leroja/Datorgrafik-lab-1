@@ -104,7 +104,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float3 light = normalize(DiffuseLightDirection);
 	float3 normal = normalize(input.Normal);
 	float3 r = normalize(2 * dot(light, normal) * normal - light);
-	float3 v = normalize(mul(normalize(ViewVector), World));
+    float3 v = normalize(mul(normalize(ViewVector), (float3x4)World));
 
 	float dotProduct = dot(r, v);
 	float4 specular = SpecularIntensity * SpecularColor * max(pow(dotProduct, Shininess), 0) * length(input.Color);
