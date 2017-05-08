@@ -714,7 +714,7 @@
 #begin ShadowStuff/dude.fbx
 /importer:FbxImporter
 /processor:CustomEffectModelProcessor
-/processorParam:CustomEffect=Effects/ShadowMapping.fx
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -918,4 +918,10 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Effects/GaussianBlur.fx
+
+#begin Effects/AllinOne.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/AllinOne.fx
 

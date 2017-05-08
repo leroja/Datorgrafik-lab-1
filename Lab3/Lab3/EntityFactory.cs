@@ -218,6 +218,66 @@ namespace Lab3
 
             ComponentManager.Instance.AddAllComponents(EntityId, componentList);
         }
-            
+        
+        public void CreateFloor()
+        {
+            int EntityId = ComponentManager.Instance.CreateID();
+            Model grid = Content.Load<Model>("ShadowStuff/grid");
+            ModelComponent mcp = new ModelComponent(grid);
+            TransformComponent tcp = new TransformComponent(Vector3.Zero, new Vector3(10, 10, 10));
+            ShaderComponent shc = new ShaderComponent(shader);
+            shc.RealisticSettings();
+
+            List<IComponent> componentList = new List<IComponent>()
+            {
+                shc,
+                mcp,
+                tcp,
+            };
+
+            ComponentManager.Instance.AddAllComponents(EntityId, componentList);
+        }
+
+        public void CreateManyModels(int width, int height, int numberOfModels)
+        {
+            int modelEntity;
+
+            List<IComponent> components;
+            ModelComponent mcp;
+            Model model = Content.Load<Model>("ShadowStuff/dude");
+
+            int addedModels = 0;
+            Random random = new Random();
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (addedModels < numberOfModels)
+                    {
+                        float rand1 = (float)random.Next(1000);
+                        float rand2 = (float)random.Next(1000);
+                        
+                        mcp = new ModelComponent(model);
+
+                        modelEntity = ComponentManager.Instance.CreateID();
+                        ShaderComponent shc = new ShaderComponent(shader);
+                        shc.RealisticSettings();
+                        components = new List<IComponent>(){
+                            shc,
+                            mcp,
+                            new TransformComponent(new Vector3((float)x - rand1, 1, -(float)y - rand2), new Vector3(3,3,3))
+                        };
+                        ComponentManager.Instance.AddAllComponents(modelEntity, components);
+                        addedModels++;
+                        x += 100;
+                        if (x > width)
+                            x = 0;
+                    }
+                      
+                }
+            }
+        }
+
     }
 }

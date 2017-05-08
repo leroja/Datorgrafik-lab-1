@@ -151,7 +151,7 @@ namespace Lab3
             DrawWithShadowMap();
 
             // Display the shadow map to the screen
-            DrawShadowMapToScreen();
+            //DrawShadowMapToScreen();
 
             base.Draw(gameTime);
         }
@@ -379,6 +379,7 @@ namespace Lab3
                     effect.Parameters["LightDirection"].SetValue(lightDir);
                     effect.Parameters["LightViewProj"].SetValue(lightViewProjection);
                     effect.Parameters["ShadowStrenght"].SetValue(1f);
+                    effect.Parameters["DepthBias"].SetValue(0.001f);
 
                     if (!createShadowMap)
                         effect.Parameters["ShadowMap"].SetValue(shadowRenderTarget);

@@ -43,7 +43,7 @@ namespace Lab3
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
             EntityFactory factory = new EntityFactory(Content);
 
-            factory.CreateHangar();
+            //factory.CreateHangar();
 
             //factory.CreateSkyBox();
             //factory.CreateChopper(Device);
@@ -51,19 +51,23 @@ namespace Lab3
 
             factory.CreateFreeRoamCam(new Vector3(0,70,0), Device);
 
-            int HeightmapEnt = ComponentManager.Instance.CreateID();
+            factory.CreateFloor();
+            factory.CreateManyModels(500, 500, 30);
 
-            HeightmapComponentTexture hmp = heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("HeightMap/Canyon_elev_1024"), Content.Load<Texture2D>("HeightMap/grass"), 10);
+            //int HeightmapEnt = ComponentManager.Instance.CreateID();
 
-            List<IComponent> HeightmapCompList = new List<IComponent>
-            {
-                hmp,
-                new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1))
-            };
-            ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
+            //HeightmapComponentTexture hmp = heightmapFactory.CreateTexturedHeightMap(Content.Load<Texture2D>("HeightMap/Canyon_elev_1024"), Content.Load<Texture2D>("HeightMap/grass"), 10);
 
-            factory.CreateManyTrees(hmp, heightmapFactory.Width, heightmapFactory.Height, heightmapFactory.VerticesTexture);
-            SystemManager.Instance.AddSystem(new ModelSystem());
+            //List<IComponent> HeightmapCompList = new List<IComponent>
+            //{
+            //    hmp,
+            //    new TransformComponent(new Vector3(0, 0, 0), new Vector3(1, 1, 1))
+            //};
+            //ComponentManager.Instance.AddAllComponents(HeightmapEnt, HeightmapCompList);
+
+            //factory.CreateManyTrees(hmp, heightmapFactory.Width, heightmapFactory.Height, heightmapFactory.VerticesTexture);
+            //SystemManager.Instance.AddSystem(new ModelSystem());
+            SystemManager.Instance.AddSystem(new TestModelSystem(Device));
             SystemManager.Instance.AddSystem(new HeightmapSystemColour(Device));
             SystemManager.Instance.AddSystem(new HeightmapSystemTexture(Device));
             SystemManager.Instance.AddSystem(new TransformSystem());

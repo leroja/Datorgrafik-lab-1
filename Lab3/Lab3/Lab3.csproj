@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Effects\AllinOne.fx" />
     <Content Include="Content\Effects\ShadowMapping.fx" />
     <Content Include="Content\TestShaders.fx" />
     <Content Include="Icon.ico" />

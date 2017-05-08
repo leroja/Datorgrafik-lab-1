@@ -28,7 +28,7 @@ float3 ViewVector = float3(1, 0, 0);
 ///FOG
 float FogStart = 40;
 float FogEnd = 100;
-float4 FogColor = (1, 0, 0, 1);
+float4 FogColor = float4(1, 0, 0, 1);
 bool FogEnabled = 0;
 float3 CameraPosition;
 
@@ -62,12 +62,12 @@ struct VertexShaderOutput
 };
 
 
-SamplerState SampleType
-{
-    //Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = Wrap;
-    AddressV = Wrap;
-};
+//SamplerState SampleType
+//{
+//    //Filter = MIN_MAG_MIP_LINEAR;
+//    AddressU = Wrap;
+//    AddressV = Wrap;
+//};
 
 float ComputeFogFactor(float d)
 {

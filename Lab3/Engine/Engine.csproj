@@ -70,6 +70,7 @@
     <Compile Include="Source\Systems\Interfaces\IUpdate.cs" />
     <Compile Include="Source\Systems\KeyBoardSystem.cs" />
     <Compile Include="Source\Systems\ModelSystem.cs" />
+    <Compile Include="Source\Systems\TestModelSystem.cs" />
     <Compile Include="Source\Systems\TransformSystem.cs" />
     <Compile Include="Source\Systems\WindowTitleFPSSystem.cs" />
   </ItemGroup>

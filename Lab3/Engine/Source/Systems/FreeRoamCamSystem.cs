@@ -61,11 +61,11 @@ namespace Engine.Source.Systems
                     }
                     if (KeyBoardComp.State["Up"] == ButtonStates.Hold)
                     {
-                        transformComp.Position += transformComp.Up;
+                        transformComp.Position += Vector3.Up;
                     }
                     if (KeyBoardComp.State["Down"] == ButtonStates.Hold)
                     {
-                        transformComp.Position -= transformComp.Up;
+                        transformComp.Position -= Vector3.Up;
                     }
 
                     //var mouseDelta = (CurrentMouseState.Position - PreviousMouseState.Position).ToVector2();
