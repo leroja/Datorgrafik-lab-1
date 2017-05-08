@@ -661,12 +661,6 @@
 /processorParam:TextureFormat=DxtCompressed
 /build:Lab3Stuff/ZF_balloon.x
 
-#begin Effects/TestL.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Effects/TestL.fx
-
 #begin TestShaders.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -715,12 +709,6 @@
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=DxtCompressed
 /build:Lab Models/tree.fbx
-
-#begin Effects/DrawModel.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Effects/DrawModel.fx
 
 #begin ShadowStuff/dude.fbx
 /importer:FbxImporter
@@ -915,4 +903,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:ShadowStuff/upBodyS.tga
+
+#begin Effects/ShadowMapping.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/ShadowMapping.fx
+
+#begin Effects/GaussianBlur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Effects/GaussianBlur.fx
 

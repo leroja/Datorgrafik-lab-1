@@ -16,6 +16,7 @@ namespace Lab3
         // The size of the shadow map
         // The larger the size the more detail we will have for our entire scene
         const int shadowMapWidthHeight = 2048;
+        //const int shadowMapWidthHeight = 4096;
 
         const int windowWidth = 800;
         const int windowHeight = 480;
@@ -46,6 +47,9 @@ namespace Lab3
 
         // The shadow map render target
         RenderTarget2D shadowRenderTarget;
+        RenderTarget2D shadowRenderTarget2;
+
+        Effect GaussianEffect;
 
         // Transform matrices
         Matrix world;
@@ -88,14 +92,15 @@ namespace Lab3
             gridModel = Content.Load<Model>("ShadowStuff/grid");
             dudeModel = Content.Load<Model>("ShadowStuff/dude");
             //dudeModel = Content.Load<Model>("Lab Models/Chopper");
+            //dudeModel = Content.Load<Model>("Lab3Stuff/plane");
+            GaussianEffect = Content.Load<Effect>("Effects/GaussianBlur");
 
             foreach (ModelMesh mesh in gridModel.Meshes)
             {
                 // Loop over effects in the mesh
                 foreach (ModelMeshPart part in mesh.MeshParts)
                 {
-                    part.Effect = Content.Load<Effect>("Effects/DrawModel");
-                    
+                    part.Effect = Content.Load<Effect>("Effects/ShadowMapping");
                 }
             }
             foreach (ModelMesh mesh in dudeModel.Meshes)
@@ -103,11 +108,18 @@ namespace Lab3
                 // Loop over effects in the mesh
                 foreach (ModelMeshPart part in mesh.MeshParts)
                 {
-                    part.Effect = Content.Load<Effect>("Effects/DrawModel");
+                    part.Effect = Content.Load<Effect>("Effects/ShadowMapping");
                 }
             }
             // Create floating point render target
             shadowRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                            shadowMapWidthHeight,
+                                            shadowMapWidthHeight,
+                                            false,
+                                            SurfaceFormat.Single,
+                                            DepthFormat.Depth24);
+
+            shadowRenderTarget2 = new RenderTarget2D(graphics.GraphicsDevice,
                                             shadowMapWidthHeight,
                                             shadowMapWidthHeight,
                                             false,
@@ -149,11 +161,13 @@ namespace Lab3
             // Render the scene to the shadow map
             CreateShadowMap();
 
+            //DoBlurStuff(GaussianEffect);
+
             // Draw the scene using the shadow map
             DrawWithShadowMap();
 
             // Display the shadow map to the screen
-            //DrawShadowMapToScreen();
+            DrawShadowMapToScreen();
 
             base.Draw(gameTime);
         }
@@ -238,6 +252,105 @@ namespace Lab3
             GraphicsDevice.SetRenderTarget(null);
         }
 
+
+        public void DoBlurStuff(Effect eff)
+        {
+            // Pass 2: draw from rendertarget 1 into rendertarget 2,
+            // using a shader to apply a horizontal gaussian blur filter.
+            SetBlurEffectParameters(1.0f / (float)shadowRenderTarget.Width, 0, eff);
+
+            GraphicsDevice.SetRenderTarget(shadowRenderTarget2);
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, eff);
+            spriteBatch.Draw(shadowRenderTarget, new Rectangle(0, 0, shadowRenderTarget2.Width, shadowRenderTarget2.Height), Color.White);
+            spriteBatch.End();
+            
+            // Pass 3: draw from rendertarget 2 back into rendertarget 1,
+            // using a shader to apply a vertical gaussian blur filter.
+            SetBlurEffectParameters(0, 1.0f / (float)shadowRenderTarget.Height, eff);
+
+            GraphicsDevice.SetRenderTarget(shadowRenderTarget);
+
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, eff);
+            spriteBatch.Draw(shadowRenderTarget2, new Rectangle(0, 0, shadowRenderTarget.Width, shadowRenderTarget.Height), Color.White);
+            spriteBatch.End();
+
+            GraphicsDevice.SetRenderTarget(null);
+        }
+
+        /// <summary>
+        /// Computes sample weightings and texture coordinate offsets
+        /// for one pass of a separable gaussian blur filter.
+        /// </summary>
+        void SetBlurEffectParameters(float dx, float dy, Effect gaussianBlurEffect)
+        {
+            // Look up the sample weight and offset effect parameters.
+            EffectParameter weightsParameter, offsetsParameter;
+
+            weightsParameter = gaussianBlurEffect.Parameters["SampleWeights"];
+            offsetsParameter = gaussianBlurEffect.Parameters["SampleOffsets"];
+
+            // Look up how many samples our gaussian blur effect supports.
+            int sampleCount = weightsParameter.Elements.Count;
+
+            // Create temporary arrays for computing our filter settings.
+            float[] sampleWeights = new float[sampleCount];
+            Vector2[] sampleOffsets = new Vector2[sampleCount];
+
+            // The first sample always has a zero offset.
+            sampleWeights[0] = ComputeGaussian(0);
+            sampleOffsets[0] = new Vector2(0);
+
+            // Maintain a sum of all the weighting values.
+            float totalWeights = sampleWeights[0];
+
+            // Add pairs of additional sample taps, positioned
+            // along a line in both directions from the center.
+            for (int i = 0; i < sampleCount / 2; i++)
+            {
+                // Store weights for the positive and negative taps.
+                float weight = ComputeGaussian(i + 1);
+
+                sampleWeights[i * 2 + 1] = weight;
+                sampleWeights[i * 2 + 2] = weight;
+
+                totalWeights += weight * 2;
+
+                // To get the maximum amount of blurring from a limited number of
+                // pixel shader samples, we take advantage of the bilinear filtering
+                // hardware inside the texture fetch unit. If we position our texture
+                // coordinates exactly halfway between two texels, the filtering unit
+                // will average them for us, giving two samples for the price of one.
+                // This allows us to step in units of two texels per sample, rather
+                // than just one at a time. The 1.5 offset kicks things off by
+                // positioning us nicely in between two texels.
+                float sampleOffset = i * 2 + 1.5f;
+
+                Vector2 delta = new Vector2(dx, dy) * sampleOffset;
+
+                // Store texture coordinate offsets for the positive and negative taps.
+                sampleOffsets[i * 2 + 1] = delta;
+                sampleOffsets[i * 2 + 2] = -delta;
+            }
+
+            // Normalize the list of sample weightings, so they will always sum to one.
+            for (int i = 0; i < sampleWeights.Length; i++)
+            {
+                sampleWeights[i] /= totalWeights;
+            }
+
+            // Tell the effect about our new filter settings.
+            weightsParameter.SetValue(sampleWeights);
+            offsetsParameter.SetValue(sampleOffsets);
+        }
+
+        float ComputeGaussian(float n)
+        {
+            float theta = 5;
+
+            return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
+                           Math.Exp(-(n * n) / (2 * theta * theta)));
+        }
+
         /// <summary>
         /// Renders the scene using the shadow map to darken the shadow areas
         /// </summary>
@@ -281,6 +394,7 @@ namespace Lab3
                     effect.Parameters["Projection"].SetValue(projection);
                     effect.Parameters["LightDirection"].SetValue(lightDir);
                     effect.Parameters["LightViewProj"].SetValue(lightViewProjection);
+                    effect.Parameters["ShadowStrenght"].SetValue(1f);
 
                     if (!createShadowMap)
                         effect.Parameters["ShadowMap"].SetValue(shadowRenderTarget);
@@ -325,6 +439,14 @@ namespace Lab3
                 rotateDude -= time * 0.2f;
             if (currentKeyboardState.IsKeyDown(Keys.E))
                 rotateDude += time * 0.2f;
+
+            if (currentKeyboardState.IsKeyDown(Keys.F)){
+                lightDir = new Vector3(lightDir.X, lightDir.Y, lightDir.Z - 0.002f);
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.G))
+            {
+                lightDir = new Vector3(lightDir.X, lightDir.Y, lightDir.Z + 0.002f);
+            }
 
             // Check for exit.
             if (currentKeyboardState.IsKeyDown(Keys.Escape) ||

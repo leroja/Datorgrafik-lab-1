@@ -82,10 +82,10 @@ namespace Engine.Source.Systems
                 
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    if (mcp.isTextured)
+                    if (mcp.IsTextured)
                     {
                         effect.TextureEnabled = true;
-                        effect.Texture = mcp.modelTexture;
+                        effect.Texture = mcp.ModelTexture;
                     }
 
                     effect.EnableDefaultLighting();
@@ -138,7 +138,7 @@ namespace Engine.Source.Systems
                         effect.Parameters["ViewVector"].SetValue(defaultCam.ViewVector);
                         effect.Parameters["fogStart"].SetValue(defaultCam.NearPlane);
                         effect.Parameters["fogEnd"].SetValue(defaultCam.FarPlane * 4);
-                        effect.Parameters["shaderTexture"].SetValue(mcp.modelTexture);
+                        effect.Parameters["shaderTexture"].SetValue(mcp.ModelTexture);
                     }
                     mesh.Draw();
                 }
