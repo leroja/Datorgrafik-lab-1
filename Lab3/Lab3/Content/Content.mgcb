@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\MonoGameContentPipelineExtension\bin\Debug\MonoGameContentPipelineExtension.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -712,7 +713,8 @@
 
 #begin ShadowStuff/dude.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/ShadowMapping.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -724,14 +726,15 @@
 /processorParam:RotationX=0
 /processorParam:RotationY=0
 /processorParam:RotationZ=0
-/processorParam:Scale=1
+/processorParam:Scale=0.75
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
 /build:ShadowStuff/dude.fbx
 
 #begin ShadowStuff/grid.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/ShadowMapping.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -743,7 +746,7 @@
 /processorParam:RotationX=0
 /processorParam:RotationY=0
 /processorParam:RotationZ=0
-/processorParam:Scale=1
+/processorParam:Scale=2
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
 /build:ShadowStuff/grid.fbx

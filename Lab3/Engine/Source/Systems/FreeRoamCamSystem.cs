@@ -7,13 +7,25 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Engine.Source.Components;
 using Engine.Source.Enums;
+using Microsoft.Xna.Framework.Input;
 
 namespace Engine.Source.Systems
 {
     public class FreeRoamCamSystem : IUpdate
     {
+        //private MouseState CurrentMouseState;
+        //private MouseState PreviousMouseState;
+        public FreeRoamCamSystem()
+        {
+            //CurrentMouseState = Mouse.GetState();
+        }
+
+
         public override void Update(GameTime gameTime)
         {
+            //PreviousMouseState = CurrentMouseState;
+            //CurrentMouseState = Mouse.GetState();
+
             var ids = ComponentManager.GetAllEntitiesWithComponentType<FreeRoamCamComponent>();
             if (ids != null)
             {
@@ -56,6 +68,8 @@ namespace Engine.Source.Systems
                         transformComp.Position -= transformComp.Up;
                     }
 
+                    //var mouseDelta = (CurrentMouseState.Position - PreviousMouseState.Position).ToVector2();
+                    //transformComp.Rotation = transformComp.Rotation + new Vector3(-mouseDelta.Y, -mouseDelta.X, 0) * 2.0f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     if (KeyBoardComp.State["RotateZ"] == ButtonStates.Hold)
                     {
                         newRot.Z += 0.01f;

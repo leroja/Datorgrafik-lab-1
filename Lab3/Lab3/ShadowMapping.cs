@@ -94,23 +94,7 @@ namespace Lab3
             //dudeModel = Content.Load<Model>("Lab Models/Chopper");
             //dudeModel = Content.Load<Model>("Lab3Stuff/plane");
             GaussianEffect = Content.Load<Effect>("Effects/GaussianBlur");
-
-            foreach (ModelMesh mesh in gridModel.Meshes)
-            {
-                // Loop over effects in the mesh
-                foreach (ModelMeshPart part in mesh.MeshParts)
-                {
-                    part.Effect = Content.Load<Effect>("Effects/ShadowMapping");
-                }
-            }
-            foreach (ModelMesh mesh in dudeModel.Meshes)
-            {
-                // Loop over effects in the mesh
-                foreach (ModelMeshPart part in mesh.MeshParts)
-                {
-                    part.Effect = Content.Load<Effect>("Effects/ShadowMapping");
-                }
-            }
+                        
             // Create floating point render target
             shadowRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
                                             shadowMapWidthHeight,
