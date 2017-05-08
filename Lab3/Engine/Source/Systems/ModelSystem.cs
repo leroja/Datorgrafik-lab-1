@@ -112,9 +112,6 @@ namespace Engine.Source.Systems
             Matrix world;
             Effect effect = shader.ShaderEffect;
 
-           
-            
-
             for (int index = 0; index < mcp.Model.Meshes.Count; index++)
             {
                 ModelMesh mesh = mcp.Model.Meshes[index];
@@ -132,13 +129,26 @@ namespace Engine.Source.Systems
                         effect.Parameters["World"].SetValue(world);
                         effect.Parameters["View"].SetValue(defaultCam.ViewMatrix);
                         effect.Parameters["Projection"].SetValue(defaultCam.ProjectionMatrix);
-                        effect.Parameters["AmbientColor"].SetValue(Color.DeepPink.ToVector4());
-                        effect.Parameters["AmbientIntensity"].SetValue(0.5f);
+                        effect.Parameters["AmbientColor"].SetValue(shader.AmbientColor);
+                        effect.Parameters["AmbientIntensity"].SetValue(shader.AmbientIntensity);
                         effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Transpose(mesh.ParentBone.Transform * world));
                         effect.Parameters["ViewVector"].SetValue(defaultCam.ViewVector);
-                        effect.Parameters["fogStart"].SetValue(defaultCam.NearPlane);
-                        effect.Parameters["fogEnd"].SetValue(defaultCam.FarPlane * 4);
-                        effect.Parameters["shaderTexture"].SetValue(mcp.ModelTexture);
+                        effect.Parameters["DiffuseLightDirection"].SetValue(shader.DiffuseLightDirection);
+                        effect.Parameters["DiffuseColor"].SetValue(shader.Diffusecolor);
+                        effect.Parameters["DiffuseIntensity"].SetValue(shader.DiffuseIntensity);
+                        effect.Parameters["ModelTexture"].SetValue(mcp.ModelTexture);
+                        effect.Parameters["CameraPosition"].SetValue(defaultCam.Position);
+                        if (shader.FogEnabled)
+                        {
+                            effect.Parameters["FogStart"].SetValue(shader.FogStart);
+                            effect.Parameters["FogEnd"].SetValue(shader.FogEnd);
+                            effect.Parameters["FogColor"].SetValue(shader.FogColor);
+                            effect.Parameters["FogEnabled"].SetValue(true);
+                        }
+                        effect.Parameters["Shininess"].SetValue(shader.Shininess);
+                        effect.Parameters["SpecularColor"].SetValue(shader.SpecularColor);
+                        effect.Parameters["SpecularIntensity"].SetValue(shader.SpecularIntensity);
+                        
                     }
                     mesh.Draw();
                 }

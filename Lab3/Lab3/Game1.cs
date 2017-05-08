@@ -42,6 +42,9 @@ namespace Lab3
 
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
             EntityFactory factory = new EntityFactory(Content);
+
+            factory.CreateHangar();
+
             //factory.CreateSkyBox();
             //factory.CreateChopper(Device);
             //factory.CreateHumanoidEntity(Content.Load<Texture2D>("HeightMap/canyon_rgb"),Device);

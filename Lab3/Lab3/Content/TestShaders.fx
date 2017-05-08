@@ -12,27 +12,44 @@ matrix View;
 matrix Projection;
 matrix WorldInverseTranspose;
 
-float4 AmbientColor = float4(0.2f, 0.2f, 0.2f, 0.2f);
-float AmbientIntensity = 0.1f;
+float4 AmbientColor;
+float AmbientIntensity;
 
-float3 DiffuseLightDirection = float3(0, 1, 0);
-float4 DiffuseColor = float4(1, 1, 1, 1);
-float DiffuseIntensity = 1.0;
+float3 DiffuseLightDirection;
+float4 DiffuseColor;
+float DiffuseIntensity;
 
-float Shininess = 200;
-float4 SpecularColor = float4(1, 1, 1, 1);
-float SpecularIntensity = 1;
+float Shininess;
+float4 SpecularColor;
+float SpecularIntensity;
+
 float3 ViewVector = float3(1, 0, 0);
 
-//Parameters for the fog
-float fogStart;
-float fogEnd;
-Texture2D shaderTexture;
+///FOG
+float FogStart = 40;
+float FogEnd = 100;
+float4 FogColor = (1, 0, 0, 1);
+bool FogEnabled = 0;
+float3 CameraPosition;
+
+bool TextureEnabled = 1;
+texture ModelTexture;
+
+sampler2D textureSampler = sampler_state
+{
+    Texture = (ModelTexture);
+    MagFilter = Linear;
+    MinFilter = Linear;
+    AddressU = Clamp;
+    AddressV = Clamp;
+};
+
 
 struct VertexShaderInput
 {
 	float4 Position : POSITION0;
 	float4 Normal : NORMAL0;
+    float2 TextureCoordinate : TEXCOORD0;
 };
 
 struct VertexShaderOutput
@@ -40,20 +57,10 @@ struct VertexShaderOutput
 	float4 Position : POSITION0;
 	float4 Color : COLOR0;
 	float3 Normal : TEXCOORD0;
-};
-
-struct VertexInputType
-{
-    float4 position : POSITION0;
-    float2 tex : TEXCOORD0;
-};
-
-struct PixelInputType
-{
-    float4 position : POSITION0;
-    float2 tex : TEXCOORD0;
+    float2 TextureCoordinate : TEXCOORD1;
     float fogFactor : FOG;
 };
+
 
 SamplerState SampleType
 {
@@ -62,81 +69,77 @@ SamplerState SampleType
     AddressV = Wrap;
 };
 
+float ComputeFogFactor(float d)
+{
+    //d is the distance to the geometry sampling from the camera
+    //this simply returns a value that interpolates from 0 to 1 
+    //with 0 starting at FogStart and 1 at FogEnd 
+    return clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
+}
+
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
 	VertexShaderOutput output;
+    float distance;
 
 	float4 worldPosition = mul(input.Position, World);
 	float4 viewPosition = mul(worldPosition, View);
-	output.Position = mul(viewPosition, Projection);
-
 	float4 normal = mul(input.Normal, WorldInverseTranspose);
 	float lightIntensity = dot(normal.xyz, DiffuseLightDirection);
+
+    output.Position = mul(viewPosition, Projection);
+    output.TextureCoordinate = input.TextureCoordinate;
 	output.Color = saturate(DiffuseColor * DiffuseIntensity * lightIntensity);
 	output.Normal = normal;
+
+    distance = length(worldPosition.xyz - CameraPosition);
+    output.fogFactor = saturate(ComputeFogFactor(distance));
 
 	return output;
 }
 
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-	float3 light = normalize(DiffuseLightDirection);
-	float3 normal = normalize(input.Normal);
-	float3 r = normalize(2 * dot(light, normal) * normal - light);
-    float3 v = normalize(mul(normalize(ViewVector), (float3x4)World));
+    float3 normal = normalize(input.Normal);
+    float4 returnColor = { 1, 1, 1, 1 };
+    float4 textureColor = { 0, 0, 0, 0 };
+    float4 lights = { 0, 0, 0, 0 };
 
-	float dotProduct = dot(r, v);
-	float4 specular = SpecularIntensity * SpecularColor * max(pow(dotProduct, Shininess), 0) * length(input.Color);
 
-	return saturate(input.Color + AmbientColor * AmbientIntensity + specular);
-}
+    lights += AmbientColor * AmbientIntensity;
 
-PixelInputType FogVertexShader(VertexInputType input)
-{
-    PixelInputType output;
-    float4 cameraPosition;
+    if (TextureEnabled)
+    {
+        textureColor = tex2D(textureSampler, input.TextureCoordinate);
+        lights = (0, 0, 0, 0);
+        lights += AmbientColor * AmbientIntensity * textureColor;
+    }
 
-    
-    // Change the position vector to be 4 units for proper matrix calculations.
-    input.position.w = 1.0f;
+    float nl = max(0, dot(normalize(DiffuseLightDirection), normal));
+    lights += DiffuseIntensity * DiffuseColor * nl;
+    float3 light = normalize(DiffuseLightDirection);
+    float3 r = normalize(2 * dot(light, normal) * normal - light);
+    float3 v = normalize(ViewVector);
 
-    // Calculate the position of the vertex against the world, view, and projection matrices.
-    output.position = mul(input.position, World);
-    output.position = mul(output.position, View);
-    output.position = mul(output.position, Projection);
-    
-    // Store the texture coordinates for the pixel shader.
-    output.tex = input.tex;
-    
-    // Calculate the camera position.
-    cameraPosition = mul(input.position, World);
-    cameraPosition = mul(cameraPosition, View);
-
-    // Calculate linear fog.    
-    output.fogFactor = saturate((fogEnd - cameraPosition.z) / (fogEnd - fogStart));
-
-    return output;
-}
-
-float4 FogPixelShader(PixelInputType input) : SV_Target
-{
-    float4 textureColor;
-    float4 fogColor;
-    float4 finalColor;
+    float dotProduct = dot(r, v);
+    float4 specular = SpecularIntensity * SpecularColor * max(pow(abs(dotProduct), Shininess), 0);
+				
+    lights += specular;
+		
+    returnColor = saturate(returnColor * lights);
 	
+    returnColor.a = 1;
 	
-    // Sample the texture pixel at this location.
-    textureColor = shaderTexture.Sample(SampleType, input.tex);
-    
-    // Set the color of the fog to grey.
-    fogColor = float4(0.5f, 0.5f, 0.5f, 1.0f);
+    if (FogEnabled)
+    {
+        return lerp(returnColor, FogColor, input.fogFactor);
+    }
+    return returnColor;
 
-
-    // Calculate the final color using the fog effect equation.
-    finalColor = input.fogFactor * textureColor + (1.0 - input.fogFactor) * fogColor;
-   	
-    return finalColor;
 }
+
+
+
 
 technique Ambient
 {
@@ -147,12 +150,5 @@ technique Ambient
     }
 }
 
-technique Fog
-{
-    pass Pass2
-    {
-        VertexShader = compile VS_SHADERMODEL FogVertexShader();
-        PixelShader = compile PS_SHADERMODEL FogPixelShader();
-    }
-}
+
 
