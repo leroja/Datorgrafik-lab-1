@@ -88,7 +88,8 @@
 
 #begin Lab Models/Chopper.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -102,7 +103,7 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=DxtCompressed
+/processorParam:TextureFormat=Compressed
 /build:Lab Models/Chopper.fbx
 
 #begin Lab Models/Leaf_Oak.fbx
@@ -337,7 +338,8 @@
 
 #begin Lab3Stuff/moffett-hangar2.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -351,7 +353,7 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=DxtCompressed
+/processorParam:TextureFormat=Compressed
 /build:Lab3Stuff/moffett-hangar2.fbx
 
 #begin Lab3Stuff/moffett-hangar2-concrete.png
@@ -447,7 +449,8 @@
 
 #begin Lab3Stuff/moffett-old-building-b.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -461,12 +464,13 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=DxtCompressed
+/processorParam:TextureFormat=Compressed
 /build:Lab3Stuff/moffett-old-building-b.fbx
 
 #begin Lab3Stuff/Nordstern.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -480,7 +484,7 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=DxtCompressed
+/processorParam:TextureFormat=Compressed
 /build:Lab3Stuff/Nordstern.fbx
 
 #begin Lab3Stuff/prop.png
@@ -626,7 +630,8 @@
 
 #begin Lab3Stuff/Zeppelin_NT.fbx
 /importer:FbxImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -640,12 +645,13 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=DxtCompressed
+/processorParam:TextureFormat=Compressed
 /build:Lab3Stuff/Zeppelin_NT.fbx
 
 #begin Lab3Stuff/ZF_balloon.x
 /importer:OpenAssetImporter
-/processor:ModelProcessor
+/processor:CustomEffectModelProcessor
+/processorParam:CustomEffect=Effects/AllinOne.fx
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
 /processorParam:DefaultEffect=BasicEffect
@@ -659,7 +665,7 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=DxtCompressed
+/processorParam:TextureFormat=Compressed
 /build:Lab3Stuff/ZF_balloon.x
 
 #begin TestShaders.fx

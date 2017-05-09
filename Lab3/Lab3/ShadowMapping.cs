@@ -383,6 +383,28 @@ namespace Lab3
 
                     if (!createShadowMap)
                         effect.Parameters["ShadowMap"].SetValue(shadowRenderTarget);
+
+                    effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4());
+                    effect.Parameters["AmbientIntensity"].SetValue(0.2f);
+                    effect.Parameters["ViewVector"].SetValue(Vector3.One);
+                    //effect.Parameters["DiffuseLightDirection"].SetValue(shader.DiffuseLightDirection);
+                    effect.Parameters["DiffuseLightDirection"].SetValue(lightDir); // todo
+                    effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4());
+                    effect.Parameters["DiffuseIntensity"].SetValue(0.5f);
+                    //effect.Parameters["TextureEnabled"].SetValue(false);
+                    //if (fal)
+                    //    effect.Parameters["Texture"].SetValue(mcp.ModelTexture);
+                    effect.Parameters["CameraPosition"].SetValue(cameraPosition);
+                    //if (shader.FogEnabled)
+                    //{
+                        effect.Parameters["FogStart"].SetValue(200f);
+                        effect.Parameters["FogEnd"].SetValue(300f);
+                        effect.Parameters["FogColor"].SetValue(Color.CornflowerBlue.ToVector4());
+                        effect.Parameters["FogEnabled"].SetValue(true);
+                    //}
+                    effect.Parameters["Shininess"].SetValue(0.9f);
+                    effect.Parameters["SpecularColor"].SetValue(Color.Green.ToVector4());
+                    effect.Parameters["SpecularIntensity"].SetValue(0.3f);
                 }
                 // Draw the mesh
                 mesh.Draw();

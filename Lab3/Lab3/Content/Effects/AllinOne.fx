@@ -57,7 +57,7 @@ sampler ShadowMapSampler = sampler_state
 };
 
 struct DrawWithShadowMap_VSIn
-{ // samma som testshader
+{
     float4 Position : POSITION0;
     float3 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
@@ -70,8 +70,7 @@ struct DrawWithShadowMap_VSOut
     float2 TexCoord : TEXCOORD1;
     float4 WorldPos : TEXCOORD2;
 
-    //från testshader som inte finns i shadowMap
-    float4 Color : COLOR0; // behövs color?
+    float4 Color : COLOR0;
     float fogFactor : FOG;
 };
 
@@ -99,15 +98,6 @@ float4 CreateShadowMap_PixelShader(CreateShadowMap_VSOut input) : COLOR
     return float4(input.Depth, 0, 0, 0);
 }
 
-
-
-
-
-
-
-
-
-
 float ComputeFogFactor(float d)
 {
     //d is the distance to the geometry sampling from the camera
@@ -116,10 +106,6 @@ float ComputeFogFactor(float d)
     return clamp((d - FogStart) / (FogEnd - FogStart), 0, 1) * FogEnabled;
 }
 
-
-
-
-// Draws the model with shadows
 DrawWithShadowMap_VSOut DrawWithShadowMap_VertexShader(DrawWithShadowMap_VSIn input)
 {
     DrawWithShadowMap_VSOut Output;
@@ -206,8 +192,6 @@ float4 DrawWithShadowMap_PixelShader(DrawWithShadowMap_VSOut input) : COLOR
         diffuse *= float4(ShadowStrenght, ShadowStrenght, ShadowStrenght, 0);
     };
     
-    //return diffuse;
-
     returnColor = saturate(returnColor * diffuse);
 	
     returnColor.a = 1;

@@ -43,7 +43,7 @@ namespace Lab3
             HeightMapFactory heightmapFactory = new HeightMapFactory(Device);
             EntityFactory factory = new EntityFactory(Content);
 
-            //factory.CreateHangar();
+            factory.CreateHangar();
 
             //factory.CreateSkyBox();
             //factory.CreateChopper(Device);

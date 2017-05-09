@@ -204,8 +204,9 @@ namespace Lab3
             
             int EntityId = ComponentManager.Instance.CreateID();
             Model hangar = Content.Load<Model>("Lab Models/Chopper");
+            //Model hangar = Content.Load<Model>("Lab3Stuff/moffett-old-building-b");
             ModelComponent mcp = new ModelComponent(hangar);
-            TransformComponent tcp = new TransformComponent(new Vector3(300, 50, -200), new Vector3(10, 10, 10));
+            TransformComponent tcp = new TransformComponent(new Vector3(20, 10, 20), new Vector3(10, 10, 10));
             ShaderComponent shc = new ShaderComponent(shader);
             shc.RealisticSettings();
 

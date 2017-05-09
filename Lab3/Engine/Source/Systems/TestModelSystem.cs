@@ -301,16 +301,12 @@ namespace Engine.Source.Systems
                     effect.Parameters["Projection"].SetValue(defaultCam.ProjectionMatrix);
                     effect.Parameters["LightDirection"].SetValue(lightDir);
                     effect.Parameters["LightViewProj"].SetValue(lightViewProjection);
-                    effect.Parameters["ShadowStrenght"].SetValue(1f);
-                    effect.Parameters["DepthBias"].SetValue(0.001f);
+                    effect.Parameters["ShadowStrenght"].SetValue(shader.ShadowStrenght);
+                    effect.Parameters["DepthBias"].SetValue(0.0005f);
 
                     if (!createShadowMap)
                         effect.Parameters["ShadowMap"].SetValue(shadowRenderTarget);
                     
-                    //effect.Parameters["World"].SetValue(world);
-                    //effect.Parameters["View"].SetValue(defaultCam.ViewMatrix);
-                    //effect.Parameters["Projection"].SetValue(defaultCam.ProjectionMatrix);
-
                     effect.Parameters["AmbientColor"].SetValue(shader.AmbientColor);
                     effect.Parameters["AmbientIntensity"].SetValue(shader.AmbientIntensity);
                     effect.Parameters["ViewVector"].SetValue(defaultCam.ViewVector);

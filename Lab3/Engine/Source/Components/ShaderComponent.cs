@@ -23,7 +23,7 @@ namespace Engine.Source.Components
         public float Shininess { get; set; }
         public Vector4 SpecularColor { get; set; }
         public float SpecularIntensity { get; set; }
-
+        public float ShadowStrenght { get; set; }
 
         public ShaderComponent(Effect effect)
         {
@@ -40,6 +40,7 @@ namespace Engine.Source.Components
             Shininess = 50;
             SpecularColor = Color.White.ToVector4();
             SpecularIntensity = 0;
+            ShadowStrenght = 0.5f;
         }
 
         public void AmbientLightSettings(Color AmbientColor, float AmbientIntensity)
