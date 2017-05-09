@@ -11,7 +11,6 @@
 matrix World;
 matrix View;
 matrix Projection;
-matrix WorldInverseTranspose;
 
 float4 AmbientColor;
 float AmbientIntensity;
@@ -34,12 +33,10 @@ bool FogEnabled = 0;
 float3 CameraPosition;
 
 bool TextureEnabled = 1;
-//texture ModelTexture;
 texture Texture;
 
 sampler2D textureSampler = sampler_state
 {
-    //Texture = (ModelTexture);
     Texture = (Texture);
     MagFilter = Linear;
     MinFilter = Linear;
@@ -47,11 +44,6 @@ sampler2D textureSampler = sampler_state
     AddressV = Clamp;
 };
 
-//texture Texture;
-//sampler TextureSampler = sampler_state
-//{
-//    Texture = (Texture);
-//};
 
 float3 LightDirection;
 float4x4 LightViewProj;
@@ -79,7 +71,7 @@ struct DrawWithShadowMap_VSOut
     float4 WorldPos : TEXCOORD2;
 
     //från testshader som inte finns i shadowMap
-    float4 Color : COLOR0;  // behövs color?
+    float4 Color : COLOR0; // behövs color?
     float fogFactor : FOG;
 };
 
@@ -140,43 +132,51 @@ DrawWithShadowMap_VSOut DrawWithShadowMap_VertexShader(DrawWithShadowMap_VSIn in
     Output.TexCoord = input.TexCoord;
     
     // Save the vertices postion in world space
-    Output.WorldPos = mul(input.Position, World);
+    float4 worldPosition = mul(input.Position, World);
+    Output.WorldPos = worldPosition;
     
+    float distance;
+
+    float lightIntensity = dot(Output.Normal.xyz, DiffuseLightDirection);
+
+    Output.Color = saturate(DiffuseColor * DiffuseIntensity * lightIntensity);
+
+    distance = length(worldPosition.xyz - CameraPosition);
+    Output.fogFactor = saturate(ComputeFogFactor(distance));
+
     return Output;
-
-
-    // från testshader, todo 
-    //VertexShaderOutput output;
-    //float distance;
-
-    //float4 worldPosition = mul(input.Position, World);
-    //float4 viewPosition = mul(worldPosition, View);
-    //float4 normal = mul(input.Normal, WorldInverseTranspose);
-    //float lightIntensity = dot(normal.xyz, DiffuseLightDirection);
-
-    //output.Position = mul(viewPosition, Projection);
-    //output.TextureCoordinate = input.TextureCoordinate;
-    //output.Color = saturate(DiffuseColor * DiffuseIntensity * lightIntensity);
-    //output.Normal = normal;
-
-    //distance = length(worldPosition.xyz - CameraPosition);
-    //output.fogFactor = saturate(ComputeFogFactor(distance));
-
-    //return output;
-
 }
 
 // Determines the depth of the pixel for the model and checks to see 
 // if it is in shadow or not
 float4 DrawWithShadowMap_PixelShader(DrawWithShadowMap_VSOut input) : COLOR
 {
+    float3 normal = normalize(input.Normal);
+    float4 returnColor = { 1, 1, 1, 1 };
+
+    float nl = max(0, dot(normalize(DiffuseLightDirection), normal));
+
     // Color of the model
     float4 diffuseColor = tex2D(textureSampler, input.TexCoord);
     // Intensity based on the direction of the light
+
     float diffuseIntensity = saturate(dot(LightDirection, input.Normal));
     // Final diffuse color with ambient color added
-    float4 diffuse = diffuseIntensity * diffuseColor + AmbientColor;
-    
+    //float4 diffuse = DiffuseIntensity * DiffuseColor * nl + AmbientColor * AmbientIntensity;
+    float4 diffuse = diffuseIntensity * diffuseColor * nl + AmbientColor * AmbientIntensity;
+
+    float4 textureColor = tex2D(textureSampler, input.TexCoord);
+    if (TextureEnabled)
+    {
+        diffuse = diffuse * textureColor;
+    }
+
+    //float3 light = normalize(DiffuseLightDirection);
+    float3 light = normalize(LightDirection);
+    float3 r = normalize(2 * dot(light, normal) * normal - light);
+    float3 v = normalize(ViewVector);
+
+    diffuse + SpecularIntensity * SpecularColor * max(pow(abs(dot(r, v)), Shininess), 0);
 
 
 
@@ -206,7 +206,17 @@ float4 DrawWithShadowMap_PixelShader(DrawWithShadowMap_VSOut input) : COLOR
         diffuse *= float4(ShadowStrenght, ShadowStrenght, ShadowStrenght, 0);
     };
     
-    return diffuse;
+    //return diffuse;
+
+    returnColor = saturate(returnColor * diffuse);
+	
+    returnColor.a = 1;
+	
+    if (FogEnabled)
+    {
+        return lerp(returnColor, FogColor, input.fogFactor);
+    }
+    return returnColor;
 }
 
 // Technique for creating the shadow map

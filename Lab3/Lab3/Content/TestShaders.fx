@@ -90,7 +90,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     output.Position = mul(viewPosition, Projection);
     output.TextureCoordinate = input.TextureCoordinate;
 	output.Color = saturate(DiffuseColor * DiffuseIntensity * lightIntensity);
-	output.Normal = normal;
+	output.Normal = normal.xyz;
 
     distance = length(worldPosition.xyz - CameraPosition);
     output.fogFactor = saturate(ComputeFogFactor(distance));
@@ -111,7 +111,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
     if (TextureEnabled)
     {
         textureColor = tex2D(textureSampler, input.TextureCoordinate);
-        lights = (0, 0, 0, 0);
+        lights = float4(0, 0, 0, 0);
         lights += AmbientColor * AmbientIntensity * textureColor;
     }
 

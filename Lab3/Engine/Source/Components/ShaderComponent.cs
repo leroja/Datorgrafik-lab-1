@@ -56,9 +56,9 @@ namespace Engine.Source.Components
         public void ActivateAppropriateFogSettings()
         {
             FogEnabled = true;
-            FogEnd = 400;
-            FogStart = 50;
-            FogColor = Color.LightGray.ToVector4();
+            FogEnd = 600;
+            FogStart = 400;
+            FogColor = Color.Black.ToVector4();
         }
         public void AddCustomFog(float FogEnd, float FogStart, Color FogColor)
         {
@@ -85,9 +85,9 @@ namespace Engine.Source.Components
 
         public void RealisticSettings()
         {
-            AmbientLightSettings(Color.White, 0.4f);
+            AmbientLightSettings(Color.White, 0.1f);
             DirectionalLightSettings(new Vector3(-1f, 0f, 0), Color.White, 0.8f);
-            SpecularSettings(80, Color.WhiteSmoke, 0.2f);
+            SpecularSettings(80, Color.WhiteSmoke, 0.4f);
             ActivateAppropriateFogSettings();
         }
     }

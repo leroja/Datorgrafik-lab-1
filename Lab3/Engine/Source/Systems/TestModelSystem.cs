@@ -54,6 +54,7 @@ namespace Engine.Source.Systems
 
             CreateShadowMap(mc);
             DrawWithShadowMap(mc);
+            
 
             //foreach (var entity in mc)
             //{
@@ -305,6 +306,33 @@ namespace Engine.Source.Systems
 
                     if (!createShadowMap)
                         effect.Parameters["ShadowMap"].SetValue(shadowRenderTarget);
+                    
+                    //effect.Parameters["World"].SetValue(world);
+                    //effect.Parameters["View"].SetValue(defaultCam.ViewMatrix);
+                    //effect.Parameters["Projection"].SetValue(defaultCam.ProjectionMatrix);
+
+                    effect.Parameters["AmbientColor"].SetValue(shader.AmbientColor);
+                    effect.Parameters["AmbientIntensity"].SetValue(shader.AmbientIntensity);
+                    effect.Parameters["ViewVector"].SetValue(defaultCam.ViewVector);
+                    //effect.Parameters["DiffuseLightDirection"].SetValue(shader.DiffuseLightDirection);
+                    effect.Parameters["DiffuseLightDirection"].SetValue(lightDir); // todo
+                    effect.Parameters["DiffuseColor"].SetValue(shader.Diffusecolor);
+                    effect.Parameters["DiffuseIntensity"].SetValue(shader.DiffuseIntensity);
+                    effect.Parameters["TextureEnabled"].SetValue(mcp.IsTextured);
+                    if (mcp.IsTextured)
+                        effect.Parameters["Texture"].SetValue(mcp.ModelTexture);
+                    effect.Parameters["CameraPosition"].SetValue(defaultCam.Position);
+                    if (shader.FogEnabled)
+                    {
+                        effect.Parameters["FogStart"].SetValue(shader.FogStart);
+                        effect.Parameters["FogEnd"].SetValue(shader.FogEnd);
+                        effect.Parameters["FogColor"].SetValue(shader.FogColor);
+                        effect.Parameters["FogEnabled"].SetValue(true);
+                    }
+                    effect.Parameters["Shininess"].SetValue(shader.Shininess);
+                    effect.Parameters["SpecularColor"].SetValue(shader.SpecularColor);
+                    effect.Parameters["SpecularIntensity"].SetValue(shader.SpecularIntensity);
+                    
                 }
                 // Draw the mesh
                 mesh.Draw();

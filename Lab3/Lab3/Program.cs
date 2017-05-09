@@ -16,10 +16,10 @@ namespace Lab3
         {
             using (var game = new Game1())
                 game.Run();
-            using (ShadowMappingGame game = new ShadowMappingGame())
-            {
-                game.Run();
-            }
+            //using (ShadowMappingGame game = new ShadowMappingGame())
+            //{
+            //    game.Run();
+            //}
         }
     }
 #endif
